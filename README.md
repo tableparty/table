@@ -13,3 +13,12 @@ A virtual table-top for basic roleplaying games.
 ```
 $ bin/setup
 ```
+
+## Linting
+
+Run linting before merging. Rubocop is setup:
+
+```
+$ rails lint      # Runs lint:ruby
+$ rails lint:ruby # Runs rubocop
+```
