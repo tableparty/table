@@ -14,6 +14,14 @@ A virtual table-top for basic roleplaying games.
 $ bin/setup
 ```
 
+## Testing
+
+Tests are handled by rspec:
+
+```
+$ rails spec
+```
+
 ## Linting
 
 Run linting before merging. Rubocop is setup:
