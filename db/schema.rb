@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_19_154513) do
+ActiveRecord::Schema.define(version: 2020_03_19_174825) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -22,4 +22,13 @@ ActiveRecord::Schema.define(version: 2020_03_19_154513) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "campaign_id", null: false
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["campaign_id"], name: "index_maps_on_campaign_id"
+  end
+
+  add_foreign_key "maps", "campaigns"
 end

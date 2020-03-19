@@ -1,0 +1,20 @@
+<div class="mx-auto max-w-sm">
+  <h1 class="text-4xl">New Map</h1>
+
+  <hr class="my-2" />
+
+  <%= form_with model: [map.campaign, map], local: true, class: "my-2" do |form| %>
+    <% if map.errors.any? %>
+      <ul class="errors">
+      <% map.errors.full_messages.each do |error| %>
+        <%= content_tag :li, error %>
+      <% end %>
+      </ul>
+    <% end %>
+
+    <%= form.label :name %>
+    <%= form.text_field :name, class: "input" %>
+
+    <%= form.submit class: "btn" %>
+  <% end %>
+</div>

@@ -1,3 +1,13 @@
 <%= content_tag :h1, campaign.name, class: "text-4xl" %>
 
 <hr class="my-2" />
+
+<div class="grid grid-cols-4 gap-4 my-4">
+  <% campaign.maps.each do |map| %>
+    <div class="rounded-lg border p-2 flex flex-col items-center justify-center h-40">
+      <%= content_tag :span, map.name, class: "" %>
+    </div>
+  <% end %>
+</div>
+
+<%= link_to "New Map", new_campaign_map_path(campaign), class: "btn" %>

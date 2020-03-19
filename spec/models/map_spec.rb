@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe Campaign, type: :model do
+RSpec.describe Map, type: :model do
   describe "associations" do
-    it { is_expected.to have_many(:maps).dependent(:destroy) }
+    it { is_expected.to belong_to(:campaign) }
   end
 
   describe "validations" do
