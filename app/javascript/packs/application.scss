@@ -1,5 +1,21 @@
-@import 'tailwindcss/base';
+@import "tailwindcss/base";
 
-@import 'tailwindcss/components';
+@import "tailwindcss/components";
 
-@import 'tailwindcss/utilities';
+@import "tailwindcss/utilities";
+
+.btn {
+  @apply text-white bg-blue-500 p-2 transition duration-150 rounded cursor-pointer;
+}
+
+.btn:hover {
+  @apply opacity-50;
+}
+
+.errors {
+  @apply rounded border bg-red-200 border-red-500 p-2 mb-2 text-red-700 italic;
+}
+
+.input {
+  @apply border rounded p-2 block mt-2 mb-4 w-full;
+}

@@ -1,7 +1,13 @@
-<ul>
+<h1 class="text-4xl">Campaigns</h1>
+
+<hr class="my-2" />
+
+<ul class="py-4">
   <% campaigns.each do |campaign| %>
-    <%= content_tag :li, campaign.name %>
+    <%= content_tag :li do %>
+      <%= link_to campaign.name, campaign, class: "cursor-pointer text-blue-800" %>
+    <% end %>
   <% end %>
 </ul>
 
-<%= link_to "New Campaign", new_campaign_path %>
+<%= link_to "New Campaign", new_campaign_path, class: "btn" %>
