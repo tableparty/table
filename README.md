@@ -24,9 +24,10 @@ $ rails spec
 
 ## Linting
 
-Run linting before merging. Rubocop is setup:
+Run linting before merging. Linting for ruby and scss is setup:
 
 ```
-$ rails lint      # Runs lint:ruby
+$ rails lint      # Runs lint:ruby and lint:scss
 $ rails lint:ruby # Runs rubocop
+$ rails lint:scss # Rubs scss-lint
 ```

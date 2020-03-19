@@ -45,6 +45,7 @@ group :development do
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
+  gem "scss_lint", require: false
   gem "spring"
   gem "spring-watcher-listen", "~> 2.0.0"
 end
