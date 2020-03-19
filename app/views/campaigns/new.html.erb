@@ -1,0 +1,14 @@
+<%= form_with model: campaign, local: true do |form| %>
+  <% if campaign.errors.any? %>
+    <ul>
+    <% campaign.errors.full_messages.each do |error| %>
+      <%= content_tag :li, error %>
+    <% end %>
+    </ul>
+  <% end %>
+
+  <%= form.label :name %>
+  <%= form.text_field :name %>
+
+  <%= form.submit %>
+<% end %>
