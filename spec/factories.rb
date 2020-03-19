@@ -6,5 +6,8 @@ FactoryBot.define do
   factory :map do
     campaign
     name { "Dwarven Excavation" }
+    image do
+      Rack::Test::UploadedFile.new("spec/fixtures/files/dwarven-excavation.jpg")
+    end
   end
 end

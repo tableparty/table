@@ -13,6 +13,7 @@ RSpec.describe "manage maps", type: :system do
     visit campaign_path(campaign)
     click_on "New Map"
     fill_in "Name", with: "Dwarven Excavation"
+    attach_file "Image", file_fixture("dwarven-excavation.jpg")
     click_on "Create Map"
     expect(page).to have_content "Dwarven Excavation"
   end

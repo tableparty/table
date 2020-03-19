@@ -4,10 +4,19 @@
 
 <div class="grid grid-cols-4 gap-4 my-4">
   <% campaign.maps.each do |map| %>
-    <div class="rounded-lg border p-2 flex flex-col items-center justify-center h-40">
-      <%= content_tag :span, map.name, class: "" %>
+    <div class="rounded-lg border flex flex-col items-center justify-center h-40 bg-cover bg-center overflow-none bg-black">
+      <%= content_tag :div, nil, class: "bg-cover bg-center w-full h-full opacity-50 hover:opacity-100 transition duration-150 rounded-lg", style: "background-image: url('#{url_for map.image}')" %>
+      <div class="absolute">
+        <%= content_tag :span, map.name, class: "text-white font-bold" %>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to new_campaign_map_path(campaign) do %>
+    <div class="rounded-lg border flex flex-col items-center justify-center h-40 bg-cover bg-center overflow-none bg-gray-200 text-gray-700">
+      <div class="absolute">
+        <span class="">New Map</span>
+      </div>
     </div>
   <% end %>
 </div>
-
-<%= link_to "New Map", new_campaign_map_path(campaign), class: "btn" %>
