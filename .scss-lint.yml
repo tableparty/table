@@ -1,4 +1,4 @@
-scss_files: "app/javascript/packs/**/*.scss"
+scss_files: "app/javascript/src/**/*.scss"
 
 severity: warning
 
