@@ -1,6 +1,7 @@
 {
   "addons": [
-    "heroku-postgresql:hobby-dev"
+    "heroku-postgresql:hobby-dev",
+    "heroku-redis:hobby-dev"
   ],
   "scripts": {
     "postdeploy": "rails dev:prime"
