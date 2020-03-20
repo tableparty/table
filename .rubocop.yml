@@ -108,6 +108,7 @@ Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
     - "config/environments/*"
+    - "lib/tasks/**/*"
 
 Metrics/CyclomaticComplexity:
   Description: >-

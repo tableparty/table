@@ -14,6 +14,14 @@ A virtual table-top for basic roleplaying games.
 $ bin/setup
 ```
 
+## Priming
+
+Get started with some helpful data in development:
+
+```
+$ rails dev:prime
+```
+
 ## Testing
 
 Tests are handled by rspec:

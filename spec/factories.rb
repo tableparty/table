@@ -4,10 +4,14 @@ FactoryBot.define do
   end
 
   factory :map do
+    transient do
+      image_name { "dwarven-excavation.jpg" }
+    end
+
     campaign
     name { "Dwarven Excavation" }
     image do
-      Rack::Test::UploadedFile.new("spec/fixtures/files/dwarven-excavation.jpg")
+      Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end
   end
 end
