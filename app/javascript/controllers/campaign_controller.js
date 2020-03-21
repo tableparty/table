@@ -11,24 +11,20 @@ export default class extends Controller {
       id: this.campaignId
     }, {
       received: this.cableReceived.bind(this),
-      connected: this.cableConnected.bind(this)
     })
+  }
+
+  chooseMapOption(event) {
+    this.channel.perform(
+      "change_current_map",
+      {
+        map_id: event.target.dataset.mapId,
+        campaign_id: this.campaignId
+      }
+    )
   }
 
   cableReceived(data) {
-    console.log(data)
     this.currentMapTarget.innerHTML = data.current_map_html
-  }
-
-  cableConnected() {
-    const changeMap = map => {
-      this.channel.perform(
-        "change_current_map",
-        { map_id: map.dataset.mapId, campaign_id: this.campaignId }
-      )
-    }
-    this.mapOptionTargets.forEach(mapOption => {
-      mapOption.addEventListener("click", () => changeMap(mapOption))
-    })
   }
 }
