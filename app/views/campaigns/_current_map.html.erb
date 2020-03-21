@@ -1,0 +1,4 @@
+<%= content_tag :h2, (campaign.current_map&.name || "No Current Map") %>
+<div>
+  <%= image_tag url_for(campaign.current_map&.image) %>
+</div>

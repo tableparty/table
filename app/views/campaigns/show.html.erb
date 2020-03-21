@@ -2,12 +2,12 @@
 
 <hr class="my-2" />
 
-<div data-controller="campaign" data-id="<%= campaign.id %>">
-  <div class="grid grid-cols-4 gap-4 my-4" data-controller="map-selector">
+<div data-controller="campaign" data-campaign-id="<%= campaign.id %>">
+  <div class="grid grid-cols-4 gap-4 my-4">
     <% campaign.maps.each do |map| %>
       <div class="campaign-map-selector relative rounded-lg border h-40 bg-cover bg-center overflow-none bg-black">
         <%= content_tag :div, nil, class: "bg-cover bg-center w-full h-full opacity-50 transition duration-150 rounded-lg", style: "background-image: url('#{url_for map.image}')" %>
-        <%= content_tag :div, class: "absolute flex flex-col items-center justify-center w-full h-full top-0", data: { target: "campaign.map", map_id: map.id } do %>
+        <%= content_tag :div, class: "absolute flex flex-col items-center justify-center w-full h-full top-0", data: { target: "campaign.mapOption", map_id: map.id } do %>
           <%= content_tag :span, map.name, class: "text-white font-bold" %>
         <% end %>
       </div>
@@ -22,8 +22,7 @@
     <% end %>
   </div>
 
-  <%= content_tag :h2, (campaign.current_map&.name || "No Current Map"), data: { target: "campaign.mapName" } %>
-  <div>
-    <%= image_tag url_for(campaign.current_map&.image), data: { target: "campaign.mapImage" } %>
+  <div data-target="campaign.currentMap">
+    <%= render partial: "current_map", locals: { campaign: campaign } %>
   </div>
 </div>

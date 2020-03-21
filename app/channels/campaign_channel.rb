@@ -1,20 +1,25 @@
 class CampaignChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "campaign_#{params[:id]}"
+    campaign = Campaign.find(params[:id])
+    stream_for campaign
   end
 
   def change_current_map(data)
     campaign = Campaign.find(data["campaign_id"])
-    map = Map.find(data["map_id"])
+    map = campaign.maps.find(data["map_id"])
     campaign.update(current_map: map)
-    ActionCable.server.broadcast(
-      "campaign_#{campaign.id}",
-      campaign: campaign.attributes,
-      current_map: map.attributes,
-      current_map_image: Rails.application.routes.url_helpers.rails_blob_path(
-        map.image,
-        host: "localhost:3000"
-      )
+    broadcast_to(
+      campaign,
+      current_map_html: render_current_map(campaign)
+    )
+  end
+
+  private
+
+  def render_current_map(campaign)
+    ApplicationController.renderer.render(
+      partial: "campaigns/current_map",
+      locals: { campaign: campaign }
     )
   end
 end

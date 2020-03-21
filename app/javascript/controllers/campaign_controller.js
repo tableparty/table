@@ -2,10 +2,10 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["mapName", "mapImage", "map"]
+  static targets = ["mapOption", "currentMap"]
 
   connect() {
-    this.campaignId = this.element.dataset.id
+    this.campaignId = this.element.dataset.campaignId
     this.channel = consumer.subscriptions.create({
       channel: "CampaignChannel",
       id: this.campaignId
@@ -16,16 +16,19 @@ export default class extends Controller {
   }
 
   cableReceived(data) {
-    this.mapNameTarget.innerHTML = data.current_map.name
-    this.mapImageTarget.src = data.current_map_image
+    console.log(data)
+    this.currentMapTarget.innerHTML = data.current_map_html
   }
 
   cableConnected() {
     const changeMap = map => {
-      this.channel.perform("change_current_map", { map_id: map.dataset.mapId, campaign_id: this.campaignId })
+      this.channel.perform(
+        "change_current_map",
+        { map_id: map.dataset.mapId, campaign_id: this.campaignId }
+      )
     }
-    this.mapTargets.forEach(map => {
-      map.addEventListener("click", () => changeMap(map))
+    this.mapOptionTargets.forEach(mapOption => {
+      mapOption.addEventListener("click", () => changeMap(mapOption))
     })
   }
 }
