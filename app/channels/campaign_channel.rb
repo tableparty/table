@@ -7,6 +7,8 @@ class CampaignChannel < ApplicationCable::Channel
   def change_current_map(data)
     campaign = Campaign.find(data["campaign_id"])
     map = campaign.maps.find(data["map_id"])
+    return if campaign.current_map == map
+
     campaign.update(current_map: map)
     broadcast_to(
       campaign,
