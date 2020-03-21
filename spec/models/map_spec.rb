@@ -5,6 +5,7 @@ RSpec.describe Map, type: :model do
     it { is_expected.to belong_to(:campaign) }
     it { is_expected.to have_one(:image_attachment) }
     it { is_expected.to have_one(:image_blob) }
+    it { is_expected.to have_many(:tokens).dependent(:destroy) }
   end
 
   describe "validations" do

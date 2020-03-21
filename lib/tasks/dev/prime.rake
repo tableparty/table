@@ -16,8 +16,8 @@ namespace :dev do
         name: "Gnomengarde",
         image_filename: "gnomengarde.jpg"
       }
-    ].map do |details|
-      campaign.maps.find_or_create_by(
+    ].each do |details|
+      map = campaign.maps.find_or_create_by(
         name: details[:name]
       ) do |map|
         map.image.attach(
@@ -27,7 +27,28 @@ namespace :dev do
           filename: details[:image_filename]
         )
       end
-      Map.all.each(&:center_image)
+      map.center_image
+      [
+        "Jormund",
+        "Olokas",
+        "Tanpos",
+        "Thoduhr",
+        "Uxil",
+        "Yenkas"
+      ].each do |name|
+        map.tokens.find_or_create_by(
+          name: name
+        ) do |token|
+          token.x = (100..500).to_a.sample
+          token.y = (100..500).to_a.sample
+          token.image.attach(
+            io: File.open(
+              Rails.root.join("spec/fixtures/files/#{name.downcase}.jpeg")
+            ),
+            filename: "#{name.downcase}.jpeg"
+          )
+        end
+      end
     end
   end
 end

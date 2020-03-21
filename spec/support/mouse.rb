@@ -16,6 +16,25 @@ def map_element(map)
   find(".current-map[data-map-id='#{map.id}'][data-map-id='#{map.id}']")
 end
 
+def click_and_move_token(token, by:)
+  element = token_element(token)
+  dispatch_event(
+    element,
+    "this",
+    mouse_event("mousedown", screenX: element.native.location.x, screenY: element.native.location.y)
+  )
+  dispatch_event(
+    page,
+    "document",
+    mouse_event("mousemove", screenX: by[:x] + element.native.location.x, screenY: by[:y] + element.native.location.y)
+  )
+  dispatch_event(page, "document", "new MouseEvent('mouseup')")
+end
+
+def token_element(token)
+  find(".token[data-token-id='#{token.id}']")
+end
+
 def dispatch_event(node, element, event)
   node.execute_script("#{element}.dispatchEvent(#{event})")
 end

@@ -30,6 +30,7 @@ class MapChannel < ApplicationCable::Channel
         {
           operation: "zoom",
           zoom: map.zoom,
+          zoomAmount: map.zoom_amount,
           width: map.width,
           height: map.height,
           x: map.x,
@@ -37,5 +38,22 @@ class MapChannel < ApplicationCable::Channel
         }
       )
     end
+  end
+
+  def move_token(data)
+    map = Map.find(data["map_id"])
+    token = map.tokens.find(data["token_id"])
+    return if token.x == data["x"] && token.y == data["y"]
+
+    token.update(x: data["x"], y: data["y"])
+    broadcast_to(
+      map,
+      {
+        operation: "moveToken",
+        token_id: token.id,
+        x: token.x,
+        y: token.y
+      }
+    )
   end
 end

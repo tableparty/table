@@ -8,6 +8,7 @@ module.exports = {
       },
       stage: 3
     }),
-    require('tailwindcss')
+    require('tailwindcss'),
+    require('autoprefixer')
   ]
 }

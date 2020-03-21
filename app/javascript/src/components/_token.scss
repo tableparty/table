@@ -1,0 +1,37 @@
+.token {
+  @apply
+    flex
+    items-center
+    absolute;
+  width: min-content;
+}
+
+.token__image {
+  @apply
+    w-8
+    h-8
+    bg-cover
+    bg-center
+    rounded-full
+    border-2
+    border-white
+    pointer-events-none
+    z-0
+    shadow;
+}
+
+.token__name {
+  @apply
+    hidden
+    bg-white
+    rounded-full
+    ml-2
+    px-2
+    text-xs
+    z-10
+    pointer-events-none;
+}
+
+.token:hover .token__name {
+  @apply block;
+}

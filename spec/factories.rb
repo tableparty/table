@@ -13,5 +13,23 @@ FactoryBot.define do
     image do
       Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end
+
+    after(:create) do |map|
+      map.center_image
+    end
+  end
+
+  factory :token do
+    transient do
+      image_name { "uxil.jpeg" }
+    end
+
+    map
+    name { "Uxil" }
+    x { rand(100) }
+    y { rand(100) }
+    image do
+      Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
+    end
   end
 end

@@ -51,8 +51,8 @@ RSpec.describe "manage maps", type: :system do
     find(".campaign-map-selector", text: "Dwarven Excavation").click
     click_and_move_map(map, from: { x: 300, y: 300 }, to: { x: 50, y: 50 })
 
-    expect(page).to have_map_with_data(map, "x", "500")
-    expect(page).to have_map_with_data(map, "y", "500")
+    expect(page).to have_map_with_data(map, "x", "550")
+    expect(page).to have_map_with_data(map, "y", "550")
   end
 
   it "moves the map for other users" do
@@ -68,8 +68,8 @@ RSpec.describe "manage maps", type: :system do
     click_and_move_map(map, from: { x: 300, y: 300 }, to: { x: 50, y: 50 })
 
     using_session "other user" do
-      expect(page).to have_map_with_data(map, "x", "500")
-      expect(page).to have_map_with_data(map, "y", "500")
+      expect(page).to have_map_with_data(map, "x", "550")
+      expect(page).to have_map_with_data(map, "y", "550")
     end
   end
 

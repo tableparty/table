@@ -2,6 +2,7 @@ class Map < ApplicationRecord
   ZOOM_LEVELS = [0.25, 0.5, 1, 1.5, 2].freeze
 
   belongs_to :campaign
+  has_many :tokens, dependent: :destroy
 
   has_one_attached :image
 
