@@ -2,7 +2,7 @@
 
 <hr class="my-2" />
 
-<div data-controller="campaign" data-campaign-id="<%= campaign.id %>">
+<%= content_tag :div, data: { controller: "campaign", "campaign-id": campaign.id } do %>
   <div class="grid grid-cols-4 gap-4 my-4">
     <% campaign.maps.each do |map| %>
       <div class="campaign-map-selector relative rounded-lg border h-40 bg-cover bg-center overflow-none bg-black">
@@ -25,4 +25,4 @@
   <div data-target="campaign.currentMap">
     <%= render partial: "current_map", locals: { campaign: campaign } %>
   </div>
-</div>
+<% end %>
