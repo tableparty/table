@@ -1,8 +1,30 @@
 <% if campaign.current_map.present? %>
   <%= content_tag :h2, campaign.current_map.name %>
-  <div>
-    <%= image_tag url_for campaign.current_map.image %>
-  </div>
+
+  <%= content_tag :div,
+    class: "current-map relative",
+    data: {
+      controller: "map",
+      "map-id": campaign.current_map.id,
+      target: "map.image",
+      action: "mousedown->map#moveMap",
+      x: campaign.current_map.x,
+      y: campaign.current_map.y,
+      zoom: campaign.current_map.zoom,
+      height: campaign.current_map.height,
+      width: campaign.current_map.width,
+      "zoom-max": campaign.current_map.zoom_max
+    },
+    style: "background-image: url('#{url_for campaign.current_map.image}');" do %>
+    <div class="controls w-16 absolute top-0 right-0 m-2 flex justify-center">
+      <%= button_tag class: "flex-1 text-center border rounded-l-md h-7 bg-gray-200 cursor-default", data: { target: "map.zoomOut", action: "click->map#zoomOut" } do %>
+        -
+      <% end %>
+      <%= button_tag class: "flex-1 text-center border rounded-r-md h-7 bg-gray-200 cursor-default", data: { target: "map.zoomIn", action: "click->map#zoomIn" } do %>
+        +
+      <% end %>
+    </div>
+  <% end %>
 <% else %>
   <h2>No Current Map</h2>
 <% end %>

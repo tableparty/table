@@ -1,8 +1,8 @@
 @import "tailwindcss/base";
-
 @import "tailwindcss/components";
-
 @import "tailwindcss/utilities";
+
+@import "components/map";
 
 .btn {
   @apply text-white bg-blue-500 p-2 transition duration-150 rounded cursor-pointer;

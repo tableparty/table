@@ -1,0 +1,13 @@
+.current-map {
+  @apply w-full h-screen;
+
+  background-repeat: no-repeat;
+  cursor: move;
+  user-select: none;
+
+  .controls {
+    button[disabled] {
+      @apply cursor-not-allowed text-gray-400;
+    }
+  }
+}

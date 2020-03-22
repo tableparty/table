@@ -5,7 +5,7 @@ FactoryBot.define do
 
   factory :map do
     transient do
-      image_name { "dwarven-excavation.jpg" }
+      image_name { "small-map.jpg" }
     end
 
     campaign

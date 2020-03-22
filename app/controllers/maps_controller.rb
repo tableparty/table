@@ -8,6 +8,7 @@ class MapsController < ApplicationController
     campaign = Campaign.find(params[:campaign_id])
     map = campaign.maps.new(map_params)
     if map.save
+      map.center_image
       redirect_to campaign
     else
       render :new, locals: { map: map }

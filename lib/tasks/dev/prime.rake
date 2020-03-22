@@ -27,6 +27,7 @@ namespace :dev do
           filename: details[:image_filename]
         )
       end
+      Map.all.each(&:center_image)
     end
   end
 end
