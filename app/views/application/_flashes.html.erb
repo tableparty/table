@@ -1,0 +1,6 @@
+<% flash.each do |key, value| -%>
+  <div class="mb-4 border rounded px-4 py-3 flash-<%= key %>">
+    <%= flash_icon(key) %>
+    <span><%= value %></span>
+  </div>
+<% end -%>

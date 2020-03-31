@@ -1,6 +1,8 @@
 class CampaignsController < ApplicationController
+  before_action :require_login, except: [:show]
+
   def index
-    render locals: { campaigns: Campaign.all }
+    render locals: { campaigns: current_user.campaigns }
   end
 
   def new
@@ -8,7 +10,7 @@ class CampaignsController < ApplicationController
   end
 
   def create
-    campaign = Campaign.new(campaign_params)
+    campaign = current_user.campaigns.new(campaign_params)
     if campaign.save
       redirect_to campaign
     else

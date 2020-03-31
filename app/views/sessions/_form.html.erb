@@ -1,0 +1,24 @@
+<%= form_for :session, url: session_path, class: "my-2" do |form| %>
+  <div class="text-field">
+    <%= form.label :email %>
+    <%= form.email_field :email, class:  "input" %>
+  </div>
+
+  <div class="password-field">
+    <%= form.label :password %>
+    <%= form.password_field :password, class:  "input" %>
+  </div>
+
+  <div class="flex items-center justify-between">
+    <%= form.submit class: "btn" %>
+    <%= link_to t(".forgot_password"), new_password_path, class: "inline-block align-baseline text-sm text-blue-500 hover:text-blue-800" %>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="text-sm">
+    <% if Clearance.configuration.allow_sign_up? %>
+      Need an account? <%= link_to t(".sign_up"), sign_up_path, class: "text-blue-500 hover:text-blue-800" %>
+    <% end %>
+  </div>
+<% end %>

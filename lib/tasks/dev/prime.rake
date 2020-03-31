@@ -1,7 +1,26 @@
 namespace :dev do
   desc "Sample data for local development environment"
   task prime: :environment do
-    campaign = Campaign.find_or_create_by(name: "Dragon of Icespire Peak")
+    dm = User.find_or_initialize_by(
+      email: "jdbann@icloud.com",
+      name: "John Bannister"
+    )
+    unless dm.persisted?
+      dm.password = "prime"
+      dm.save
+    end
+
+    campaign = Campaign.find_by(
+      name: "Dragon of Icespire Peak"
+    )
+    if campaign
+      campaign.update(user: dm)
+    else
+      campaign = Campaign.find_or_create_by(
+        name: "Dragon of Icespire Peak",
+        user: dm
+      )
+    end
 
     [
       {

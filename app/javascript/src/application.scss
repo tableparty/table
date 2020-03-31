@@ -5,6 +5,7 @@
 @import "components/map";
 @import "components/map_selector";
 @import "components/token";
+@import "components/flashes";
 
 .btn {
   @apply text-white bg-blue-500 p-2 transition duration-150 rounded cursor-pointer;
@@ -20,4 +21,8 @@
 
 .input {
   @apply border rounded p-2 block mt-2 mb-4 w-full;
+}
+
+svg {
+  @apply inline h-4 w-4 -mt-px fill-current;
 }

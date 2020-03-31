@@ -9,8 +9,9 @@ RSpec.describe "manage maps", type: :system do
   end
 
   it "can create a map" do
-    campaign = create :campaign
-    visit campaign_path(campaign)
+    user = create(:user)
+    campaign = create(:campaign, user: user)
+    visit campaign_path(campaign, as: user)
     click_on "New Map"
     fill_in "Name", with: "Dwarven Excavation"
     attach_file "Image", file_fixture("dwarven-excavation.jpg")
@@ -24,8 +25,9 @@ RSpec.describe "manage maps", type: :system do
   end
 
   it "validates parameters for map" do
-    campaign = create :campaign
-    visit campaign_path(campaign)
+    user = create(:user)
+    campaign = create :campaign, user: user
+    visit campaign_path(campaign, as: user)
     click_on "New Map"
     fill_in "Name", with: ""
     click_on "Create Map"

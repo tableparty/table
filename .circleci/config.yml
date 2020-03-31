@@ -18,6 +18,10 @@ jobs:
     steps:
       - checkout
 
+      - run:
+          name: Copy environment
+          command: cp .sample.env .env
+
       # Restore Cached Dependencies
       - type: cache-restore
         name: Restore bundle cache

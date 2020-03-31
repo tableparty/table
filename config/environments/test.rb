@@ -4,6 +4,7 @@
 # and recreated between test runs. Don't rely on the data there!
 
 Rails.application.configure do
+  config.middleware.use Clearance::BackDoor
   # Settings specified here will take precedence over those in
   # config/application.rb.
 

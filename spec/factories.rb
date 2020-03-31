@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :campaign do
     name { "Dragon of Icespire Peak" }
+    user
   end
 
   factory :map do
@@ -29,5 +30,11 @@ FactoryBot.define do
     image do
       Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end
+  end
+
+  factory :user do
+    sequence(:name) { |n| "Dungeon Master#{n}" }
+    sequence(:email) { |n| "user-#{n}@thoughtbot.com" }
+    password { "password" }
   end
 end

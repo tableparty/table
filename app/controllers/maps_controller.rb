@@ -1,4 +1,6 @@
 class MapsController < ApplicationController
+  before_action :require_login
+
   def new
     campaign = Campaign.find(params[:campaign_id])
     render locals: { map: campaign.maps.new }

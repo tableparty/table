@@ -42,7 +42,9 @@ ActiveRecord::Schema.define(version: 2020_04_04_171951) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.uuid "current_map_id"
+    t.uuid "user_id"
     t.index ["current_map_id"], name: "index_campaigns_on_current_map_id"
+    t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
   create_table "maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -66,8 +68,21 @@ ActiveRecord::Schema.define(version: 2020_04_04_171951) do
     t.index ["map_id"], name: "index_tokens_on_map_id"
   end
 
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name", null: false
+    t.string "email", null: false
+    t.string "encrypted_password", limit: 128, null: false
+    t.string "confirmation_token", limit: 128
+    t.string "remember_token", limit: 128, null: false
+    t.index ["email"], name: "index_users_on_email"
+    t.index ["remember_token"], name: "index_users_on_remember_token"
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns", "maps", column: "current_map_id"
+  add_foreign_key "campaigns", "users"
   add_foreign_key "maps", "campaigns"
   add_foreign_key "tokens", "maps"
 end

@@ -1,0 +1,21 @@
+<div id="clearance" class="sign-up mx-auto max-w-sm">
+  <h2 class="text-4xl"><%= t(".title") %></h2>
+
+  <hr class="my-2" />
+
+  <%= form_for @user, class: "my-2" do |form| %>
+    <%= render partial: '/users/form', object: form %>
+
+    <div class="submit-field">
+      <%= form.submit class: "btn" %>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="text-sm">
+      <% if Clearance.configuration.allow_sign_up? %>
+        Already have an account? <%= link_to t(".sign_in"), sign_in_path, class: "text-blue-500 hover:text-blue-800" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
