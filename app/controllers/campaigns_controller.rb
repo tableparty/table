@@ -17,7 +17,7 @@ class CampaignsController < ApplicationController
   end
 
   def show
-    render locals: { campaign: Campaign.find(params[:id]) }
+    render locals: { campaign: Campaign.find(params[:id]) }, layout: "campaign"
   end
 
   private
