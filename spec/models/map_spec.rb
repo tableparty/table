@@ -63,7 +63,7 @@ RSpec.describe Map, type: :model do
   end
 
   describe "#center_image" do
-    it "sets x and y to the center of the image at the current zoom_level" do
+    it "sets x to the center of the image at the current zoom_level" do
       map = create(:map, zoom: 0)
 
       map.center_image
@@ -71,6 +71,13 @@ RSpec.describe Map, type: :model do
       expect(map.x).to eq(
         ((map.original_width * map.zoom_amount) / 2).round
       )
+    end
+
+    it "sets y to the center of the image at the current zoom_level" do
+      map = create(:map, zoom: 0)
+
+      map.center_image
+
       expect(map.y).to eq(
         ((map.original_height * map.zoom_amount) / 2).round
       )

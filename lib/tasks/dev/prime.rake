@@ -19,8 +19,8 @@ namespace :dev do
     ].each do |details|
       map = campaign.maps.find_or_create_by(
         name: details[:name]
-      ) do |map|
-        map.image.attach(
+      ) do |map_record|
+        map_record.image.attach(
           io: File.open(
             Rails.root.join("spec/fixtures/files/#{details[:image_filename]}")
           ),

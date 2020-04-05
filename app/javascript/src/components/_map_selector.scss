@@ -59,7 +59,7 @@
     text-white
   ;
 
-  text-shadow: 1px 3px 0 rgba(0, 0, 0, 0.1), 1px 2px 0 rgba(0, 0, 0, 0.06);
+  text-shadow: 1px 3px 0 rgba(0, 0, 0, 0.1), 1px 2px 0 rgba(0, 0, 0, 0.06); // scss-lint:disable ColorVariable
 }
 
 .map-selector__new {

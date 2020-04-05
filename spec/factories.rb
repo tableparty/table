@@ -14,9 +14,7 @@ FactoryBot.define do
       Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end
 
-    after(:create) do |map|
-      map.center_image
-    end
+    after(:create, &:center_image)
   end
 
   factory :token do

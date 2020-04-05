@@ -6,7 +6,7 @@
   user-select: none;
 
   .controls {
-    button[disabled] {
+    [disabled] {
       @apply cursor-not-allowed text-gray-400;
     }
   }
