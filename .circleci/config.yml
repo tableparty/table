@@ -1,0 +1,63 @@
+---
+version: 2
+jobs:
+  build:
+    working_directory: ~/table
+    docker:
+      - image: circleci/ruby:2.6.4-node-browsers
+        environment:
+          PGHOST: localhost
+          PGUSER: table
+          PGPASSWORD: test
+          RAILS_ENV: test
+      - image: postgres:9.5
+        environment:
+          POSTGRES_USER: table
+          POSTGRES_DB: table_test
+          POSTGRES_PASSWORD: test
+    steps:
+      - checkout
+
+      # Restore Cached Dependencies
+      - type: cache-restore
+        name: Restore bundle cache
+        key: table-{{ checksum "Gemfile.lock" }}
+
+      - type: cache-restore
+        name: Restore yarn cache
+        key: table-{{ checksum "yarn.lock" }}
+
+      # Bundle install dependencies
+      - run: bundle install --path vendor/bundle
+
+      # Yarn install dependencies
+      - run: yarn install
+
+      # Cache Dependencies
+      - type: cache-save
+        name: Store bundle cache
+        key: table-{{ checksum "Gemfile.lock" }}
+        paths:
+          - vendor/bundle
+
+      - type: cache-save
+        name: Store yarn cache
+        key: table-{{ checksum "yarn.lock" }}
+        paths:
+          - node_modules
+
+      # Wait for DB
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+
+      # Setup the environment
+      # - run: cp .sample.env .env
+
+      # Setup the database
+      - run: bundle exec rails db:setup
+
+      # Run the tests
+      - run: bundle exec rspec --format RspecJunitFormatter --out test_results/rspec.xml --format progress
+
+      # Save test results
+      - store_test_results:
+          path: test_results
