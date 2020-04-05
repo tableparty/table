@@ -28,6 +28,19 @@ export default class extends Controller {
     }, {
       received: this.cableReceived.bind(this)
     })
+
+    this.repositionMap = () => {
+      this.setMapPosition(
+        this.imageTarget.dataset.x,
+        this.imageTarget.dataset.y
+      )
+    }
+
+    window.addEventListener('resize', this.repositionMap)
+  }
+
+  disconnect() {
+    window.removeEventListener('resize', this.repositionMap)
   }
 
   moveMap(event) {
