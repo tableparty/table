@@ -10,16 +10,7 @@
   </head>
 
   <body>
-    <div class="bg-gray-200">
-      <div class="mx-4 py-4">
-        <div>
-          <%= link_to root_path do %>
-            <span class="text-2xl">Table</span>
-            <span class="text-gray-600 italic">A simple virtual table-top</span>
-          <% end %>
-        </div>
-      </div>
-    </div>
+    <%= render partial: "header", locals: { full_width: true } %>
     <div class="mx-4 py-4">
       <%= yield %>
     </div>
