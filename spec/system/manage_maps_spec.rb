@@ -16,7 +16,7 @@ RSpec.describe "manage maps", type: :system do
     attach_file "Image", file_fixture("dwarven-excavation.jpg")
     click_on "Create Map"
     expect(page).to have_content "Dwarven Excavation"
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
 
     map = campaign.maps.first
     expect(page).to have_map_with_data(map, "x", (map.width / 2).to_s)
@@ -38,9 +38,9 @@ RSpec.describe "manage maps", type: :system do
     create :map, campaign: campaign, name: "Gnomengarde"
     visit campaign_path(campaign)
     expect(page).to have_css "h2", text: "No Current Map"
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
     expect(page).to have_css "h2", text: "Dwarven Excavation"
-    find(".campaign-map-selector", text: "Gnomengarde").click
+    find(".map-selector__option", text: "Gnomengarde").click
     expect(page).to have_css "h2", text: "Gnomengarde"
   end
 
@@ -48,7 +48,7 @@ RSpec.describe "manage maps", type: :system do
     campaign = create :campaign
     map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
     visit campaign_path(campaign)
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
     click_and_move_map(map, from: { x: 300, y: 300 }, to: { x: 50, y: 50 })
 
     expect(page).to have_map_with_data(map, "x", "550")
@@ -59,7 +59,7 @@ RSpec.describe "manage maps", type: :system do
     campaign = create :campaign
     map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
     visit campaign_path(campaign)
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
 
     using_session "other user" do
       visit campaign_path(campaign)
@@ -79,7 +79,7 @@ RSpec.describe "manage maps", type: :system do
     map.center_image
 
     visit campaign_path(campaign)
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
 
     expect(page).to have_map_with_data(map, "width", "100")
     expect(page).to have_map_with_data(map, "height", "100")
@@ -97,7 +97,7 @@ RSpec.describe "manage maps", type: :system do
     map.center_image
 
     visit campaign_path(campaign)
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
     using_session "other user" do
       visit campaign_path(campaign)
     end
@@ -125,12 +125,12 @@ RSpec.describe "manage maps", type: :system do
       expect(page).to have_css "h2", text: "No Current Map"
     end
 
-    find(".campaign-map-selector", text: "Dwarven Excavation").click
+    find(".map-selector__option", text: "Dwarven Excavation").click
     using_session "other user" do
       expect(page).to have_css "h2", text: "Dwarven Excavation"
     end
 
-    find(".campaign-map-selector", text: "Gnomengarde").click
+    find(".map-selector__option", text: "Gnomengarde").click
     using_session "other user" do
       expect(page).to have_css "h2", text: "Gnomengarde"
     end

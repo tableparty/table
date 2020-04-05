@@ -5,7 +5,7 @@ RSpec.describe "move tokens", type: :system do
     map = create :map
     token = create :token, map: map
     visit campaign_path(map.campaign)
-    find(".campaign-map-selector", text: map.name).click
+    find(".map-selector__option", text: map.name).click
     expect(page).to have_token_with_data(token, "token-id", token.id)
   end
 
@@ -13,7 +13,7 @@ RSpec.describe "move tokens", type: :system do
     map = create :map, zoom: 2
     token = create :token, map: map, x: 0, y: 0
     visit campaign_path(map.campaign)
-    find(".campaign-map-selector", text: map.name).click
+    find(".map-selector__option", text: map.name).click
 
     click_and_move_token(token, by: { x: 50, y: 50 })
 
@@ -25,7 +25,7 @@ RSpec.describe "move tokens", type: :system do
     map = create :map, zoom: 0
     token = create :token, map: map, x: 0, y: 0
     visit campaign_path(map.campaign)
-    find(".campaign-map-selector", text: map.name).click
+    find(".map-selector__option", text: map.name).click
 
     click_and_move_token(token, by: { x: 50, y: 50 })
 
@@ -37,7 +37,7 @@ RSpec.describe "move tokens", type: :system do
     map = create :map, zoom: 2
     token = create :token, map: map, x: 0, y: 0
     visit campaign_path(map.campaign)
-    find(".campaign-map-selector", text: map.name).click
+    find(".map-selector__option", text: map.name).click
 
     using_session "other user" do
       visit campaign_path(map.campaign)

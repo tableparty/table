@@ -1,0 +1,75 @@
+.map-selector {
+  @apply
+    my-4
+    overflow-x-auto
+  ;
+
+  display: grid;
+  grid-auto-columns: 24rem;
+  grid-auto-flow: column;
+  grid-gap: 1rem;
+}
+
+.map-selector__option {
+  @apply
+    bg-black
+    cursor-pointer
+    h-40
+    relative
+    rounded-lg
+  ;
+}
+
+.map-selector__option-background {
+  @apply
+    bg-center
+    bg-cover
+    duration-150
+    h-full
+    opacity-50
+    rounded-lg
+    transition
+    w-full
+  ;
+}
+
+.map-selector__option:hover .map-selector__option-background {
+  @apply
+    opacity-100
+  ;
+}
+
+.map-selector__option-overlay {
+  @apply
+    absolute
+    flex
+    flex-col
+    h-full
+    items-center
+    justify-center
+    top-0
+    w-full
+  ;
+}
+
+.map-selector__option-text {
+  @apply
+    font-bold
+    pointer-events-none
+    text-white
+  ;
+
+  text-shadow: 1px 3px 0 rgba(0, 0, 0, 0.1), 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.map-selector__new {
+  @apply
+    bg-gray-200
+    border
+    flex
+    flex-col
+    items-center
+    justify-center
+    text-gray-700
+  ;
+}
