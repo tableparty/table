@@ -122,6 +122,7 @@ RSpec.describe "manage maps", type: :system do
     visit campaign_path(campaign)
     using_session "other user" do
       visit campaign_path(campaign)
+      wait_for_connection
       expect(page).to have_css "h2", text: "No Current Map"
     end
 
@@ -134,6 +135,10 @@ RSpec.describe "manage maps", type: :system do
     using_session "other user" do
       expect(page).to have_css "h2", text: "Gnomengarde"
     end
+  end
+
+  def wait_for_connection
+    page.has_no_css?("[data-target='campaign.statusIndicator']")
   end
 
   def have_map_with_data(map, attribute, value)

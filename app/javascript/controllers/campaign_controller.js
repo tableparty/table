@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["mapOption", "currentMap"]
+  static targets = ["mapOption", "currentMap", "statusIndicator"]
 
   connect() {
     this.campaignId = this.element.dataset.campaignId
@@ -11,6 +11,8 @@ export default class extends Controller {
       id: this.campaignId
     }, {
       received: this.cableReceived.bind(this),
+      connected: () => { this.statusIndicatorTarget.style.display = 'none' },
+      disconnected: () => { this.statusIndicatorTarget.style.display = 'block' }
     })
   }
 

@@ -2,7 +2,7 @@
 
 <hr class="my-2" />
 
-<%= content_tag :div, data: { controller: "campaign", "campaign-id": campaign.id } do %>
+<%= content_tag :div, class: "relative", data: { controller: "campaign", "campaign-id": campaign.id } do %>
   <div class="map-selector">
     <% campaign.maps.each do |map| %>
       <div class="map-selector__option">
@@ -22,5 +22,9 @@
 
   <div data-target="campaign.currentMap">
     <%= render partial: "current_map", locals: { campaign: campaign } %>
+  </div>
+
+  <div data-target="campaign.statusIndicator" class="absolute top-0 left-0 w-full h-full bg-white flex items-center justify-center opacity-50">
+    <span>Connecting...</span>
   </div>
 <% end %>
