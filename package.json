@@ -10,8 +10,13 @@
     "tailwindcss": "^1.2.0",
     "turbolinks": "^5.2.0"
   },
+  "scripts": {
+    "lint": "eslint app/javascript"
+  },
   "version": "0.1.0",
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
     "webpack-dev-server": "^3.10.3"
   }
 }

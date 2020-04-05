@@ -35,7 +35,8 @@ $ rails spec
 Run linting before merging. Linting for ruby and scss is setup:
 
 ```
-$ rails lint      # Runs lint:ruby and lint:scss
+$ rails lint      # Runs lint:ruby, lint:js and lint:scss
 $ rails lint:ruby # Runs rubocop
+$ rails lint:js   # Runs eslint
 $ rails lint:scss # Rubs scss-lint
 ```
