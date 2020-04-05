@@ -1,25 +1,30 @@
+:root {
+  --zoom-scale: 1;
+}
+
 .token {
   @apply
     flex
     items-center
-    -ml-4
-    -mt-4
     absolute;
-  width: min-content;
+
+  margin-left: calc(-1rem * var(--zoom-scale));
+  margin-top: calc(-1rem * var(--zoom-scale));
 }
 
 .token__image {
   @apply
-    w-8
-    h-8
     bg-cover
     bg-center
     rounded-full
-    border-2
     border-white
     pointer-events-none
     z-0
     shadow;
+
+  border-width: calc(2px * var(--zoom-scale));
+  height: calc(2rem * var(--zoom-scale));
+  width: calc(2rem * var(--zoom-scale));
 }
 
 .token__name {

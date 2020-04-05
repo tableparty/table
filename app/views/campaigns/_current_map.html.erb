@@ -18,20 +18,7 @@
     },
     style: "background-image: url('#{url_for campaign.current_map.image}');" do %>
     <div class="relative" data-target="map.tokenContainer">
-      <% campaign.current_map.tokens.each do |token| %>
-        <%= content_tag :div,
-          class: "token",
-          data: {
-            target: "map.token",
-            action: "mousedown->map#startMoveToken",
-            token_id: token.id,
-            x: token.x,
-            y: token.y
-          } do %>
-          <%= content_tag :div, "", class: "token__image", style: "background-image: url('#{url_for token.image}');" %>
-          <span class="token__name"><%= token.name %></span>
-        <% end %>
-      <% end %>
+      <%= render campaign.current_map.tokens %>
     </div>
     <div class="controls w-16 absolute top-0 right-0 m-2 flex justify-center">
       <%= button_tag class: "flex-1 text-center border rounded-l-md h-7 bg-gray-200 cursor-default", data: { target: "map.zoomOut", action: "click->map#zoomOut" } do %>

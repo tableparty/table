@@ -150,6 +150,7 @@ export default class extends Controller {
     this.imageTarget.style.backgroundSize = `${this.imageTarget.dataset.width}px ${this.imageTarget.dataset.height}px`
     this.zoomOutTarget.disabled = (zoom === 0)
     this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
+    document.documentElement.style.setProperty('--zoom-scale', amount);
 
     this.tokenTargets.forEach(token => {
       token.style.left = `${parseInt(token.dataset.x) * parseFloat(this.imageTarget.dataset.zoomAmount)}px`
