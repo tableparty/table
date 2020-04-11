@@ -49,7 +49,7 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use
   # secure cookies.
-  # config.force_ssl = true
+  config.force_ssl = true
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
@@ -130,5 +130,5 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true
   }
-  ActionMailer::Base.delivery_method = :smtp
+  config.middleware.use Rack::CanonicalHost, ENV.fetch("APP_HOST")
 end

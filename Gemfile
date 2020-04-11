@@ -46,4 +46,8 @@ group :test do
   gem "webdrivers"
 end
 
+group :production do
+  gem "rack-canonical-host"
+end
+
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby]
