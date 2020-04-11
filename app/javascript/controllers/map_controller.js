@@ -20,12 +20,12 @@ export default class extends Controller {
       received: this.cableReceived.bind(this)
     })
 
-    window.addEventListener('resize', this.setViewportSize.bind(this))
+    this.onWindowResize = this.setViewportSize.bind(this)
+    window.addEventListener('resize', this.onWindowResize)
   }
 
   disconnect() {
     window.removeEventListener('resize', this.onWindowResize)
-    this.observer.disconnect()
   }
 
   moveMap(event) {
