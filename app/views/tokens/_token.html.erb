@@ -3,7 +3,7 @@
   data: {
     controller: "css-var",
     target: "map.token",
-    action: "mousedown->map#startMoveToken",
+    action: "mousedown->map#startMove mousemove->map#moveToken mouseup->map#finishMove",
     token_id: token.id,
     x: token.x,
     y: token.y,

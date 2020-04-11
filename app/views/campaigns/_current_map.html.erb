@@ -7,7 +7,7 @@
       controller: "map css-var",
       "map-id": campaign.current_map.id,
       target: "map.image",
-      action: "mousedown->map#moveMap",
+      action: "mousedown->map#startMove mousemove->map#moveMap mouseup->map#finishMove",
       x: campaign.current_map.x,
       y: campaign.current_map.y,
       zoom: campaign.current_map.zoom,
