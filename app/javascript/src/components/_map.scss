@@ -1,7 +1,10 @@
 .current-map {
   @apply w-full h-screen;
 
+  background-position-x: calc((var(--viewport-x) - var(--x)) * 1px);
+  background-position-y: calc((var(--viewport-y) - var(--y)) * 1px);
   background-repeat: no-repeat;
+  background-size: calc(var(--width) * 1px) calc(var(--height) * 1px);
   cursor: move;
   user-select: none;
 
@@ -9,5 +12,17 @@
     [disabled] {
       @apply cursor-not-allowed text-gray-400;
     }
+  }
+}
+
+.current-map__token-container {
+  @apply relative;
+
+  left: calc((var(--viewport-x) - var(--x)) * 1px);
+  top: calc((var(--viewport-y) - var(--y)) * 1px);
+
+  .token {
+    left: calc(var(--x) * var(--zoom-scale) * 1px);
+    top: calc(var(--y) * var(--zoom-scale) * 1px);
   }
 }
