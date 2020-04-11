@@ -22,7 +22,7 @@
   top: calc((var(--viewport-y) - var(--y)) * 1px);
 
   .token {
-    left: calc(var(--x) * var(--zoom-scale) * 1px);
-    top: calc(var(--y) * var(--zoom-scale) * 1px);
+    left: calc(var(--x) * var(--zoom-amount) * 1px);
+    top: calc(var(--y) * var(--zoom-amount) * 1px);
   }
 }

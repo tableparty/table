@@ -2,11 +2,25 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer"]
+  static targets = ["image", "zoomIn", "zoomOut", "token"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
 
+    this.observer = new MutationObserver(mutations => {
+      mutations.forEach(({ target, attributeName }) => {
+        target.dataset.cssVars.split(" ").forEach(cssVar => {
+          if (attributeName == `data-${cssVar}`) {
+            target.style.setProperty(`--${cssVar}`, target.dataset[cssVar])
+          }
+        })
+      })
+    })
+
+    this.observer.observe(this.element, { attributes: true })
+    this.tokenTargets.forEach(token => this.observer.observe(token, { attributes: true }))
+
+    this.setViewportSize()
     this.setMapPosition(
       parseInt(this.element.dataset.x),
       parseInt(this.element.dataset.y)
@@ -20,8 +34,7 @@ export default class extends Controller {
 
     this.tokenTargets.forEach(target => {
       target.ondragstart = () => { return null }
-      target.style.setProperty("--x", target.dataset.x)
-      target.style.setProperty("--y", target.dataset.y)
+      this.setTokenLocation(target, target.dataset.x, target.dataset.y)
     })
 
     this.channel = consumer.subscriptions.create({
@@ -43,6 +56,7 @@ export default class extends Controller {
 
   disconnect() {
     window.removeEventListener('resize', this.repositionMap)
+    this.observer.disconnect()
   }
 
   moveMap(event) {
@@ -84,16 +98,15 @@ export default class extends Controller {
   }
 
   setMapPosition(x, y) {
-    let viewportX = this.imageTarget.clientWidth / 2
-    let viewportY = this.imageTarget.clientHeight / 2
     this.imageTarget.dataset.x = x
     this.imageTarget.dataset.y = y
+  }
+
+  setViewportSize() {
+    let viewportX = this.imageTarget.clientWidth / 2
+    let viewportY = this.imageTarget.clientHeight / 2
     this.imageTarget.dataset.viewportX = viewportX
     this.imageTarget.dataset.viewportY = viewportY
-    this.imageTarget.style.setProperty("--x", x)
-    this.imageTarget.style.setProperty("--y", y)
-    this.imageTarget.style.setProperty("--viewport-x", viewportX)
-    this.imageTarget.style.setProperty("--viewport-y", viewportY)
   }
 
   zoomIn(event) {
@@ -165,9 +178,7 @@ export default class extends Controller {
     this.imageTarget.dataset.zoomAmount = parseFloat(amount)
     this.imageTarget.dataset.width = width
     this.imageTarget.dataset.height = height
-    this.imageTarget.style.setProperty("--width", width)
-    this.imageTarget.style.setProperty("--height", height)
-    this.imageTarget.style.setProperty('--zoom-scale', amount);
+    this.imageTarget.dataset.zoomAmount = amount
     this.zoomOutTarget.disabled = (zoom === 0)
     this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
   }
@@ -200,7 +211,5 @@ export default class extends Controller {
   setTokenLocation(token, x, y) {
     token.dataset.x = x
     token.dataset.y = y
-    token.style.setProperty("--x", x)
-    token.style.setProperty("--y", y)
   }
 }

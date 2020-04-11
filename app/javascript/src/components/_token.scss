@@ -1,5 +1,5 @@
 :root {
-  --zoom-scale: 1;
+  --zoom-amount: 1;
 }
 
 .token {
@@ -8,8 +8,8 @@
     items-center
     absolute;
 
-  margin-left: calc(-1rem * var(--zoom-scale));
-  margin-top: calc(-1rem * var(--zoom-scale));
+  margin-left: calc(-1rem * var(--zoom-amount));
+  margin-top: calc(-1rem * var(--zoom-amount));
 }
 
 .token__image {
@@ -22,9 +22,9 @@
     z-0
     shadow;
 
-  border-width: calc(2px * var(--zoom-scale));
-  height: calc(2rem * var(--zoom-scale));
-  width: calc(2rem * var(--zoom-scale));
+  border-width: calc(2px * var(--zoom-amount));
+  height: calc(2rem * var(--zoom-amount));
+  width: calc(2rem * var(--zoom-amount));
 }
 
 .token__name {

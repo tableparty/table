@@ -5,7 +5,8 @@
     action: "mousedown->map#startMoveToken",
     token_id: token.id,
     x: token.x,
-    y: token.y
+    y: token.y,
+    "css-vars": "x y"
   } do %>
   <%= content_tag :div, "", class: "token__image", style: "background-image: url('#{url_for token.image}');" %>
   <span class="token__name"><%= token.name %></span>

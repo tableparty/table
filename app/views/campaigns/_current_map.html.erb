@@ -14,7 +14,8 @@
       "zoom-amount": campaign.current_map.zoom_amount,
       height: campaign.current_map.height,
       width: campaign.current_map.width,
-      "zoom-max": campaign.current_map.zoom_max
+      "zoom-max": campaign.current_map.zoom_max,
+      "css-vars": "x y viewport-x viewport-y width height zoom-amount"
     },
     style: "background-image: url('#{url_for campaign.current_map.image}');" do %>
     <div class="current-map__token-container" data-target="map.tokenContainer">
