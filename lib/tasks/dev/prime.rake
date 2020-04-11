@@ -10,17 +10,10 @@ namespace :dev do
       dm.save
     end
 
-    campaign = Campaign.find_by(
-      name: "Dragon of Icespire Peak"
+    campaign = Campaign.find_or_create_by(
+      name: "Dragon of Icespire Peak",
+      user: dm
     )
-    if campaign
-      campaign.update(user: dm)
-    else
-      campaign = Campaign.find_or_create_by(
-        name: "Dragon of Icespire Peak",
-        user: dm
-      )
-    end
 
     [
       {
