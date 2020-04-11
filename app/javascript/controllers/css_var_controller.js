@@ -2,7 +2,6 @@ import { Controller } from "stimulus"
 
 export default class extends Controller {
   connect() {
-    console.log("connected")
     this.observer = new MutationObserver(mutations => {
       mutations.forEach(({ target, attributeName }) => {
         target.dataset.cssVars.split(" ").forEach(cssVar => {
