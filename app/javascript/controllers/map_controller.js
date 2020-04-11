@@ -2,24 +2,16 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer"]
+  static targets = ["image", "zoomIn", "zoomOut", "token"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
 
-    this.setMapPosition(
-      parseInt(this.element.dataset.x),
-      parseInt(this.element.dataset.y)
-    )
-    this.setMapZoom(
-      parseInt(this.element.dataset.zoom),
-      parseFloat(this.element.dataset.zoomAmount),
-      parseInt(this.element.dataset.width),
-      parseInt(this.element.dataset.height)
-    )
+    this.setViewportSize()
+    this.updateZoomButtons()
 
     this.tokenTargets.forEach(target => {
-      target.ondragstart = () => { return null }
+      target.ondragstart = () => null
     })
 
     this.channel = consumer.subscriptions.create({
@@ -29,18 +21,12 @@ export default class extends Controller {
       received: this.cableReceived.bind(this)
     })
 
-    this.repositionMap = () => {
-      this.setMapPosition(
-        this.imageTarget.dataset.x,
-        this.imageTarget.dataset.y
-      )
-    }
-
-    window.addEventListener('resize', this.repositionMap)
+    this.onWindowResize = this.setViewportSize.bind(this)
+    window.addEventListener('resize', this.onWindowResize)
   }
 
   disconnect() {
-    window.removeEventListener('resize', this.repositionMap)
+    window.removeEventListener('resize', this.onWindowResize)
   }
 
   moveMap(event) {
@@ -75,20 +61,20 @@ export default class extends Controller {
       }
     }
     document.addEventListener("mouseup", () => {
-      this.imageTarget.dataset.beingDragged = false
+      delete this.imageTarget.dataset.beingDragged
       document.removeEventListener("mousemove", handleMove)
     })
     document.addEventListener("mousemove", handleMove)
   }
 
   setMapPosition(x, y) {
-    let viewPortX = this.imageTarget.clientWidth / 2
-    let viewPortY = this.imageTarget.clientHeight / 2
     this.imageTarget.dataset.x = x
     this.imageTarget.dataset.y = y
-    this.imageTarget.style.backgroundPosition = `${viewPortX - x}px ${viewPortY - y}px`
-    this.tokenContainerTarget.style.left = `${viewPortX - x}px`
-    this.tokenContainerTarget.style.top = `${viewPortY - y}px`
+  }
+
+  setViewportSize() {
+    this.imageTarget.dataset.viewportX = this.imageTarget.clientWidth
+    this.imageTarget.dataset.viewportY = this.imageTarget.clientHeight
   }
 
   zoomIn(event) {
@@ -126,8 +112,12 @@ export default class extends Controller {
 
     document.addEventListener("mousemove", moveToken)
     document.addEventListener("mouseup", () => {
-      target.dataset.beingDragged = false
       document.removeEventListener("mousemove", moveToken)
+      delete target.dataset.originalX
+      delete target.dataset.originalY
+      delete target.dataset.dragStartX
+      delete target.dataset.dragStartY
+      delete target.dataset.beingDragged
     })
   }
 
@@ -157,18 +147,16 @@ export default class extends Controller {
 
   setMapZoom(zoom, amount, width, height) {
     this.imageTarget.dataset.zoom = zoom
-    this.imageTarget.dataset.zoomAmount = parseFloat(amount)
     this.imageTarget.dataset.width = width
     this.imageTarget.dataset.height = height
-    this.imageTarget.style.backgroundSize = `${this.imageTarget.dataset.width}px ${this.imageTarget.dataset.height}px`
+    this.imageTarget.dataset.zoomAmount = amount
+    this.updateZoomButtons()
+  }
+
+  updateZoomButtons() {
+    const zoom = parseInt(this.imageTarget.dataset.zoom)
     this.zoomOutTarget.disabled = (zoom === 0)
     this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
-    document.documentElement.style.setProperty('--zoom-scale', amount);
-
-    this.tokenTargets.forEach(token => {
-      token.style.left = `${parseInt(token.dataset.x) * parseFloat(this.imageTarget.dataset.zoomAmount)}px`
-      token.style.top = `${parseInt(token.dataset.y) * parseFloat(this.imageTarget.dataset.zoomAmount)}px`
-    })
   }
 
   cableReceived(data) {
@@ -187,7 +175,7 @@ export default class extends Controller {
       }
       case "moveToken": {
         const token = this.tokenTargets.find(token => token.dataset.tokenId == data.token_id)
-        if (token.dataset.beingDragged == "true") {
+        if (token.dataset.beingDragged) {
           return
         }
         this.setTokenLocation(token, data.x, data.y)
@@ -199,7 +187,5 @@ export default class extends Controller {
   setTokenLocation(token, x, y) {
     token.dataset.x = x
     token.dataset.y = y
-    token.style.left = `${x * parseFloat(this.imageTarget.dataset.zoomAmount)}px`
-    token.style.top = `${y * parseFloat(this.imageTarget.dataset.zoomAmount)}px`
   }
 }

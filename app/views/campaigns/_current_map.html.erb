@@ -4,7 +4,7 @@
   <%= content_tag :div,
     class: "current-map relative overflow-hidden",
     data: {
-      controller: "map",
+      controller: "map css-var",
       "map-id": campaign.current_map.id,
       target: "map.image",
       action: "mousedown->map#moveMap",
@@ -14,10 +14,11 @@
       "zoom-amount": campaign.current_map.zoom_amount,
       height: campaign.current_map.height,
       width: campaign.current_map.width,
-      "zoom-max": campaign.current_map.zoom_max
+      "zoom-max": campaign.current_map.zoom_max,
+      "css-vars": "x y viewport-x viewport-y width height zoom-amount"
     },
     style: "background-image: url('#{url_for campaign.current_map.image}');" do %>
-    <div class="relative" data-target="map.tokenContainer">
+    <div class="current-map__token-container" data-target="map.tokenContainer">
       <%= render campaign.current_map.tokens %>
     </div>
     <div class="controls w-16 absolute top-0 right-0 m-2 flex justify-center">
