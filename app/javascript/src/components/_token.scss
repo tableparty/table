@@ -8,8 +8,10 @@
     items-center
     absolute;
 
+  left: calc(var(--x) * var(--zoom-amount) * 1px);
   margin-left: calc(-1rem * var(--zoom-amount));
   margin-top: calc(-1rem * var(--zoom-amount));
+  top: calc(var(--y) * var(--zoom-amount) * 1px);
 }
 
 .token__image {

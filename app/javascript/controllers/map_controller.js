@@ -51,11 +51,12 @@ export default class extends Controller {
       )
     }
 
-    window.addEventListener('resize', this.repositionMap)
+    this.onWindowResize = () => this.setViewportSize()
+    window.addEventListener('resize', this.onWindowResize)
   }
 
   disconnect() {
-    window.removeEventListener('resize', this.repositionMap)
+    window.removeEventListener('resize', this.onWindowResize)
     this.observer.disconnect()
   }
 
@@ -91,7 +92,7 @@ export default class extends Controller {
       }
     }
     document.addEventListener("mouseup", () => {
-      this.imageTarget.dataset.beingDragged = false
+      delete this.imageTarget.dataset.beingDragged
       document.removeEventListener("mousemove", handleMove)
     })
     document.addEventListener("mousemove", handleMove)
@@ -103,10 +104,8 @@ export default class extends Controller {
   }
 
   setViewportSize() {
-    let viewportX = this.imageTarget.clientWidth / 2
-    let viewportY = this.imageTarget.clientHeight / 2
-    this.imageTarget.dataset.viewportX = viewportX
-    this.imageTarget.dataset.viewportY = viewportY
+    this.imageTarget.dataset.viewportX = this.imageTarget.clientWidth
+    this.imageTarget.dataset.viewportY = this.imageTarget.clientHeight
   }
 
   zoomIn(event) {
@@ -146,6 +145,11 @@ export default class extends Controller {
     document.addEventListener("mouseup", () => {
       target.dataset.beingDragged = false
       document.removeEventListener("mousemove", moveToken)
+      delete target.dataset.originalX
+      delete target.dataset.originalY
+      delete target.dataset.dragStartX
+      delete target.dataset.dragStartY
+      delete target.dataset.beingDragged
     })
   }
 
@@ -199,7 +203,7 @@ export default class extends Controller {
       }
       case "moveToken": {
         const token = this.tokenTargets.find(token => token.dataset.tokenId == data.token_id)
-        if (token.dataset.beingDragged == "true") {
+        if (token.dataset.beingDragged) {
           return
         }
         this.setTokenLocation(token, data.x, data.y)
