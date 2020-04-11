@@ -8,6 +8,7 @@ export default class extends Controller {
     this.mapId = this.element.dataset.mapId
 
     this.setViewportSize()
+    this.disableZoomButtons()
 
     this.tokenTargets.forEach(target => {
       target.ondragstart = () => null
@@ -147,10 +148,14 @@ export default class extends Controller {
 
   setMapZoom(zoom, amount, width, height) {
     this.imageTarget.dataset.zoom = zoom
-    this.imageTarget.dataset.zoomAmount = parseFloat(amount)
     this.imageTarget.dataset.width = width
     this.imageTarget.dataset.height = height
     this.imageTarget.dataset.zoomAmount = amount
+    this.disableZoomButtons()
+  }
+
+  disableZoomButtons() {
+    const zoom = parseInt(this.imageTarget.dataset.zoom)
     this.zoomOutTarget.disabled = (zoom === 0)
     this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
   }
