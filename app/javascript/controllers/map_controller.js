@@ -7,19 +7,6 @@ export default class extends Controller {
   connect() {
     this.mapId = this.element.dataset.mapId
 
-    this.observer = new MutationObserver(mutations => {
-      mutations.forEach(({ target, attributeName }) => {
-        target.dataset.cssVars.split(" ").forEach(cssVar => {
-          if (attributeName == `data-${cssVar}`) {
-            target.style.setProperty(`--${cssVar}`, target.dataset[cssVar])
-          }
-        })
-      })
-    })
-
-    this.observer.observe(this.element, { attributes: true })
-    this.tokenTargets.forEach(token => this.observer.observe(token, { attributes: true }))
-
     this.setViewportSize()
     this.setMapPosition(
       parseInt(this.element.dataset.x),
@@ -34,7 +21,6 @@ export default class extends Controller {
 
     this.tokenTargets.forEach(target => {
       target.ondragstart = () => { return null }
-      this.setTokenLocation(target, target.dataset.x, target.dataset.y)
     })
 
     this.channel = consumer.subscriptions.create({
@@ -43,13 +29,6 @@ export default class extends Controller {
     }, {
       received: this.cableReceived.bind(this)
     })
-
-    this.repositionMap = () => {
-      this.setMapPosition(
-        this.imageTarget.dataset.x,
-        this.imageTarget.dataset.y
-      )
-    }
 
     this.onWindowResize = () => this.setViewportSize()
     window.addEventListener('resize', this.onWindowResize)
