@@ -8,19 +8,9 @@ export default class extends Controller {
     this.mapId = this.element.dataset.mapId
 
     this.setViewportSize()
-    this.setMapPosition(
-      parseInt(this.element.dataset.x),
-      parseInt(this.element.dataset.y)
-    )
-    this.setMapZoom(
-      parseInt(this.element.dataset.zoom),
-      parseFloat(this.element.dataset.zoomAmount),
-      parseInt(this.element.dataset.width),
-      parseInt(this.element.dataset.height)
-    )
 
     this.tokenTargets.forEach(target => {
-      target.ondragstart = () => { return null }
+      target.ondragstart = () => null
     })
 
     this.channel = consumer.subscriptions.create({
@@ -30,8 +20,7 @@ export default class extends Controller {
       received: this.cableReceived.bind(this)
     })
 
-    this.onWindowResize = () => this.setViewportSize()
-    window.addEventListener('resize', this.onWindowResize)
+    window.addEventListener('resize', this.setViewportSize.bind(this))
   }
 
   disconnect() {
