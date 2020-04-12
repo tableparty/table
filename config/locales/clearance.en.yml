@@ -52,11 +52,10 @@ en:
         your email address.
       title: Reset your password
   sessions:
-    form:
-      forgot_password: Forgot password?
-      sign_up: Sign up
     new:
       title: Sign in
+      forgot_password: Forgot password?
+      sign_up: Sign up
   users:
     new:
       sign_in: Sign in

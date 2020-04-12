@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Table</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body class="bg-gray-200 h-screen flex justify-center items-center">
+    <div class="w-full max-w-sm">
+      <%= render "flashes" %>
+
+      <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <%= yield %>
+      </div>
+
+      <p class="text-center text-gray-500 text-xs">
+        <span class="font-bold"><%= link_to "Table", root_path %></span>
+        <span>- A simple virtual table-top</span>
+      </p>
+    </div>
+  </body>
+</html>

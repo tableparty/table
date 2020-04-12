@@ -20,5 +20,11 @@ module Table
       # Default primary keys to uuids
       generators.orm :active_record, primary_key_type: :uuid
     end
+
+    config.to_prepare do
+      Clearance::PasswordsController.layout "sessions"
+      Clearance::SessionsController.layout "sessions"
+      Clearance::UsersController.layout "sessions"
+    end
   end
 end

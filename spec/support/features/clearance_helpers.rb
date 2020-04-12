@@ -37,7 +37,8 @@ module Features
     end
 
     def expect_user_to_be_signed_out
-      expect(page).to have_content I18n.t("layouts.application.sign_in")
+      visit root_path
+      expect(page).not_to have_content I18n.t("layouts.application.sign_out")
     end
 
     def user_with_reset_password

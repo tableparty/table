@@ -1,9 +1,4 @@
-<div id="clearance" class="sign-up mx-auto max-w-sm">
-  <h2 class="text-4xl"><%= t(".title") %></h2>
-
-  <hr class="my-2" />
-
-  <%= form_for @user, class: "my-2" do |form| %>
+  <%= form_for @user do |form| %>
     <%= render partial: '/users/form', object: form %>
 
     <div class="submit-field">
@@ -18,4 +13,3 @@
       <% end %>
     </div>
   <% end %>
-</div>
