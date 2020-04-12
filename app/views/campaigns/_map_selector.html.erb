@@ -1,0 +1,19 @@
+<div class="map-selector">
+  <% campaign.maps.each do |map| %>
+    <div class="map-selector__option">
+      <%= content_tag :div, nil, class: "map-selector__option-background", style: "background-image: url('#{url_for map.image}')" %>
+      <%= content_tag :div, class: "map-selector__option-overlay", data: {
+        action: "click->campaign#chooseMapOption",
+        map_id: map.id
+      } do %>
+        <%= content_tag :span, map.name, class: "map-selector__option-text" %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= link_to new_campaign_map_path(campaign), class: "map-selector__option map-selector__new" do %>
+    <div class="absolute">
+      <span class="">New Map</span>
+    </div>
+  <% end %>
+</div>

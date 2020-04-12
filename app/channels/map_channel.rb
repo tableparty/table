@@ -6,7 +6,7 @@ class MapChannel < ApplicationCable::Channel
 
   def move_map(data)
     map = Map.find(data["map_id"])
-    return if map.x == data["x"] && map.y == data["y"]
+    return if !dm?(map.campaign) || map.x == data["x"] && map.y == data["y"]
 
     if map.update(x: data["x"], y: data["y"])
       broadcast_to(
@@ -22,7 +22,7 @@ class MapChannel < ApplicationCable::Channel
 
   def set_zoom(data)
     map = Map.find(data["map_id"])
-    return if map.zoom == data["zoom"]
+    return if !dm?(map.campaign) || map.zoom == data["zoom"]
 
     if map.update(zoom: data["zoom"])
       broadcast_to(

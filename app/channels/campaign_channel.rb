@@ -7,7 +7,7 @@ class CampaignChannel < ApplicationCable::Channel
   def change_current_map(data)
     campaign = Campaign.find(data["campaign_id"])
     map = campaign.maps.find(data["map_id"])
-    return if campaign.current_map == map
+    return if !dm?(campaign) || campaign.current_map == map
 
     campaign.update(current_map: map)
     broadcast_to(
@@ -19,9 +19,6 @@ class CampaignChannel < ApplicationCable::Channel
   private
 
   def render_current_map(campaign)
-    ApplicationController.renderer.render(
-      partial: "campaigns/current_map",
-      locals: { campaign: campaign }
-    )
+    render_partial("campaigns/current_map", locals: { campaign: campaign })
   end
 end

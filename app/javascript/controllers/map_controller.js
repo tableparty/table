@@ -154,9 +154,11 @@ export default class extends Controller {
   }
 
   updateZoomButtons() {
-    const zoom = parseInt(this.imageTarget.dataset.zoom)
-    this.zoomOutTarget.disabled = (zoom === 0)
-    this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
+    if (this.hasZoomOutTarget && this.hasZoomInTarget) {
+      const zoom = parseInt(this.imageTarget.dataset.zoom)
+      this.zoomOutTarget.disabled = (zoom === 0)
+      this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
+    }
   }
 
   cableReceived(data) {
