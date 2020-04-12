@@ -16,6 +16,24 @@ namespace :dev do
     )
 
     [
+      "Jormund",
+      "Olokas",
+      "Tanpos",
+      "Thoduhr",
+      "Uxil",
+      "Yenkas"
+    ].each do |name|
+      campaign.characters.find_or_create_by(name: name) do |character|
+        character.image.attach(
+          io: File.open(
+            Rails.root.join("spec/fixtures/files/#{name.downcase}.jpeg")
+          ),
+          filename: "#{name.downcase}.jpeg"
+        )
+      end
+    end
+
+    [
       {
         name: "Dwarven Excavation",
         image_filename: "dwarven-excavation.jpg"
@@ -40,27 +58,7 @@ namespace :dev do
         )
       end
       map.center_image
-      [
-        "Jormund",
-        "Olokas",
-        "Tanpos",
-        "Thoduhr",
-        "Uxil",
-        "Yenkas"
-      ].each do |name|
-        map.tokens.find_or_create_by(
-          name: name
-        ) do |token|
-          token.x = (100..500).to_a.sample
-          token.y = (100..500).to_a.sample
-          token.image.attach(
-            io: File.open(
-              Rails.root.join("spec/fixtures/files/#{name.downcase}.jpeg")
-            ),
-            filename: "#{name.downcase}.jpeg"
-          )
-        end
-      end
+      map.populate_tokens
     end
   end
 end

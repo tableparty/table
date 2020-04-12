@@ -1,0 +1,4 @@
+<%= link_to edit_campaign_character_path(character.campaign, character), class: "character", data: { character_id: character.id } do %>
+  <%= content_tag :div, "", class: "character__image", style: "background-image: url('#{url_for character.image}');" %>
+  <span class="character__name"><%= character.name %></span>
+<% end %>

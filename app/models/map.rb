@@ -41,6 +41,12 @@ class Map < ApplicationRecord
     ZOOM_LEVELS[zoom]
   end
 
+  def populate_tokens
+    campaign.characters.each do |character|
+      tokens.find_or_create_by(tokenable: character)
+    end
+  end
+
   private
 
   def scale_coordinates

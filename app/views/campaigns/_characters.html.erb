@@ -1,0 +1,9 @@
+<div class="flex items-center justify-start md:justify-end">
+  <%= render campaign.characters %>
+  <% if dm?(campaign) %>
+    <%= link_to new_campaign_character_path(campaign), class: "character" do %>
+      <%= content_tag :div, "+", class: "character__image" %>
+      <span class="character__name">New Character</span>
+    <% end %>
+  <% end %>
+</div>

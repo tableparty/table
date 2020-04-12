@@ -24,6 +24,25 @@ RSpec.describe "manage maps", type: :system do
     expect(page).to have_map_with_data(map, "y", (map.height / 2).to_s)
   end
 
+  context "when creating a map for a campaign with characters" do
+    it "auto-populates the character tokens on the map" do
+      user = create(:user)
+      campaign = create(:campaign, user: user)
+      create(:character, campaign: campaign)
+
+      visit campaign_path(campaign, as: user)
+      click_on "New Map"
+      fill_in "Name", with: "Dwarven Excavation"
+      attach_file "Image", file_fixture("dwarven-excavation.jpg")
+      click_on "Create Map"
+      expect(page).to have_content "Dwarven Excavation"
+      find(".map-selector__option", text: "Dwarven Excavation").click
+
+      token = campaign.maps.first.tokens.first
+      expect(page).to have_token_with_data(token, "token-id", token.id)
+    end
+  end
+
   it "validates parameters for map" do
     user = create(:user)
     campaign = create :campaign, user: user

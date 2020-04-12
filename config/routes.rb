@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   delete "/sign_out" => "clearance/sessions#destroy", as: "sign_out"
   get "/sign_up" => "clearance/users#new", as: "sign_up"
   resources :campaigns, only: %i[index new create show] do
+    resources :characters
     resources :maps, only: %i[new create], shallow: true
   end
 

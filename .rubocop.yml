@@ -666,10 +666,12 @@ Rails/Validation:
 
 RSpec/ExampleLength:
   Enabled: true
+  Max: 10
   Exclude:
     - spec/system/*
 
 RSpec/MultipleExpectations:
   Enabled: true
+  Max: 3
   Exclude:
     - spec/system/*

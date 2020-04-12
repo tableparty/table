@@ -105,4 +105,17 @@ RSpec.describe Map, type: :model do
       expect(map.y).to eq original_y * zoom_change
     end
   end
+
+  describe "#populate_tokens" do
+    it "creates a token for each character in the campaign" do
+      map = create(:map)
+      character = create(:character, campaign: map.campaign)
+
+      map.populate_tokens
+
+      expect(map.tokens.size).to eq map.campaign.characters.size
+      expect(map.tokens.first.image.blob).to eq character.image.blob
+      expect(map.tokens.first.tokenable).to eq character
+    end
+  end
 end

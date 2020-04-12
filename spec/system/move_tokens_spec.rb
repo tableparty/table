@@ -55,10 +55,4 @@ RSpec.describe "move tokens", type: :system do
       expect(page).to have_token_with_data(token, "y", 50)
     end
   end
-
-  def have_token_with_data(token, attribute, value)
-    have_css(
-      ".token[data-token-id='#{token.id}'][data-#{attribute}='#{value}']"
-    )
-  end
 end

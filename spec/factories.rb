@@ -4,6 +4,18 @@ FactoryBot.define do
     user
   end
 
+  factory :character do
+    transient do
+      image_name { "uxil.jpeg" }
+    end
+
+    campaign
+    sequence(:name) { |n| "Uxil#{n}" }
+    image do
+      Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
+    end
+  end
+
   factory :map do
     transient do
       image_name { "small-map.jpg" }
@@ -24,7 +36,7 @@ FactoryBot.define do
     end
 
     map
-    name { "Uxil" }
+    sequence(:name) { |n| "Uxil#{n}" }
     x { rand(100) }
     y { rand(100) }
     image do

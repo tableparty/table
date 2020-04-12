@@ -28,4 +28,12 @@ RSpec.describe "Visitor viewing a map", type: :system do
     visit campaign_path(campaign)
     expect(page).not_to have_content "New Map"
   end
+
+  it "does not see option to create new characters" do
+    campaign = create(:campaign)
+
+    visit campaign_path(campaign)
+
+    expect(page).not_to have_content "New Character"
+  end
 end
