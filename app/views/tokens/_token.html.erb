@@ -1,9 +1,10 @@
 <%= content_tag :div,
   class: "token",
+  draggable: true,
   data: {
     controller: "css-var",
     target: "map.token",
-    action: "mousedown->map#startMoveToken",
+    action: "dragstart->map#startMoveToken drag->map#moveToken dragend->map#endMoveToken mousedown->map#stopPropagation",
     token_id: token.id,
     x: token.x,
     y: token.y,

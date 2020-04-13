@@ -21,22 +21,22 @@ def click_and_move_token(token, by:)
   dispatch_event(
     element,
     "this",
-    mouse_event(
-      "mousedown",
+    drag_event(
+      "dragstart",
       screen_x: element.native.location.x,
       screen_y: element.native.location.y
     )
   )
   dispatch_event(
-    page,
-    "document",
-    mouse_event(
-      "mousemove",
+    element,
+    "this",
+    drag_event(
+      "drag",
       screen_x: by[:x] + element.native.location.x,
       screen_y: by[:y] + element.native.location.y
     )
   )
-  dispatch_event(page, "document", "new MouseEvent('mouseup')")
+  dispatch_event(element, "this", "new DragEvent('dragend')")
 end
 
 def token_element(token)
@@ -45,6 +45,10 @@ end
 
 def dispatch_event(node, element, event)
   node.execute_script("#{element}.dispatchEvent(#{event})")
+end
+
+def drag_event(event, screen_x:, screen_y:)
+  "new DragEvent('#{event}', { screenX: #{screen_x}, screenY: #{screen_y} })"
 end
 
 def mouse_event(event, screen_x:, screen_y:)

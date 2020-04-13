@@ -99,34 +99,33 @@ export default class extends Controller {
     )
   }
 
+  stopPropagation(event) {
+    event.stopPropagation()
+  }
+
   startMoveToken(event) {
     event.stopPropagation()
+
     const { screenX, screenY, target } = event
+
     target.dataset.originalX = target.dataset.x
     target.dataset.originalY = target.dataset.y
     target.dataset.dragStartX = screenX
     target.dataset.dragStartY = screenY
     target.dataset.beingDragged = true
-
-    const moveToken = this.buildMoveToken(target).bind(this)
-
-    document.addEventListener("mousemove", moveToken)
-    document.addEventListener("mouseup", () => {
-      document.removeEventListener("mousemove", moveToken)
-      delete target.dataset.originalX
-      delete target.dataset.originalY
-      delete target.dataset.dragStartX
-      delete target.dataset.dragStartY
-      delete target.dataset.beingDragged
-    })
   }
 
-  buildMoveToken(target) {
-    return event => {
-      const { screenX, screenY } = event
-      const { originalX, originalY, dragStartX, dragStartY, tokenId } = target.dataset
-      const { zoomAmount } = this.imageTarget.dataset
+  moveToken(event) {
+    event.stopPropagation()
 
+    const { screenX, screenY, target } = event
+    const { x: currentX, y: currentY, originalX, originalY, dragStartX, dragStartY, tokenId } = target.dataset
+    const { zoomAmount } = this.imageTarget.dataset
+
+    const newX = parseInt(originalX) + ((screenX - parseInt(dragStartX)) / parseFloat(zoomAmount))
+    const newY = parseInt(originalY) + ((screenY - parseInt(dragStartY)) / parseFloat(zoomAmount))
+
+    if (newX != currentX || newY != currentY) {
       this.setTokenLocation(
         target,
         parseInt(originalX) + ((screenX - parseInt(dragStartX)) / parseFloat(zoomAmount)),
@@ -143,6 +142,18 @@ export default class extends Controller {
         }
       )
     }
+  }
+
+  endMoveToken({ target }) {
+    delete target.dataset.originalX
+    delete target.dataset.originalY
+    delete target.dataset.dragStartX
+    delete target.dataset.dragStartY
+    delete target.dataset.beingDragged
+  }
+
+  dragOver(event) {
+    event.preventDefault()
   }
 
   setMapZoom(zoom, amount, width, height) {
