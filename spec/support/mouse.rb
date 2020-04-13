@@ -18,13 +18,14 @@ end
 
 def click_and_move_token(token, by:)
   element = token_element(token)
+  page.execute_script("window.tempDataTransfer = new DataTransfer()")
   dispatch_event(
     element,
     "this",
     drag_event(
       "dragstart",
-      screen_x: element.native.location.x,
-      screen_y: element.native.location.y
+      client_x: element.native.location.x,
+      client_y: element.native.location.y
     )
   )
   dispatch_event(
@@ -32,11 +33,20 @@ def click_and_move_token(token, by:)
     "this",
     drag_event(
       "drag",
-      screen_x: by[:x] + element.native.location.x,
-      screen_y: by[:y] + element.native.location.y
+      client_x: by[:x] + element.native.location.x,
+      client_y: by[:y] + element.native.location.y
     )
   )
-  dispatch_event(element, "this", "new DragEvent('dragend')")
+  dispatch_event(
+    element,
+    "this",
+    drag_event(
+      "dragend",
+      client_x: element.native.location.x,
+      client_y: element.native.location.y
+    )
+  )
+  page.execute_script("delete window.tempDataTransfer")
 end
 
 def token_element(token)
@@ -47,8 +57,17 @@ def dispatch_event(node, element, event)
   node.execute_script("#{element}.dispatchEvent(#{event})")
 end
 
-def drag_event(event, screen_x:, screen_y:)
-  "new DragEvent('#{event}', { screenX: #{screen_x}, screenY: #{screen_y} })"
+def drag_event(event, client_x:, client_y:)
+  <<~JS
+    new DragEvent(
+      '#{event}',
+      {
+        clientX: #{client_x},
+        clientY: #{client_y},
+        dataTransfer: window.tempDataTransfer
+      }
+    )
+  JS
 end
 
 def mouse_event(event, screen_x:, screen_y:)

@@ -39,6 +39,7 @@ FactoryBot.define do
     sequence(:name) { |n| "Uxil#{n}" }
     x { rand(100) }
     y { rand(100) }
+    stashed { true }
     image do
       Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end

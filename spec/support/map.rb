@@ -4,12 +4,25 @@ def have_map_with_data(map, attribute, value)
   )
 end
 
-def have_token_with_data(token, attribute, value)
-  have_css(
-    ".token[data-token-id='#{token.id}'][data-#{attribute}='#{value}']"
-  )
+RSpec::Matchers.define :have_token do |token|
+  match do |container|
+    container.has_css?(".token[data-token-id='#{token.to_param}']")
+  end
 end
 
-def have_token(token)
-  have_css(".token[data-token-id='#{token.id}']")
+RSpec::Matchers.define :have_token_with_data do |token, key, value|
+  match do |container|
+    container.has_css?(
+      ".token[data-token-id='#{token.to_param}'][data-#{key}='#{value}']"
+    )
+  end
+
+  failure_message do |container|
+    token_element = container.find(".token[data-token-id='#{token.to_param}']")
+    actual_value = token_element.native.attribute("data-#{key}")
+    <<~MSG
+      expected token to have attribute '#{key}' with value '#{value}' but
+      instead had value '#{actual_value}'
+    MSG
+  end
 end

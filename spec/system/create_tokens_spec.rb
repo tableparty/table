@@ -10,7 +10,7 @@ RSpec.describe "create tokens", type: :system do
 
     visit campaign_path(map.campaign, as: user)
     wait_for_connection
-    click_on "New Token"
+    find(".new-token-link").click
     within "[data-controller=modal]" do
       fill_in "Name", with: "Olokas"
       attach_file "Image", file_fixture("olokas.jpeg")
@@ -33,7 +33,7 @@ RSpec.describe "create tokens", type: :system do
       visit campaign_path(map.campaign)
       wait_for_connection
     end
-    click_on "New Token"
+    find(".new-token-link").click
     fill_in "Name", with: "Olokas"
     attach_file "Image", file_fixture("olokas.jpeg")
     click_on "Create Token"

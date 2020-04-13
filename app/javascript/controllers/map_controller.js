@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer"]
+  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer", "tokenDrawer"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
@@ -36,8 +36,8 @@ export default class extends Controller {
       y: event.screenY
     }
     const original = {
-      x: parseInt(this.imageTarget.dataset.x),
-      y: parseInt(this.imageTarget.dataset.y),
+      x: parseFloat(this.imageTarget.dataset.x),
+      y: parseFloat(this.imageTarget.dataset.y),
     }
     const handleMove = (event) => {
       this.imageTarget.dataset.beingDragged = true
@@ -106,30 +106,35 @@ export default class extends Controller {
   startMoveToken(event) {
     event.stopPropagation()
 
-    const { screenX, screenY, target } = event
+    const { target, clientX, clientY } = event
+    const { left, top } = target.getBoundingClientRect()
 
-    target.dataset.originalX = target.dataset.x
-    target.dataset.originalY = target.dataset.y
-    target.dataset.dragStartX = screenX
-    target.dataset.dragStartY = screenY
+    const tokenImage = target.getElementsByClassName("token__image")[0]
+    const { width: tokenWidth, height: tokenHeight } = tokenImage.getBoundingClientRect()
+
     target.dataset.beingDragged = true
+    target.dataset.offsetX = (tokenWidth / 2) - (clientX - window.scrollX - left)
+    target.dataset.offsetY = (tokenHeight / 2) - (clientY - window.scrollY - top)
+
+    event.dataTransfer.setData("text/plain", target.dataset.tokenId)
   }
 
   moveToken(event) {
     event.stopPropagation()
 
-    const { screenX, screenY, target } = event
-    const { x: currentX, y: currentY, originalX, originalY, dragStartX, dragStartY, tokenId } = target.dataset
-    const { zoomAmount } = this.imageTarget.dataset
+    const { clientX, clientY, target } = event
+    const { x: currentX, y: currentY, offsetX, offsetY, tokenId } = target.dataset
+    const { viewportX, viewportY, x: mapX, y: mapY, zoomAmount } = this.imageTarget.dataset
+    const { left: imageLeft, top: imageTop } = this.imageTarget.getBoundingClientRect()
 
-    const newX = parseInt(originalX) + ((screenX - parseInt(dragStartX)) / parseFloat(zoomAmount))
-    const newY = parseInt(originalY) + ((screenY - parseInt(dragStartY)) / parseFloat(zoomAmount))
+    const newX = Math.round((clientX + parseFloat(offsetX) - (imageLeft + window.scrollX)) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2) - parseFloat(mapX)) / parseFloat(zoomAmount)))
+    const newY = Math.round((clientY + parseFloat(offsetY) - (imageTop + window.scrollY)) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2) - parseFloat(mapY)) / parseFloat(zoomAmount)))
 
     if (newX != currentX || newY != currentY) {
       this.setTokenLocation(
         target,
-        parseInt(originalX) + ((screenX - parseInt(dragStartX)) / parseFloat(zoomAmount)),
-        parseInt(originalY) + ((screenY - parseInt(dragStartY)) / parseFloat(zoomAmount))
+        newX,
+        newY
       )
 
       this.channel.perform(
@@ -145,15 +150,9 @@ export default class extends Controller {
   }
 
   endMoveToken({ target }) {
-    delete target.dataset.originalX
-    delete target.dataset.originalY
-    delete target.dataset.dragStartX
-    delete target.dataset.dragStartY
     delete target.dataset.beingDragged
-  }
-
-  dragOver(event) {
-    event.preventDefault()
+    delete target.dataset.offsetX
+    delete target.dataset.offsetY
   }
 
   setMapZoom(zoom, amount, width, height) {
@@ -196,6 +195,15 @@ export default class extends Controller {
       }
       case "addToken": {
         this.tokenContainerTarget.insertAdjacentHTML("beforeend", data.token_html);
+        break;
+      }
+      case "stashToken": {
+        const token = this.tokenTargets.find(token => token.dataset.tokenId == data.token_id)
+        if (this.hasTokenDrawerTarget) {
+          this.tokenDrawerTarget.appendChild(token)
+        } else {
+          token.remove()
+        }
         break
       }
     }
@@ -204,5 +212,47 @@ export default class extends Controller {
   setTokenLocation(token, x, y) {
     token.dataset.x = x
     token.dataset.y = y
+  }
+
+  dragOverDrawer(event) {
+    event.preventDefault()
+  }
+
+  dropOnDrawer(event) {
+    event.preventDefault()
+    const tokenId = event.dataTransfer.getData("text/plain")
+
+    const token = this.tokenTargets.find(token => token.dataset.tokenId == tokenId)
+    this.tokenDrawerTarget.appendChild(token)
+
+    this.channel.perform(
+      "stash_token",
+      {
+        map_id: this.mapId,
+        token_id: tokenId
+      }
+    )
+  }
+
+  dragOverMap(event) {
+    event.preventDefault()
+  }
+
+  dropOnMap(event) {
+    event.preventDefault()
+    const tokenId = event.dataTransfer.getData("text/plain")
+
+    const token = this.tokenTargets.find(token => token.dataset.tokenId == tokenId)
+    if (token.parentNode != this.tokenContainerTarget) {
+      this.tokenContainerTarget.appendChild(token)
+
+      this.channel.perform(
+        "place_token",
+        {
+          map_id: this.mapId,
+          token_id: tokenId
+        }
+      )
+    }
   }
 }

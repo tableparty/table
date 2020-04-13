@@ -106,7 +106,7 @@ RSpec.describe "manage maps", type: :system do
     expect(page).to have_map_with_data(map, "height", "100")
     expect(page).to have_button("-", disabled: true)
 
-    click_on "+"
+    find(".current-map__zoom-in").click
 
     expect(page).to have_map_with_data(map, "width", "200")
     expect(page).to have_map_with_data(map, "height", "200")
@@ -127,7 +127,7 @@ RSpec.describe "manage maps", type: :system do
     expect(page).to have_map_with_data(map, "height", "100")
     expect(page).to have_button("-", disabled: true)
 
-    click_on "+"
+    find(".current-map__zoom-in").click
 
     using_session "other user" do
       expect(page).to have_map_with_data(map, "width", "200")

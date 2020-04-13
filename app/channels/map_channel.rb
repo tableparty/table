@@ -57,6 +57,31 @@ class MapChannel < ApplicationCable::Channel
     )
   end
 
+  def stash_token(data)
+    map = Map.find(data["map_id"])
+    token = map.tokens.find(data["token_id"])
+    return if !dm?(map.campaign)
+
+    token.update(stashed: true)
+    broadcast_to(
+      map,
+      {
+        operation: "stashToken",
+        token_id: token.id,
+        stashed: true
+      }
+    )
+  end
+
+  def place_token(data)
+    map = Map.find(data["map_id"])
+    token = map.tokens.find(data["token_id"])
+    return if !dm?(map.campaign)
+
+    token.update(stashed: false)
+    MapChannel.add_token(token)
+  end
+
   class << self
     def add_token(token)
       broadcast_to(

@@ -21,3 +21,19 @@
   left: calc(((var(--viewport-x) / 2) - var(--x)) * 1px);
   top: calc(((var(--viewport-y) / 2) - var(--y)) * 1px);
 }
+
+.current-map__token-drawer {
+  @apply
+    h-screen
+    bg-gray-500
+  ;
+
+  --zoom-amount: 1.5;
+
+  .token {
+    @apply
+      static
+      m-2
+    ;
+  }
+}

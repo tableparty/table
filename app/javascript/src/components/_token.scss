@@ -29,16 +29,27 @@
   width: calc(2rem * var(--zoom-amount));
 }
 
+.token__image-add {
+  @apply
+    text-2xl
+    text-center
+    bg-gray-300
+    text-gray-700
+  ;
+}
+
 .token__name {
   @apply
+    absolute
     hidden
     bg-white
     rounded-full
-    ml-2
     px-2
     text-xs
     z-10
     pointer-events-none;
+
+  margin-left: calc((2rem + 4px) * var(--zoom-amount));
 }
 
 .token:hover .token__name {
