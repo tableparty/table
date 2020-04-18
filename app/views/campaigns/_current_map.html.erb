@@ -1,5 +1,8 @@
 <% if campaign.current_map.present? %>
   <%= content_tag :h2, campaign.current_map.name %>
+  <% if dm?(campaign) %>
+    <%= link_to "New Token", new_map_token_path(campaign.current_map), remote: true %>
+  <% end %>
 
   <%= content_tag :div,
     class: "current-map relative overflow-hidden",

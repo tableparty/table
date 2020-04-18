@@ -12,6 +12,8 @@
   <body>
     <%= render partial: "header", locals: { full_width: true } %>
     <div class="mx-4 py-4">
+      <%= render "flashes" %>
+
       <%= yield %>
     </div>
   </body>

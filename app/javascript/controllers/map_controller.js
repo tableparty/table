@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["image", "zoomIn", "zoomOut", "token"]
+  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
@@ -181,6 +181,10 @@ export default class extends Controller {
           return
         }
         this.setTokenLocation(token, data.x, data.y)
+        break
+      }
+      case "addToken": {
+        this.tokenContainerTarget.insertAdjacentHTML("beforeend", data.token_html);
         break
       }
     }

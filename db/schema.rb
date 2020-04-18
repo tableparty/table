@@ -73,7 +73,6 @@ ActiveRecord::Schema.define(version: 2020_04_18_154404) do
     t.integer "y"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.boolean "in_drawer", default: true
     t.uuid "tokenable_id"
     t.string "tokenable_type"
     t.index ["map_id"], name: "index_tokens_on_map_id"

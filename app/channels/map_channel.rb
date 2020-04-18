@@ -56,4 +56,27 @@ class MapChannel < ApplicationCable::Channel
       }
     )
   end
+
+  class << self
+    def add_token(token)
+      broadcast_to(
+        token.map,
+        {
+          operation: "addToken",
+          token_html: render_token(token),
+          x: token.x,
+          y: token.y
+        }
+      )
+    end
+
+    private
+
+    def render_token(token)
+      ApplicationController.renderer.render(
+        partial: "tokens/token",
+        locals: { token: token }
+      )
+    end
+  end
 end

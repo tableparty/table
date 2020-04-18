@@ -6,6 +6,8 @@ class Token < ApplicationRecord
   validates :name, presence: true
   validates :image, presence: true
 
+  after_create_commit :broadcast_token_creation
+
   def name
     read_attribute(:name).presence || tokenable.try(:name)
   end
@@ -13,5 +15,11 @@ class Token < ApplicationRecord
   token_image = instance_method(:image)
   define_method(:image) do
     token_image.bind(self).().presence || tokenable.try(:image)
+  end
+
+  private
+
+  def broadcast_token_creation
+    TokenBroadcastJob.perform_later(self)
   end
 end
