@@ -130,5 +130,7 @@ Rails.application.configure do
     authentication: :plain,
     enable_starttls_auto: true
   }
-  config.middleware.use Rack::CanonicalHost, ENV.fetch("APP_HOST")
+  if ENV["APP_HOST"].present?
+    config.middleware.use Rack::CanonicalHost, ENV["APP_HOST"]
+  end
 end
