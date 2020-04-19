@@ -33,8 +33,16 @@ export default class extends Controller {
   updateVariable(variableName)  {
     this.element.style.setProperty(
       this.variableNameToCssVariable(variableName),
-      this.element.dataset[variableName]
+      this.element.dataset[this.ensureCamelCase(variableName)]
     )
+  }
+
+  ensureCamelCase(variableName) {
+    return variableName.replace(/([-_][a-z])/ig, match => {
+      return match.toUpperCase()
+        .replace('-', '')
+        .replace('_', '');
+    });
   }
 
   variableNameToDataAttribute(variableName) {
