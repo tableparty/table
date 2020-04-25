@@ -41,13 +41,31 @@ class Map < ApplicationRecord
     ZOOM_LEVELS[zoom]
   end
 
-  def populate_tokens
+  def populate_characters
     campaign.characters.each do |character|
       tokens.find_or_create_by(tokenable: character)
     end
   end
 
+  def copy_token(token)
+    tokens.create(
+      tokenable: token.tokenable,
+      identifier: generate_identifier(token),
+      x: token.x,
+      y: token.y,
+      stashed: false
+    )
+  end
+
   private
+
+  def generate_identifier(token)
+    if token.tokenable
+      tokens.where(tokenable: token.tokenable).size
+    elsif token.name.present?
+      tokens.where(name: token.name).size
+    end
+  end
 
   def scale_coordinates
     maybe_analyze_image

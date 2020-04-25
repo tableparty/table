@@ -17,6 +17,10 @@ class Token < ApplicationRecord
     token_image.bind(self).().presence || tokenable.try(:image)
   end
 
+  def copy_on_place?
+    identifier.blank? && tokenable&.copy_on_place?
+  end
+
   private
 
   def broadcast_token_creation

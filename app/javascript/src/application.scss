@@ -7,8 +7,9 @@
 @import "components/modal";
 @import "components/pointer";
 @import "components/token";
-@import "components/character";
 @import "components/flashes";
+@import "components/library";
+@import "components/tabs";
 
 .btn {
   @apply text-white bg-blue-500 p-2 transition duration-150 rounded cursor-pointer;

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_26_085659) do
-
+ActiveRecord::Schema.define(version: 2020_04_30_015547) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -55,6 +54,14 @@ ActiveRecord::Schema.define(version: 2020_04_26_085659) do
     t.index ["campaign_id"], name: "index_characters_on_campaign_id"
   end
 
+  create_table "creatures", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "campaign_id", null: false
+    t.string "name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["campaign_id"], name: "index_creatures_on_campaign_id"
+  end
+
   create_table "maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "campaign_id", null: false
     t.string "name"
@@ -76,6 +83,7 @@ ActiveRecord::Schema.define(version: 2020_04_26_085659) do
     t.uuid "tokenable_id"
     t.string "tokenable_type"
     t.boolean "stashed", default: true
+    t.string "identifier"
     t.index ["map_id"], name: "index_tokens_on_map_id"
     t.index ["tokenable_type", "tokenable_id"], name: "index_tokens_on_tokenable_type_and_tokenable_id"
   end
@@ -96,6 +104,7 @@ ActiveRecord::Schema.define(version: 2020_04_26_085659) do
   add_foreign_key "campaigns", "maps", column: "current_map_id"
   add_foreign_key "campaigns", "users"
   add_foreign_key "characters", "campaigns"
+  add_foreign_key "creatures", "campaigns"
   add_foreign_key "maps", "campaigns"
   add_foreign_key "tokens", "maps"
 end

@@ -1,0 +1,18 @@
+<div class="grid grid-cols-3">
+  <%= radio_button_tag "type", "creature", params[:type].blank? || params[:type] == "creature", class: "tab__button" %>
+  <%= label_tag "type_creature", "Creature", class: "tab__label" %>
+  <%= radio_button_tag "type", "character", params[:type] == "character", class: "tab__button" %>
+  <%= label_tag "type_character", "Character", class: "tab__label" %>
+  <%= radio_button_tag "type", "library", params[:type] == "library", class: "tab__button" %>
+  <%= label_tag "type_library", "Library", class: "tab__label" %>
+
+  <div class="tab__content tab__creature my-2 p-8">
+    <%= render "creatures/form", creature: creature %>
+  </div>
+  <div class="tab__content tab__character my-2 p-8">
+    <%= render "characters/form", character: character %>
+  </div>
+  <div class="tab__content tab__library my-2 p-4">
+    <%= render "library", campaign: creature.campaign %>
+  </div>
+</div>

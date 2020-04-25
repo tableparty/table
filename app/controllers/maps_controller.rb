@@ -11,7 +11,7 @@ class MapsController < ApplicationController
     map = campaign.maps.new(map_params)
     if map.save
       map.center_image
-      map.populate_tokens
+      map.populate_characters
       redirect_to campaign
     else
       render :new, locals: { map: map }

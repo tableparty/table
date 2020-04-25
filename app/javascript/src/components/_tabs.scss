@@ -1,0 +1,49 @@
+.tab__button[type=radio] {
+  @apply hidden;
+
+  ~ .tab__label {
+    @apply
+      flex-1
+      text-center
+      block
+      rounded-b-none
+      bg-gray-200
+      text-gray-700
+      py-2
+      px-4
+    ;
+
+    &:hover {
+      @apply
+        bg-gray-400
+        text-black
+      ;
+    }
+  }
+
+  &:checked + .tab__label {
+    @apply
+      text-center
+      block
+      rounded-b-none
+      py-2
+      px-4
+      bg-white
+      text-black
+      font-bold
+    ;
+  }
+}
+
+.tab__content {
+  @apply
+    hidden
+    col-span-3
+  ;
+}
+
+#type_creature:checked ~ .tab__content.tab__creature,
+#type_character:checked ~ .tab__content.tab__character,
+#type_library:checked ~ .tab__content.tab__library {
+  @apply block;
+}

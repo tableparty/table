@@ -2,8 +2,13 @@ class TokensController < ApplicationController
   before_action :require_login
 
   def new
+    respond_to :js
+
     map = current_user.maps.find(params[:map_id])
-    render locals: { token: map.tokens.build }
+    render layout: "modal", locals: {
+      character: Character.new(campaign: map.campaign),
+      creature: Creature.new(campaign: map.campaign)
+    }
   end
 
   def create
@@ -21,6 +26,6 @@ class TokensController < ApplicationController
   private
 
   def token_params
-    params.require(:token).permit(:name, :image)
+    params.require(:token).permit(:name, :image, :tokenable_type, :tokenable_id)
   end
 end

@@ -1,40 +1,41 @@
 class CharactersController < ApplicationController
   before_action :require_login
 
-  def new
-    campaign = current_user.campaigns.find(params[:campaign_id])
-    render locals: { character: campaign.characters.new }
-  end
-
   def create
-    campaign = current_user.campaigns.find(params[:campaign_id])
     character = campaign.characters.new(character_params)
     if character.save
-      campaign.populate_tokens
-      redirect_to campaign
+      campaign.populate_characters
+      head :ok
     else
-      render :new, locals: { character: character }
+      render(
+        partial: "form",
+        locals: { character: character },
+        status: :bad_request
+      )
     end
   end
 
   def edit
-    campaign = current_user.campaigns.find(params[:campaign_id])
+    respond_to :js
+
     character = campaign.characters.find(params[:id])
-    render locals: { character: character }
+    render layout: "modal", locals: { character: character }
   end
 
   def update
-    campaign = current_user.campaigns.find(params[:campaign_id])
     character = campaign.characters.find(params[:id])
     if character.update(character_params)
-      redirect_to campaign, success: "Character successfully updated."
+      head :ok
     else
-      render :edit, locals: { character: character }
+      render(
+        partial: "form",
+        locals: { character: character },
+        status: :bad_request
+      )
     end
   end
 
   def destroy
-    campaign = current_user.campaigns.find(params[:campaign_id])
     character = campaign.characters.find(params[:id])
     if character.destroy
       redirect_to campaign, success: "Character successfully deleted."
@@ -44,6 +45,10 @@ class CharactersController < ApplicationController
   end
 
   private
+
+  def campaign
+    current_user.campaigns.find(params[:campaign_id])
+  end
 
   def character_params
     params.require(:character).permit(:name, :image)

@@ -16,6 +16,18 @@ FactoryBot.define do
     end
   end
 
+  factory :creature do
+    transient do
+      image_name { "uxil.jpeg" }
+    end
+
+    campaign
+    sequence(:name) { |n| "Orc#{n}" }
+    image do
+      Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
+    end
+  end
+
   factory :map do
     transient do
       image_name { "small-map.jpg" }

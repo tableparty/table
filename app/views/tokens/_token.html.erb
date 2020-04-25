@@ -8,8 +8,13 @@
     token_id: token.id,
     x: token.x,
     y: token.y,
+    copy_on_place: token.copy_on_place?,
     "css-vars": "x y"
   } do %>
-  <%= content_tag :div, "", class: "token__image", style: "background-image: url('#{url_for token.image}');" %>
+  <%= content_tag :div, "", class: "token__image", style: "background-image: url('#{url_for token.image}');" do %>
+    <% if token.identifier.present? %>
+      <span class="token__identifier"><%= token.identifier %></span>
+    <% end %>
+  <% end %>
   <span class="token__name"><%= token.name %></span>
 <% end %>

@@ -1,5 +1,29 @@
 $modal-background: rgba(127, 127, 127, 0.5);
 
-.modal {
+.modal__background {
+  @apply
+    h-screen
+    w-full
+    fixed
+    flex
+    items-center
+    justify-center
+    top-0
+    left-0
+  ;
+
   background-color: $modal-background;
+}
+
+.modal {
+  @apply
+    bg-white
+    rounded
+    shadow-xl
+    m-4
+    max-w-sm
+    border-solid
+    max-h-full
+    overflow-y-scroll
+  ;
 }

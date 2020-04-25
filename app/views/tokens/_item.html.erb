@@ -1,0 +1,5 @@
+<%= content_tag :li, class: "library__item flex items-center pb-2", data: { "#{item.class.name.downcase}-id": item.id } do %>
+  <%= link_to "+", map_tokens_path(item.campaign.current_map, token: { tokenable_type: item.class.name, tokenable_id: item.id }), method: :post, title: "Add to map", class: "library__image flex-none block bg-cover bg-center inline-block text-center text-lg text-gray-500 rounded-full border-white bg-gray-200 border-2 shadow h-12 w-12 pt-2", style: "background-image: url('#{url_for item.image}');" %>
+  <span class="library__name flex-1 px-2 whitespace-no-wrap"><%= item.name %></span>
+  <%= link_to "Edit", polymorphic_url([item.campaign, item], action: :edit), remote: true, data: { action: "click->modal#removeModal" }, class: "library__edit hidden text-xs text-gray-500 mr-2" %>
+<% end %>

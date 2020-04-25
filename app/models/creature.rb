@@ -1,4 +1,4 @@
-class Character < ApplicationRecord
+class Creature < ApplicationRecord
   belongs_to :campaign
   has_one_attached :image
   has_many :tokens, as: :tokenable, dependent: :destroy, inverse_of: :tokenable
@@ -8,6 +8,6 @@ class Character < ApplicationRecord
   validates :name, presence: true
 
   def copy_on_place?
-    false
+    true
   end
 end

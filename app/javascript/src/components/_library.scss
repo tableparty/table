@@ -1,0 +1,24 @@
+.library__item {
+  &:hover .library__edit {
+    display: block;
+  }
+
+  .library__image {
+    @apply
+      text-lg
+      font-bold
+    ;
+    text-indent: -999px;
+
+    &:hover {
+      background-image: none !important;
+      text-indent: inherit;
+    }
+  }
+
+  &:last-child {
+    @apply
+      pb-0
+    ;
+  }
+}

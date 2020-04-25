@@ -1,0 +1,22 @@
+<%= form_with model: [creature.campaign, creature], html: { data: { action: "ajax:success->modal#close ajax:error->modal#onPostError" } } do |form| %>
+  <%= render "errors", model: creature %>
+
+  <%= form.label :name %>
+  <%= form.text_field :name, class: "input" %>
+
+  <%= form.label :image %>
+  <%= form.file_field :image, class: "input" %>
+
+  <div class="flex items-center justify-between">
+    <%= form.submit class: "btn" %>
+    <%= link_to "Cancel", "#", data: { action: "click->modal#close" }, class: "inline-block align-baseline text-sm text-gray-500 hover:text-gray-800" %>
+    <% if creature.persisted? %>
+      <%= link_to "Delete #{creature.name}", campaign_creature_path(creature.campaign, creature), method: :delete, data: { confirm: "Are you sure you want to delete #{creature.name}?" }, class: "inline-block align-baseline text-sm text-red-500 hover:text-red-800" %>
+    <% end %>
+  </div>
+
+  <p class="text-sm text-gray-500 pt-4">
+    Creatures are added to the current map, and available for other maps in the library.
+    Creatures are copied when dragged from the token drawer.
+  </p>
+<% end %>

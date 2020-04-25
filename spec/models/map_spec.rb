@@ -106,16 +106,61 @@ RSpec.describe Map, type: :model do
     end
   end
 
-  describe "#populate_tokens" do
+  describe "#populate_characters" do
     it "creates a token for each character in the campaign" do
       map = create(:map)
       character = create(:character, campaign: map.campaign)
 
-      map.populate_tokens
+      map.populate_characters
 
       expect(map.tokens.size).to eq map.campaign.characters.size
       expect(map.tokens.first.image.blob).to eq character.image.blob
       expect(map.tokens.first.tokenable).to eq character
+    end
+  end
+
+  describe "#copy_token" do
+    describe "when there are only stashed matching tokenables" do
+      it "adds the first instance of the tokenable to the map" do
+        map = create(:map)
+        creature = create(:creature)
+        token = Token.create!(map: map, tokenable: creature, stashed: true)
+
+        map.copy_token(token)
+
+        expect(map.tokens.where(stashed: false).size).to eq 1
+        new_token = map.tokens.where(stashed: false).first
+        expect(new_token.tokenable).to eq creature
+        expect(new_token.identifier).to eq "1"
+      end
+    end
+
+    describe "when there are matching tokenables not stashed" do
+      it "adds an identifier to the copied token" do
+        map = create(:map)
+        creature = create(:creature)
+        token = Token.create!(map: map, tokenable: creature, stashed: true)
+
+        map.copy_token(token)
+
+        expect(map.tokens.map(&:identifier)).to contain_exactly(nil, "1")
+      end
+    end
+
+    describe "when generic token with the same name is already on the map" do
+      it "adds an identifier to the copied token" do
+        map = create(:map)
+        token = Token.create!(
+          map: map,
+          image: Rack::Test::UploadedFile.new("spec/fixtures/files/uxil.jpeg"),
+          name: "Test",
+          stashed: true
+        )
+
+        map.copy_token(token)
+
+        expect(map.tokens.map(&:identifier)).to contain_exactly(nil, "1")
+      end
     end
   end
 end

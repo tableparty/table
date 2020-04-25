@@ -58,7 +58,7 @@ namespace :dev do
         )
       end
       map.center_image
-      map.populate_tokens
+      map.populate_characters
     end
   end
 end

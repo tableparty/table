@@ -78,8 +78,12 @@ class MapChannel < ApplicationCable::Channel
     token = map.tokens.find(data["token_id"])
     return if !dm?(map.campaign)
 
-    token.update(stashed: false)
-    MapChannel.add_token(token)
+    if token.copy_on_place?
+      map.copy_token(token)
+    else
+      token.update(stashed: false)
+      MapChannel.add_token(token)
+    end
   end
 
   def point_to(data)
@@ -105,9 +109,11 @@ class MapChannel < ApplicationCable::Channel
         token.map,
         {
           operation: "addToken",
+          token_id: token.id,
           token_html: render_token(token),
           x: token.x,
-          y: token.y
+          y: token.y,
+          stashed: token.stashed
         }
       )
     end

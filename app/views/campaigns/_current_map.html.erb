@@ -9,7 +9,7 @@
       <% if dm?(campaign) %>
         <div class="current-map__token-drawer token-drawer" data-target="map.tokenDrawer" data-action="dragover->map#dragOverDrawer drop->map#dropOnDrawer">
           <% if dm?(campaign) %>
-            <%= link_to new_map_token_path(campaign.current_map), remote: true, class: "token new-token-link" do %>
+            <%= link_to new_map_token_path(campaign.current_map), remote: true, title: "New Token", class: "token new-token-link" do %>
               <span class="token__image token__image-add">+</span>
             <% end %>
           <% end %>

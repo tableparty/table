@@ -1,0 +1,17 @@
+<div class="overflow-y-scroll h-64 w-full">
+  <ul class="library__list">
+    <% if campaign.characters.any? %>
+      <li class="library__header font-bold bg-gray-200 rounded-sm py-1 px-2 mb-2">
+        Characters
+      </li>
+    <% end %>
+    <%= render partial: "item", collection: campaign.characters %>
+
+    <% if campaign.creatures.any? %>
+      <li class="library__header font-bold bg-gray-200 rounded-sm py-1 px-2 my-2">
+        Creatures
+      </li>
+    <% end %>
+    <%= render partial: "item", collection: campaign.creatures %>
+  </ul>
+</div>

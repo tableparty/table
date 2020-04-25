@@ -44,7 +44,7 @@ export default class extends Controller {
       event.preventDefault()
       event.stopPropagation()
 
-      const { x, y }  = this.mapPositionOf(event)
+      const { x, y } = this.mapPositionOf(event)
 
       this.channel.perform(
         "point_to",
@@ -154,10 +154,10 @@ export default class extends Controller {
     const { zoomAmount } = this.imageTarget.dataset
 
 
-    const { x, y }  = this.mapPositionOf(event)
+    const { x, y } = this.mapPositionOf(event)
 
-    const newX = x + (parseFloat(offsetX) / parseFloat(zoomAmount))
-    const newY = y + (parseFloat(offsetY) / parseFloat(zoomAmount))
+    const newX = Math.floor(x + (parseFloat(offsetX) / parseFloat(zoomAmount)))
+    const newY = Math.floor(y + (parseFloat(offsetY) / parseFloat(zoomAmount)))
 
     if (newX != currentX || newY != currentY) {
       this.setTokenLocation(
@@ -215,7 +215,7 @@ export default class extends Controller {
         break
       }
       case "moveToken": {
-        const token = this.tokenTargets.find(token => token.dataset.tokenId == data.token_id)
+        const token = this.findToken(data.token_id)
         if (token.dataset.beingDragged) {
           return
         }
@@ -223,7 +223,18 @@ export default class extends Controller {
         break
       }
       case "addToken": {
+        if (this.findToken(data.token_id)) {
+          return
+        }
         this.tokenContainerTarget.insertAdjacentHTML("beforeend", data.token_html);
+        const token = this.findToken(data.token_id)
+        if (data.stashed) {
+          if (this.hasTokenDrawerTarget) {
+            this.tokenDrawerTarget.appendChild(token)
+          } else {
+            token.remove()
+          }
+        }
         break;
       }
       case "addPointer": {
@@ -231,7 +242,7 @@ export default class extends Controller {
         break;
       }
       case "stashToken": {
-        const token = this.tokenTargets.find(token => token.dataset.tokenId == data.token_id)
+        const token = this.findToken(data.token_id)
         if (this.hasTokenDrawerTarget) {
           this.tokenDrawerTarget.appendChild(token)
         } else {
@@ -240,6 +251,10 @@ export default class extends Controller {
         break
       }
     }
+  }
+
+  findToken(tokenId) {
+    return this.tokenTargets.find(token => token.dataset.tokenId == tokenId)
   }
 
   setTokenLocation(token, x, y) {
@@ -255,7 +270,7 @@ export default class extends Controller {
     event.preventDefault()
     const tokenId = event.dataTransfer.getData("text/plain")
 
-    const token = this.tokenTargets.find(token => token.dataset.tokenId == tokenId)
+    const token = this.findToken(tokenId)
     this.tokenDrawerTarget.appendChild(token)
 
     this.channel.perform(
@@ -275,9 +290,11 @@ export default class extends Controller {
     event.preventDefault()
     const tokenId = event.dataTransfer.getData("text/plain")
 
-    const token = this.tokenTargets.find(token => token.dataset.tokenId == tokenId)
+    const token = this.findToken(tokenId)
     if (token.parentNode != this.tokenContainerTarget) {
-      this.tokenContainerTarget.appendChild(token)
+      if (token.dataset.copyOnPlace != "true") {
+        this.tokenContainerTarget.appendChild(token)
+      }
 
       this.channel.perform(
         "place_token",

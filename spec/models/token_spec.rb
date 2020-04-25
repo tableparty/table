@@ -58,4 +58,24 @@ RSpec.describe Token, type: :model do
       expect(token.image.filename.to_s).to eq "tanpos.jpeg"
     end
   end
+
+  describe "copy_on_place?" do
+    it "returns true if no identifier and tokenable copy_on_place" do
+      token = described_class.new(tokenable: Creature.new)
+
+      expect(token).to be_copy_on_place
+    end
+
+    it "returns false if no identifier and tokenable not copy_on_place" do
+      token = described_class.new(tokenable: Character.new)
+
+      expect(token).not_to be_copy_on_place
+    end
+
+    it "returns false if identifier and tokenable copy_on_place" do
+      token = described_class.new(identifier: "1", tokenable: Creature.new)
+
+      expect(token).not_to be_copy_on_place
+    end
+  end
 end

@@ -22,7 +22,10 @@
     border-white
     pointer-events-none
     z-0
-    shadow;
+    shadow
+    flex
+    items-end
+    justify-end;
 
   border-width: calc(2px * var(--zoom-amount));
   height: calc(2rem * var(--zoom-amount));
@@ -35,7 +38,8 @@
     text-center
     bg-gray-300
     text-gray-700
-  ;
+    items-center
+    justify-center;
 }
 
 .token__name {
@@ -50,6 +54,17 @@
     pointer-events-none;
 
   margin-left: calc((2rem + 4px) * var(--zoom-amount));
+}
+
+.token__identifier {
+  @apply
+    flex-none
+    text-xs
+    rounded-full
+    bg-white
+    px-1
+    z-10
+    pointer-events-none;
 }
 
 .token:hover .token__name {
