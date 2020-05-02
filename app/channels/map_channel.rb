@@ -82,7 +82,24 @@ class MapChannel < ApplicationCable::Channel
     MapChannel.add_token(token)
   end
 
+  def point_to(data)
+    map = Map.find(data["map_id"])
+    pointer = Pointer.new(map: map, x: data["x"], y: data["y"])
+
+    MapChannel.add_pointer(pointer)
+  end
+
   class << self
+    def add_pointer(pointer)
+      broadcast_to(
+        pointer.map,
+        {
+          operation: "addPointer",
+          pointer_html: render_pointer(pointer)
+        }
+      )
+    end
+
     def add_token(token)
       broadcast_to(
         token.map,
@@ -96,6 +113,13 @@ class MapChannel < ApplicationCable::Channel
     end
 
     private
+
+    def render_pointer(pointer)
+      ApplicationController.renderer.render(
+        partial: "pointers/pointer",
+        locals: { pointer: pointer }
+      )
+    end
 
     def render_token(token)
       ApplicationController.renderer.render(

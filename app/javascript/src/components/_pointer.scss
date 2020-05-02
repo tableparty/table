@@ -1,0 +1,29 @@
+@keyframes indicate-location {
+  from {
+    opacity: 0;
+    transform: scale(4);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(0);
+  }
+}
+
+.pointer {
+  @apply
+    -ml-4
+    -mt-4
+    absolute
+    bg-blue-500
+    h-8
+    opacity-0
+    rounded-full
+    w-8
+  ;
+
+  animation: indicate-location 1s;
+
+  left: calc(var(--x) * var(--zoom-amount) * 1px);
+  top: calc(var(--y) * var(--zoom-amount) * 1px);
+}

@@ -23,7 +23,7 @@
           controller: "css-var",
           "map-id": campaign.current_map.id,
           target: "map.image",
-          action: "dragover->map#dragOverMap drop->map#dropOnMap #{dm?(campaign, "mousedown->map#moveMap")}",
+          action: "dragover->map#dragOverMap drop->map#dropOnMap mousedown->map#pointTo #{dm?(campaign, "mousedown->map#moveMap")}",
           x: campaign.current_map.x,
           y: campaign.current_map.y,
           zoom: campaign.current_map.zoom,

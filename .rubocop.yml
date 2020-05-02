@@ -14,6 +14,13 @@ Naming/AccessorMethodName:
   Description: Check the naming of accessor methods for get_/set_.
   Enabled: false
 
+Naming/MethodParameterName:
+  AllowedNames:
+    - x
+    - y
+    - to
+    - by
+
 Style/Alias:
   Description: 'Use alias_method instead of alias.'
   StyleGuide: 'https://github.com/bbatsov/ruby-style-guide#alias-method'

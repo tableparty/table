@@ -29,6 +29,33 @@ export default class extends Controller {
     window.removeEventListener('resize', this.onWindowResize)
   }
 
+  mapPositionOf(event) {
+    const { clientX, clientY } = event
+    const { viewportX, viewportY, x: mapX, y: mapY, zoomAmount } = this.imageTarget.dataset
+    const { left: imageLeft, top: imageTop } = this.imageTarget.getBoundingClientRect()
+
+    const x = Math.round((clientX - imageLeft) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2) - parseFloat(mapX)) / parseFloat(zoomAmount)))
+    const y = Math.round((clientY - imageTop) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2) - parseFloat(mapY)) / parseFloat(zoomAmount)))
+    return { x, y }
+  }
+
+  pointTo(event) {
+    if (event.altKey) {
+      event.preventDefault()
+      event.stopPropagation()
+
+      const { x, y }  = this.mapPositionOf(event)
+
+      this.channel.perform(
+        "point_to",
+        {
+          map_id: this.mapId,
+          x, y
+        }
+      )
+    }
+  }
+
   moveMap(event) {
     const speedFactor = 2
     const mousedown = {
@@ -113,8 +140,8 @@ export default class extends Controller {
     const { width: tokenWidth, height: tokenHeight } = tokenImage.getBoundingClientRect()
 
     target.dataset.beingDragged = true
-    target.dataset.offsetX = (tokenWidth / 2) - (clientX - window.scrollX - left)
-    target.dataset.offsetY = (tokenHeight / 2) - (clientY - window.scrollY - top)
+    target.dataset.offsetX = (tokenWidth / 2) - (clientX - left)
+    target.dataset.offsetY = (tokenHeight / 2) - (clientY - top)
 
     event.dataTransfer.setData("text/plain", target.dataset.tokenId)
   }
@@ -122,13 +149,15 @@ export default class extends Controller {
   moveToken(event) {
     event.stopPropagation()
 
-    const { clientX, clientY, target } = event
+    const { target } = event
     const { x: currentX, y: currentY, offsetX, offsetY, tokenId } = target.dataset
-    const { viewportX, viewportY, x: mapX, y: mapY, zoomAmount } = this.imageTarget.dataset
-    const { left: imageLeft, top: imageTop } = this.imageTarget.getBoundingClientRect()
+    const { zoomAmount } = this.imageTarget.dataset
 
-    const newX = Math.round((clientX + parseFloat(offsetX) - (imageLeft + window.scrollX)) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2) - parseFloat(mapX)) / parseFloat(zoomAmount)))
-    const newY = Math.round((clientY + parseFloat(offsetY) - (imageTop + window.scrollY)) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2) - parseFloat(mapY)) / parseFloat(zoomAmount)))
+
+    const { x, y }  = this.mapPositionOf(event)
+
+    const newX = x + (parseFloat(offsetX) / parseFloat(zoomAmount))
+    const newY = y + (parseFloat(offsetY) / parseFloat(zoomAmount))
 
     if (newX != currentX || newY != currentY) {
       this.setTokenLocation(
@@ -195,6 +224,10 @@ export default class extends Controller {
       }
       case "addToken": {
         this.tokenContainerTarget.insertAdjacentHTML("beforeend", data.token_html);
+        break;
+      }
+      case "addPointer": {
+        this.tokenContainerTarget.insertAdjacentHTML("beforeend", data.pointer_html)
         break;
       }
       case "stashToken": {
