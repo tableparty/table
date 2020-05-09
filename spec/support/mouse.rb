@@ -58,6 +58,24 @@ def click_and_move_token(token, by:)
     )
   )
   dispatch_event(
+    element.ancestor("[data-controller='map']"),
+    "this",
+    drag_event(
+      "dragover",
+      client_x: by[:x] + element.native.location.x,
+      client_y: by[:y] + element.native.location.y
+    )
+  )
+  dispatch_event(
+    element,
+    "this",
+    drag_event(
+      "drag",
+      client_x: by[:x] + element.native.location.x,
+      client_y: by[:y] + element.native.location.y
+    )
+  )
+  dispatch_event(
     element,
     "this",
     drag_event(

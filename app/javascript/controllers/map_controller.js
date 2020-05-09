@@ -130,10 +130,20 @@ export default class extends Controller {
     event.stopPropagation()
   }
 
+  dragOver(event) {
+    this.recordPointerLocation(event.clientX, event.clientY)
+  }
+
+  recordPointerLocation(clientX, clientY) {
+    this.element.dataset.clientX = clientX
+    this.element.dataset.clientY = clientY
+  }
+
   startMoveToken(event) {
     event.stopPropagation()
 
     const { target, clientX, clientY } = event
+    this.recordPointerLocation(event.clientX, event.clientY)
     const { left, top } = target.getBoundingClientRect()
 
     const tokenImage = target.getElementsByClassName("token__image")[0]
@@ -152,9 +162,12 @@ export default class extends Controller {
     const { target } = event
     const { x: currentX, y: currentY, offsetX, offsetY, tokenId } = target.dataset
     const { zoomAmount } = this.imageTarget.dataset
-
-
-    const { x, y } = this.mapPositionOf(event)
+    const { x, y } = this.mapPositionOf(
+      new MouseEvent("drag", {
+        clientX: this.element.dataset.clientX,
+        clientY: this.element.dataset.clientY
+      })
+    )
 
     const newX = Math.floor(x + (parseFloat(offsetX) / parseFloat(zoomAmount)))
     const newY = Math.floor(y + (parseFloat(offsetY) / parseFloat(zoomAmount)))
