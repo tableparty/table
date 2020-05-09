@@ -51,7 +51,9 @@
     px-2
     text-xs
     z-10
-    pointer-events-none;
+    pointer-events-none
+    whitespace-no-wrap
+  ;
 
   margin-left: calc((2rem + 4px) * var(--zoom-amount));
 }
