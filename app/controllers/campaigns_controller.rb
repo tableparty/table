@@ -19,7 +19,17 @@ class CampaignsController < ApplicationController
   end
 
   def show
-    render locals: { campaign: Campaign.find(params[:id]) }, layout: "campaign"
+    campaign = Campaign.find(params[:id])
+    if request.xhr?
+      render json: {
+        html: render_to_string(
+          partial: "campaigns/current_map",
+          locals: { campaign: campaign }
+        )
+      }
+    else
+      render locals: { campaign: campaign }, layout: "campaign"
+    end
   end
 
   private

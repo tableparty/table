@@ -149,11 +149,13 @@ RSpec.describe "manage maps", type: :system do
     find(".map-selector__option", text: "Dwarven Excavation").click
     using_session "other user" do
       expect(page).to have_css "h2", text: "Dwarven Excavation"
+      expect(page).not_to have_css("[data-target='map.tokenDrawer']")
     end
 
     find(".map-selector__option", text: "Gnomengarde").click
     using_session "other user" do
       expect(page).to have_css "h2", text: "Gnomengarde"
+      expect(page).not_to have_css("[data-target='map.tokenDrawer']")
     end
   end
 end

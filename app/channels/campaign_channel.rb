@@ -12,13 +12,7 @@ class CampaignChannel < ApplicationCable::Channel
     campaign.update(current_map: map)
     broadcast_to(
       campaign,
-      current_map_html: render_current_map(campaign)
+      operation: "change_current_map"
     )
-  end
-
-  private
-
-  def render_current_map(campaign)
-    render_partial("campaigns/current_map", locals: { campaign: campaign })
   end
 end

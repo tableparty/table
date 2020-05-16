@@ -1,5 +1,6 @@
 import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
+import Rails from "@rails/ujs"
 
 export default class extends Controller {
   static targets = ["mapOption", "currentMap", "statusIndicator"]
@@ -27,6 +28,17 @@ export default class extends Controller {
   }
 
   cableReceived(data) {
-    this.currentMapTarget.innerHTML = data.current_map_html
+    switch (data.operation) {
+      case "change_current_map": {
+        Rails.ajax({
+          url: window.location.href,
+          type: "get",
+          success: data => {
+            this.currentMapTarget.innerHTML = data.html
+          }
+        })
+        break
+      }
+    }
   }
 }
