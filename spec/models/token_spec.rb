@@ -11,6 +11,12 @@ RSpec.describe Token, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :image }
+
+    it do
+      expect(described_class.new).to(
+        validate_inclusion_of(:size).in_array(Token::SIZES.keys).allow_blank
+      )
+    end
   end
 
   describe "#name" do
@@ -26,6 +32,22 @@ RSpec.describe Token, type: :model do
       token = described_class.new(name: "", tokenable: character)
 
       expect(token.name).to eq "Character Name"
+    end
+  end
+
+  describe "#size" do
+    it "returns the token's size if overridden" do
+      character = build(:creature, size: :large)
+      token = described_class.new(size: :tiny, tokenable: character)
+
+      expect(token.size).to eq "tiny"
+    end
+
+    it "returns the tokenable's name if not overridden" do
+      character = build(:creature, size: :large)
+      token = described_class.new(size: nil, tokenable: character)
+
+      expect(token.size).to eq "large"
     end
   end
 
@@ -76,6 +98,14 @@ RSpec.describe Token, type: :model do
       token = described_class.new(identifier: "1", tokenable: Creature.new)
 
       expect(token).not_to be_copy_on_place
+    end
+  end
+
+  describe "#size_scale" do
+    it "return the scale number corresponding the token's size" do
+      token = described_class.new(size: "large")
+
+      expect(token.size_scale).to eq Token::SIZES["large"]
     end
   end
 end

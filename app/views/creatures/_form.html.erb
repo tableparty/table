@@ -4,6 +4,9 @@
   <%= form.label :name %>
   <%= form.text_field :name, class: "input" %>
 
+  <%= form.label :size %>
+  <%= form.select :size, options_for_token_size, {}, class: "input" %>
+
   <%= form.label :image %>
   <%= form.file_field :image, class: "input" %>
 

@@ -28,12 +28,22 @@
     bg-gray-500
   ;
 
-  --zoom-amount: 1.5;
+  --drawer-scale: 1.25;
 
   .token {
     @apply
       static
       m-2
     ;
+
+    .token__image {
+      border-width: calc(var(--base-border) * var(--drawer-scale));
+      height: calc(var(--base-size) * var(--drawer-scale));
+      width: calc(var(--base-size) * var(--drawer-scale));
+    }
+
+    .token__name {
+      margin-left: calc((var(--base-size) + 4px) * var(--drawer-scale));
+    }
   }
 }

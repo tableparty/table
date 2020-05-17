@@ -20,6 +20,35 @@ RSpec.describe "manage creatures", type: :system do
     expect(token.name).to eq "Orc"
   end
 
+  it "can create a large creature token" do
+    base_token_size = 36
+    base_drawer_size = (base_token_size * 1.25).round
+    large_map_size = (base_token_size * Token::SIZES["large"]).round
+    user = create(:user)
+    campaign = create(:campaign, user: user)
+    map = create(:map, campaign: campaign, zoom: 2)
+    campaign.update(current_map: map)
+
+    visit campaign_path(campaign, as: user)
+    click_on "New Token"
+    fill_in "Name", with: "Ogre"
+    select "Large"
+    attach_file "Image", file_fixture("uxil.jpeg")
+    click_on "Create Creature"
+
+    drawer_token = find(
+      ".current-map__token-drawer .token[data-target='map.token']"
+    )
+    expect(drawer_token.native.size.width).to eq base_drawer_size
+    expect(drawer_token.native.size.height).to eq base_drawer_size
+
+    drawer_token.drag_to(map_element(map), html5: true)
+
+    map_token = find(".current-map .token[data-target='map.token']")
+    expect(map_token.native.size.width).to eq large_map_size
+    expect(map_token.native.size.height).to eq large_map_size
+  end
+
   it "copies creature tokens from the drawer to the map" do
     map = create :map
     creature = create :creature, campaign: map.campaign

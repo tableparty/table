@@ -6,6 +6,7 @@ class Creature < ApplicationRecord
   validates :campaign, presence: true
   validates :image, presence: true
   validates :name, presence: true
+  validates_inclusion_of :size, in: Token.size_names
 
   def copy_on_place?
     true

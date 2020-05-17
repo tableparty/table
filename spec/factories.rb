@@ -52,6 +52,7 @@ FactoryBot.define do
     x { rand(100) }
     y { rand(100) }
     stashed { true }
+    size { "medium" }
     image do
       Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end

@@ -12,5 +12,11 @@ RSpec.describe Creature, type: :model do
     it { is_expected.to validate_presence_of :campaign }
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :image }
+
+    it do
+      expect(described_class.new).to(
+        validate_inclusion_of(:size).in_array(Token::SIZES.keys)
+      )
+    end
   end
 end

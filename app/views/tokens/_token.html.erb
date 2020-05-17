@@ -8,8 +8,9 @@
     token_id: token.id,
     x: token.x,
     y: token.y,
+    "size-scale": token.size_scale,
     copy_on_place: token.copy_on_place?,
-    "css-vars": "x y"
+    "css-vars": "x y size-scale"
   } do %>
   <%= content_tag :div, "", class: "token__image", style: background_image(token.image) do %>
     <% if token.identifier.present? %>

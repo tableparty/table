@@ -8,9 +8,12 @@
     items-center
     absolute;
 
+  --base-border: 2px;
+  --base-size: 36px;
+
   left: calc(var(--x) * var(--zoom-amount) * 1px);
-  margin-left: calc(-1rem * var(--zoom-amount));
-  margin-top: calc(-1rem * var(--zoom-amount));
+  margin-left: calc((-1 * (var(--base-size) / 2)) * var(--size-scale) * var(--zoom-amount));
+  margin-top: calc((-1 * (var(--base-size) / 2)) * var(--size-scale) * var(--zoom-amount));
   top: calc(var(--y) * var(--zoom-amount) * 1px);
 }
 
@@ -18,6 +21,7 @@
   @apply
     bg-cover
     bg-center
+    bg-gray-300
     rounded-full
     border-white
     pointer-events-none
@@ -27,9 +31,9 @@
     items-end
     justify-end;
 
-  border-width: calc(2px * var(--zoom-amount));
-  height: calc(2rem * var(--zoom-amount));
-  width: calc(2rem * var(--zoom-amount));
+  border-width: calc(var(--base-border) * var(--size-scale) * var(--zoom-amount));
+  height: calc((var(--base-size) * var(--size-scale) * var(--zoom-amount)));
+  width: calc((var(--base-size) * var(--size-scale) * var(--zoom-amount)));
 }
 
 .token__image-add {
@@ -55,7 +59,7 @@
     whitespace-no-wrap
   ;
 
-  margin-left: calc((2rem + 4px) * var(--zoom-amount));
+  margin-left: calc((var(--base-size) * var(--size-scale) + (2 * var(--base-border))) * var(--zoom-amount));
 }
 
 .token__identifier {
