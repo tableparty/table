@@ -1,7 +1,11 @@
 class CampaignChannel < ApplicationCable::Channel
   def subscribed
     campaign = Campaign.find(params[:id])
-    stream_for campaign
+    if dm?(campaign)
+      stream_for [campaign, campaign.user]
+    else
+      stream_for campaign
+    end
   end
 
   def change_current_map(data)
@@ -12,13 +16,20 @@ class CampaignChannel < ApplicationCable::Channel
     campaign.update(current_map: map)
     broadcast_to(
       campaign,
-      current_map_html: render_current_map(campaign)
+      current_map_html: render_current_map(campaign, admin: false)
+    )
+    broadcast_to(
+      [campaign, campaign.user],
+      current_map_html: render_current_map(campaign, admin: true)
     )
   end
 
   private
 
-  def render_current_map(campaign)
-    render_partial("campaigns/current_map", locals: { campaign: campaign })
+  def render_current_map(campaign, admin: false)
+    render_partial(
+      "campaigns/current_map",
+      locals: { campaign: campaign, admin: admin }
+    )
   end
 end

@@ -10,7 +10,7 @@
   <% end %>
 
   <div data-target="campaign.currentMap">
-    <%= render partial: "current_map", locals: { campaign: campaign } %>
+    <%= render partial: "current_map", locals: { campaign: campaign, admin: dm?(campaign) } %>
   </div>
 
   <div data-target="campaign.statusIndicator" class="absolute top-0 left-0 w-full h-full bg-white flex items-center justify-center opacity-50">
