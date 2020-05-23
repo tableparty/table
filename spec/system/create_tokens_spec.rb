@@ -13,7 +13,7 @@ RSpec.describe "create tokens", type: :system do
     click_on "New Token"
     within "[data-controller=modal]" do
       fill_in "Name", with: "Olokas"
-      attach_file "Image", file_fixture("olokas.jpeg")
+      attach_file "Image", file_fixture("wizard.jpg")
       click_on "Create"
     end
 

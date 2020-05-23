@@ -1,0 +1,24 @@
+<nav id="header" class="w-full z-30 top-0 text-white py-1 lg:py-6">
+  <div class="w-full container mx-auto flex flex-wrap items-center justify-between mt-0 px-2 py-2 lg:py-6">
+    <div class="pl-4 flex items-center">
+      <%= link_to root_path, class: "text-white no-underline hover:no-underline font-bold text-2xl lg:text-4xl" do %>
+        <%= inline_svg_tag "logo.svg", class: "inline-block w-6 h-6 lg:w-10 lg:h-10 fill-current text-white" %>
+        table.party
+      <% end %>
+    </div>
+    <div class="flex-grow flex items-center w-auto block mt-0 text-black p-0 z-20">
+      <ul class="list-reset flex justify-end flex-1 items-center">
+        <li class="mr-3">
+          <%= link_to "Patreon", patreon_url, class: "inline-block py-2 px-4 text-black font-bold no-underline" %>
+        </li>
+        <li class="mr-3">
+          <%= link_to "Why?", why_url, class: "inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4" %>
+        </li>
+        <li class="mr-3 hidden md:block">
+          <%= link_to "Sign in", sign_in_path, class: "inline-block text-black no-underline hover:text-gray-800 hover:text-underline py-2 px-4" %>
+        </li>
+      </ul>
+      <%= link_to "Sign up", sign_up_path, class: "hidden md:block button-gradient mx-auto lg:mx-0 hover:underline text-gray-800 font-extrabold rounded mt-4 lg:mt-0 py-4 px-8 shadow" %>
+    </div>
+  </div>
+</nav>

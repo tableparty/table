@@ -1,0 +1,152 @@
+<%= render "nav" %>
+
+<div class="home--intro container mx-auto">
+  <div class="text-center px-3 lg:px-0">
+    <h1 class="my-4 text-2xl md:text-3xl lg:text-5xl font-black leading-tight">
+      A simple virtual table-top
+    </h1>
+    <p class="leading-normal text-gray-800 text-base md:text-xl lg:text-2xl mb-8">
+      Focus on your game-play instead of managing your maps.
+    </p>
+    <%= link_to "Get started", sign_up_path, class: "button-gradient mx-auto lg:mx-0 hover:underline text-gray-800 font-extrabold rounded my-2 md:my-6 py-4 px-8 shadow-lg w-48" %>
+    <%= link_to "Why did we create this?", why_url, class: "inline-block mx-auto lg:mx-0 hover:underline bg-transparent text-gray-600 font-extrabold my-2 md:my-6 py-2 lg:py-4 px-8" %>
+  </div>
+  <div class="relative items-center w-full my-6 md:my-12 mx-auto content-end">
+    <div class="browser-mockup browser-one z-20 md:px-0 bg-white w-8/12 rounded shadow-2xl">
+      <iframe class="w-full h-full rounded-b" src="<%= demo_path %>"></iframe>
+    </div>
+    <div class="browser-mockup browser-two z-10 md:px-0 bg-white w-7/12 rounded shadow-2xl">
+      <iframe class="w-full h-full rounded-b" src="<%= demo_path %>"></iframe>
+    </div>
+  </div>
+</div>
+
+<section class="home--details bg-white border-b pb-8">
+  <div class="container mx-auto flex flex-wrap pb-12">
+    <h2 class="w-full my-2 text-5xl font-black leading-tight text-center text-gray-800">
+      Lightweight & Fun
+    </h2>
+    <div class="w-full mb-4">
+      <div class="h-1 mx-auto gradient w-64 opacity-25 my-0 py-0 rounded-t"></div>
+    </div>
+
+    <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
+      <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+        <p class="w-full text-gray-600 text-xs md:text-sm px-6 mt-6">
+          GET STARTED QUICKLY
+        </p>
+        <div class="w-full font-bold text-xl text-gray-800 px-6">
+          Be up and running in minutes.
+        </div>
+        <p class="text-gray-600 text-base px-6 mb-5">
+          No software to install or configure.
+          Quickly load in your existing maps and tokens and start playing.
+        </p>
+      </div>
+    </div>
+
+    <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
+      <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+        <p class="w-full text-gray-600 text-xs md:text-sm px-6 mt-6">
+          SHARE WITH PLAYERS
+        </p>
+        <div class="w-full font-bold text-xl text-gray-800 px-6">
+          No user accounts needed.
+        </div>
+        <p class="text-gray-600 text-base px-6 mb-5">
+          Players don't need an account to play.
+          Share the campaign url with them and they can join in right away.
+        </p>
+      </div>
+    </div>
+
+    <div class="w-full md:w-1/3 p-6 flex flex-col flex-grow flex-shrink">
+      <div class="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow">
+        <p class="w-full text-gray-600 text-xs md:text-sm px-6 mt-6">
+          JUST THE BASICS
+        </p>
+        <div class="w-full font-bold text-xl text-gray-800 px-6">
+          Table.party focuses on being a great VTT.
+        </div>
+        <p class="text-gray-600 text-base px-6 mb-5">
+          Use the other tools you prefer for video and audio, character sheets, combat tracking, etc.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="background-gradient w-full mx-auto text-center pt-6 pb-12">
+  <h2 class="w-full my-2 text-5xl font-black leading-tight text-center text-white">
+    Get your campaign started today
+  </h2>
+  <div class="w-full mb-4">
+    <div class="h-1 mx-auto bg-white w-1/6 opacity-25 my-0 py-0 rounded-t"></div>
+  </div>
+
+  <h3 class="my-4 text-3xl font-extrabold">
+    Open source. Member supported. Free to play.
+  </h3>
+
+  <%= link_to "Sign up", sign_up_path, class: "button-gradient inline-block mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded my-6 py-4 px-8 shadow-lg" %>
+</section>
+
+<footer class="bg-white border-t">
+  <div class="container mx-auto mt-8 px-8">
+    <div class="w-full flex flex-col md:flex-row py-6">
+      <div class="flex-grow flex items-baseline">
+        <%= link_to root_path, class: "text-orange-600 no-underline hover:no-underline font-bold text-2xl lg:text-4xl" do %>
+          <%= inline_svg_tag "logo.svg", class: "inline-block w-6 h-6 lg:w-10 lg:h-10 fill-current text-orange-600" %>
+          table.party
+        <% end %>
+      </div>
+
+      <div class="flex-1">
+        <p class="uppercase font-extrabold text-gray-500 md:mb-6">Links</p>
+        <ul class="list-reset mb-6">
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "FAQ", faq_url, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= mail_to support_email, "Help", class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "Terms & Privacy", privacy_url, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex-1">
+        <p class="uppercase font-extrabold text-gray-500 md:mb-6">Social</p>
+        <ul class="list-reset mb-6">
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "Patreon", patreon_url, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "GitHub", github_url, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "Twitter", twitter_url, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+        </ul>
+      </div>
+
+      <div class="flex-1">
+        <p class="uppercase font-extrabold text-gray-500 md:mb-6">Account</p>
+        <ul class="list-reset mb-6">
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "Sign in", sign_in_path, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+          <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+            <%= link_to "Sign up", sign_up_path, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+          </li>
+          <% if signed_in? %>
+            <li class="mt-2 inline-block mr-2 md:block md:mr-0">
+              <%= link_to "Sign out", sign_out_path, method: :delete, class: "font-light no-underline hover:underline text-gray-800 hover:text-orange-500" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>

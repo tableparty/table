@@ -1,0 +1,43 @@
+$browser-bar: rgba(230, 230, 230, 0.7);
+$browser-close: #f44;
+$browser-expand: #9b3;
+$browser-minimize: #fb5;
+
+.browser-mockup {
+  border-bottom: 0;
+  border-left: 0;
+  border-right: 0;
+  border-top: 2em solid $browser-bar;
+  position: absolute;
+
+  iframe {
+    border: 0;
+  }
+
+  > * {
+    display: block;
+  }
+}
+
+.browser-mockup::before {
+  background-color: $browser-close;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px $browser-close, 1.5em 0 0 2px $browser-expand, 3em 0 0 2px $browser-minimize;
+  content: "";
+  display: block;
+  height: 0.5em;
+  left: 1em;
+  position: absolute;
+  top: -1.25em;
+  width: 0.5em;
+}
+
+.browser-one {
+  height: 60vh;
+}
+
+.browser-two {
+  height: 50vh;
+  right: 0;
+  top: 3rem;
+}

@@ -78,7 +78,6 @@ class Map < ApplicationRecord
   end
 
   def scale_coordinates
-    maybe_analyze_image
     if zoom_changed?
       zoom_factor = zoom_amount / ZOOM_LEVELS[zoom_was]
       self.x = x * zoom_factor

@@ -14,7 +14,7 @@ RSpec.describe "manage maps", type: :system do
     visit campaign_path(campaign, as: user)
     click_on "New Map"
     fill_in "Name", with: "Dwarven Excavation"
-    attach_file "Image", file_fixture("dwarven-excavation.jpg")
+    attach_file "Image", file_fixture("map.jpg")
     fill_in "Grid size", with: "43"
     click_on "Create Map"
     expect(page).to have_content "Dwarven Excavation"
@@ -34,7 +34,7 @@ RSpec.describe "manage maps", type: :system do
       visit campaign_path(campaign, as: user)
       click_on "New Map"
       fill_in "Name", with: "Dwarven Excavation"
-      attach_file "Image", file_fixture("dwarven-excavation.jpg")
+      attach_file "Image", file_fixture("map.jpg")
       fill_in "Grid size", with: "43"
       click_on "Create Map"
       expect(page).to have_content "Dwarven Excavation"

@@ -172,7 +172,7 @@ RSpec.describe Map, type: :model do
         map = create(:map)
         token = Token.create!(
           map: map,
-          image: Rack::Test::UploadedFile.new("spec/fixtures/files/uxil.jpeg"),
+          image: Rack::Test::UploadedFile.new("spec/fixtures/files/thief.jpg"),
           name: "Test",
           stashed: true
         )

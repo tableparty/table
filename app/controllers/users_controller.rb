@@ -13,10 +13,24 @@ class UsersController < Clearance::UsersController
   private
 
   def user_params
-    params[:user].permit(:email, :password, :name)
+    if params[:user]
+      params[:user].permit(:email, :password, :name)
+    else
+      Hash.new
+    end
   end
 
   def sign_up_code_correct
     params[:sign_up_code] == ENV["SIGN_UP_CODE"]
+  end
+
+  def url_after_create
+    campaigns_url
+  end
+
+  def redirect_signed_in_users
+    if signed_in?
+      redirect_to campaigns_url
+    end
   end
 end

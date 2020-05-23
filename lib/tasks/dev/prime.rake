@@ -16,35 +16,24 @@ namespace :dev do
     )
 
     [
-      "Jormund",
-      "Olokas",
-      "Tanpos",
-      "Thoduhr",
-      "Uxil",
-      "Yenkas"
+      "Thief",
+      "Wizard",
+      "Archer"
     ].each do |name|
       campaign.characters.find_or_create_by(name: name) do |character|
         character.image.attach(
           io: File.open(
-            Rails.root.join("spec/fixtures/files/#{name.downcase}.jpeg")
+            Rails.root.join("spec/fixtures/files/#{name.downcase}.jpg")
           ),
-          filename: "#{name.downcase}.jpeg"
+          filename: "#{name.downcase}.jpg"
         )
       end
     end
 
     [
       {
-        name: "Dwarven Excavation",
-        image_filename: "dwarven-excavation.jpg"
-      },
-      {
-        name: "Umbrage Hill",
-        image_filename: "umbrage-hill.jpg"
-      },
-      {
-        name: "Gnomengarde",
-        image_filename: "gnomengarde.jpg"
+        name: "Map",
+        image_filename: "map.jpg"
       }
     ].each do |details|
       map = campaign.maps.find_or_create_by(

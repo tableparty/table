@@ -10,6 +10,8 @@
 @import "components/flashes";
 @import "components/library";
 @import "components/tabs";
+@import "components/browser";
+@import "components/home";
 
 .btn {
   @apply text-white bg-blue-500 p-2 transition duration-150 rounded cursor-pointer;
@@ -30,3 +32,4 @@
 svg {
   @apply inline h-4 w-4 -mt-px fill-current;
 }
+

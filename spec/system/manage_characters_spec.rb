@@ -11,7 +11,7 @@ RSpec.describe "manage characters", type: :system do
     click_on "New Token"
     find("label", text: "Character").click
     fill_in "Name", with: "Uxil"
-    attach_file "Image", file_fixture("uxil.jpeg")
+    attach_file "Image", file_fixture("thief.jpg")
     click_on "Create Character"
 
     # if we don't use find here, capybara doesn't wait for the ajax to complete

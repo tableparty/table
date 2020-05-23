@@ -6,7 +6,7 @@ FactoryBot.define do
 
   factory :character do
     transient do
-      image_name { "uxil.jpeg" }
+      image_name { "thief.jpg" }
     end
 
     campaign
@@ -18,7 +18,7 @@ FactoryBot.define do
 
   factory :creature do
     transient do
-      image_name { "uxil.jpeg" }
+      image_name { "thief.jpg" }
     end
 
     campaign
@@ -45,7 +45,7 @@ FactoryBot.define do
 
   factory :token do
     transient do
-      image_name { "uxil.jpeg" }
+      image_name { "thief.jpg" }
     end
 
     map

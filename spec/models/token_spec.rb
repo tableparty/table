@@ -55,21 +55,21 @@ RSpec.describe Token, type: :model do
     it "returns the token's image if overridden" do
       character = create(
         :character,
-        image: Rack::Test::UploadedFile.new("spec/fixtures/files/tanpos.jpeg")
+        image: Rack::Test::UploadedFile.new("spec/fixtures/files/archer.jpg")
       )
       token = create(
         :token,
-        image: Rack::Test::UploadedFile.new("spec/fixtures/files/uxil.jpeg"),
+        image: Rack::Test::UploadedFile.new("spec/fixtures/files/thief.jpg"),
         token_template: character
       )
 
-      expect(token.image.filename.to_s).to eq "uxil.jpeg"
+      expect(token.image.filename.to_s).to eq "thief.jpg"
     end
 
     it "returns the token_template's name if not overridden" do
       character = create(
         :character,
-        image: Rack::Test::UploadedFile.new("spec/fixtures/files/tanpos.jpeg")
+        image: Rack::Test::UploadedFile.new("spec/fixtures/files/archer.jpg")
       )
       token = create(
         :token,
@@ -77,7 +77,7 @@ RSpec.describe Token, type: :model do
         token_template: character
       )
 
-      expect(token.image.filename.to_s).to eq "tanpos.jpeg"
+      expect(token.image.filename.to_s).to eq "archer.jpg"
     end
   end
 

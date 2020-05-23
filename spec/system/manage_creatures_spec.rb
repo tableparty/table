@@ -10,7 +10,7 @@ RSpec.describe "manage creatures", type: :system do
     visit campaign_path(campaign, as: user)
     click_on "New Token"
     fill_in "Name", with: "Orc"
-    attach_file "Image", file_fixture("uxil.jpeg")
+    attach_file "Image", file_fixture("thief.jpg")
     click_on "Create Creature"
 
     # if we don't use find here, capybara doesn't wait for the ajax to complete
@@ -33,7 +33,7 @@ RSpec.describe "manage creatures", type: :system do
     click_on "New Token"
     fill_in "Name", with: "Ogre"
     select "Large"
-    attach_file "Image", file_fixture("uxil.jpeg")
+    attach_file "Image", file_fixture("thief.jpg")
     click_on "Create Creature"
 
     drawer_token = find(
