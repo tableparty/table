@@ -11,6 +11,8 @@ RSpec.describe Map, type: :model do
   describe "validations" do
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :image }
+    it { is_expected.to validate_presence_of :grid_size }
+    it { is_expected.to validate_numericality_of :grid_size }
     it { is_expected.to validate_inclusion_of(:zoom).in_range(0..4) }
   end
 
@@ -40,13 +42,31 @@ RSpec.describe Map, type: :model do
     end
   end
 
+  describe "#scaled_height" do
+    it "returns the height adjusted to a 50px grid size" do
+      map = create(:map, grid_size: 25)
+      map.image.analyze
+
+      expect(map.scaled_height).to eq(map.original_height * 2)
+    end
+  end
+
+  describe "#scaled_width" do
+    it "returns the width adjusted to a 50px grid size" do
+      map = create(:map, grid_size: 25)
+      map.image.analyze
+
+      expect(map.scaled_width).to eq(map.original_width * 2)
+    end
+  end
+
   describe "#height" do
     it "returns the integer zoomed height" do
       map = create(:map, zoom: 0)
       map.image.analyze
 
       expect(map.height).to eq(
-        (map.image.metadata[:height] * map.zoom_amount).round
+        (map.scaled_height * map.zoom_amount).round
       )
     end
   end
@@ -57,7 +77,7 @@ RSpec.describe Map, type: :model do
       map.image.analyze
 
       expect(map.width).to eq(
-        (map.image.metadata[:width] * map.zoom_amount).round
+        (map.scaled_width * map.zoom_amount).round
       )
     end
   end
@@ -69,7 +89,7 @@ RSpec.describe Map, type: :model do
       map.center_image
 
       expect(map.x).to eq(
-        ((map.original_width * map.zoom_amount) / 2).round
+        ((map.scaled_width * map.zoom_amount) / 2).round
       )
     end
 
@@ -79,7 +99,7 @@ RSpec.describe Map, type: :model do
       map.center_image
 
       expect(map.y).to eq(
-        ((map.original_height * map.zoom_amount) / 2).round
+        ((map.scaled_height * map.zoom_amount) / 2).round
       )
     end
   end

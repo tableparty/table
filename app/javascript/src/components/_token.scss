@@ -9,7 +9,7 @@
     absolute;
 
   --base-border: 2px;
-  --base-size: 36px;
+  --base-size: 40px;
 
   left: calc(var(--x) * var(--zoom-amount) * 1px);
   margin-left: calc((-1 * (var(--base-size) / 2)) * var(--size-scale) * var(--zoom-amount));

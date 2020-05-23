@@ -35,6 +35,7 @@ FactoryBot.define do
 
     campaign
     name { "Dwarven Excavation" }
+    grid_size { 50 }
     image do
       Rack::Test::UploadedFile.new("spec/fixtures/files/#{image_name}")
     end

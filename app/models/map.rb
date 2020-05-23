@@ -1,5 +1,6 @@
 class Map < ApplicationRecord
   ZOOM_LEVELS = [0.25, 0.5, 1, 1.5, 2].freeze
+  NORMALIZED_GRID_SIZE = 50
 
   belongs_to :campaign
   has_many :tokens, dependent: :destroy
@@ -8,6 +9,7 @@ class Map < ApplicationRecord
 
   validates :name, presence: true
   validates :image, presence: true
+  validates :grid_size, presence: true, numericality: true
   validates_inclusion_of :zoom, in: ->(map) { (0..map.zoom_max) }
 
   before_update :scale_coordinates
@@ -24,12 +26,20 @@ class Map < ApplicationRecord
     image.metadata[:width]
   end
 
+  def scaled_height
+    original_height * NORMALIZED_GRID_SIZE / grid_size
+  end
+
+  def scaled_width
+    original_width * NORMALIZED_GRID_SIZE / grid_size
+  end
+
   def height
-    (original_height * zoom_amount).round
+    (scaled_height * zoom_amount).round
   end
 
   def width
-    (original_width * zoom_amount).round
+    (scaled_width * zoom_amount).round
   end
 
   def center_image

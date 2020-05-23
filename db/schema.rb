@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_17_115412) do
+ActiveRecord::Schema.define(version: 2020_05_23_115746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -73,6 +73,7 @@ ActiveRecord::Schema.define(version: 2020_05_17_115412) do
     t.integer "x", default: 0, null: false
     t.integer "y", default: 0, null: false
     t.integer "zoom", default: 0, null: false
+    t.integer "grid_size", null: false
     t.index ["campaign_id"], name: "index_maps_on_campaign_id"
   end
 

@@ -21,6 +21,6 @@ class MapsController < ApplicationController
   private
 
   def map_params
-    params.require(:map).permit(:name, :image)
+    params.require(:map).permit(:name, :image, :grid_size)
   end
 end

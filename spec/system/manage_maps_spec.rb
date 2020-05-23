@@ -15,6 +15,7 @@ RSpec.describe "manage maps", type: :system do
     click_on "New Map"
     fill_in "Name", with: "Dwarven Excavation"
     attach_file "Image", file_fixture("dwarven-excavation.jpg")
+    fill_in "Grid size", with: "43"
     click_on "Create Map"
     expect(page).to have_content "Dwarven Excavation"
     find(".map-selector__option", text: "Dwarven Excavation").click
@@ -34,6 +35,7 @@ RSpec.describe "manage maps", type: :system do
       click_on "New Map"
       fill_in "Name", with: "Dwarven Excavation"
       attach_file "Image", file_fixture("dwarven-excavation.jpg")
+      fill_in "Grid size", with: "43"
       click_on "Create Map"
       expect(page).to have_content "Dwarven Excavation"
       find(".map-selector__option", text: "Dwarven Excavation").click

@@ -21,7 +21,7 @@ RSpec.describe "manage creatures", type: :system do
   end
 
   it "can create a large creature token" do
-    base_token_size = 36
+    base_token_size = 40
     base_drawer_size = (base_token_size * 1.25).round
     large_map_size = (base_token_size * Token::SIZES["large"]).round
     user = create(:user)
