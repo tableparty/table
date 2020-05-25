@@ -3,7 +3,13 @@
     <div class="flex items-baseline">
       <%= link_to root_path, class: "flex-1" do %>
         <span class="text-2xl">Table</span>
-        <span class="text-gray-600 italic">A simple virtual table-top</span>
+        <span class="text-gray-600 italic">
+          <% if content_for?(:subtitle) %>
+            <%= yield :subtitle %>
+          <% else %>
+            A simple virtual table-top
+          <% end %>
+        </span>
       <% end %>
       <% if signed_in? %>
         <%= link_to t(".sign_out"), sign_out_path, method: :delete, class: "text-gray-600" %>

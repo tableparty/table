@@ -2,12 +2,12 @@
   @apply
     my-4
     overflow-x-auto
+    overflow-y-hidden
   ;
 
   display: grid;
   grid-auto-columns: 24rem;
   grid-auto-flow: column;
-  grid-gap: 1rem;
 }
 
 .map-selector__option {
@@ -17,6 +17,7 @@
     h-40
     relative
     rounded-lg
+    mx-3
   ;
 }
 

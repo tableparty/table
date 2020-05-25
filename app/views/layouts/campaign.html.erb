@@ -10,8 +10,8 @@
   </head>
 
   <body>
-    <%= render partial: "header", locals: { full_width: true } %>
-    <div class="mx-4 py-4">
+    <div class="flex flex-col h-screen">
+      <%= render partial: "header", locals: { full_width: true } %>
       <%= render "flashes" %>
 
       <%= yield %>
