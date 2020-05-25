@@ -12,3 +12,9 @@
   <%= form.label :password %>
   <%= form.password_field :password, class: "input" %>
 </div>
+
+<div class="text-field">
+  <%= label_tag :sign_up_code %>
+  <span class="text-sm text-gray-500">Available to <a href="https://www.patreon.com/tableparty" class="text-blue-500 hover:text-blue-800">Patreon supporters</a></span>
+  <%= text_field_tag :sign_up_code, nil, class: "input" %>
+</div>
