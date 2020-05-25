@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Token, type: :model do
   describe "associations" do
     it { is_expected.to belong_to(:map) }
-    it { is_expected.to belong_to(:tokenable).optional(true) }
+    it { is_expected.to belong_to(:token_template).optional(true) }
     it { is_expected.to have_one(:image_attachment) }
     it { is_expected.to have_one(:image_blob) }
   end
@@ -22,14 +22,14 @@ RSpec.describe Token, type: :model do
   describe "#name" do
     it "returns the token's name if overridden" do
       character = build(:character, name: "Character Name")
-      token = described_class.new(name: "Token Name", tokenable: character)
+      token = described_class.new(name: "Token Name", token_template: character)
 
       expect(token.name).to eq "Token Name"
     end
 
-    it "returns the tokenable's name if not overridden" do
+    it "returns the token_template's name if not overridden" do
       character = build(:character, name: "Character Name")
-      token = described_class.new(name: "", tokenable: character)
+      token = described_class.new(name: "", token_template: character)
 
       expect(token.name).to eq "Character Name"
     end
@@ -38,14 +38,14 @@ RSpec.describe Token, type: :model do
   describe "#size" do
     it "returns the token's size if overridden" do
       character = build(:creature, size: :large)
-      token = described_class.new(size: :tiny, tokenable: character)
+      token = described_class.new(size: :tiny, token_template: character)
 
       expect(token.size).to eq "tiny"
     end
 
-    it "returns the tokenable's name if not overridden" do
+    it "returns the token_template's name if not overridden" do
       character = build(:creature, size: :large)
-      token = described_class.new(size: nil, tokenable: character)
+      token = described_class.new(size: nil, token_template: character)
 
       expect(token.size).to eq "large"
     end
@@ -60,13 +60,13 @@ RSpec.describe Token, type: :model do
       token = create(
         :token,
         image: Rack::Test::UploadedFile.new("spec/fixtures/files/uxil.jpeg"),
-        tokenable: character
+        token_template: character
       )
 
       expect(token.image.filename.to_s).to eq "uxil.jpeg"
     end
 
-    it "returns the tokenable's name if not overridden" do
+    it "returns the token_template's name if not overridden" do
       character = create(
         :character,
         image: Rack::Test::UploadedFile.new("spec/fixtures/files/tanpos.jpeg")
@@ -74,7 +74,7 @@ RSpec.describe Token, type: :model do
       token = create(
         :token,
         image: nil,
-        tokenable: character
+        token_template: character
       )
 
       expect(token.image.filename.to_s).to eq "tanpos.jpeg"
@@ -82,20 +82,20 @@ RSpec.describe Token, type: :model do
   end
 
   describe "copy_on_place?" do
-    it "returns true if no identifier and tokenable copy_on_place" do
-      token = described_class.new(tokenable: Creature.new)
+    it "returns true if no identifier and token_template copy_on_place" do
+      token = described_class.new(token_template: Creature.new)
 
       expect(token).to be_copy_on_place
     end
 
-    it "returns false if no identifier and tokenable not copy_on_place" do
-      token = described_class.new(tokenable: Character.new)
+    it "returns false if no identifier and token_template not copy_on_place" do
+      token = described_class.new(token_template: Character.new)
 
       expect(token).not_to be_copy_on_place
     end
 
-    it "returns false if identifier and tokenable copy_on_place" do
-      token = described_class.new(identifier: "1", tokenable: Creature.new)
+    it "returns false if identifier and token_template copy_on_place" do
+      token = described_class.new(identifier: "1", token_template: Creature.new)
 
       expect(token).not_to be_copy_on_place
     end

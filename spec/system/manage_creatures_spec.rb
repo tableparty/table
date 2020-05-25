@@ -52,7 +52,7 @@ RSpec.describe "manage creatures", type: :system do
   it "copies creature tokens from the drawer to the map" do
     map = create :map
     creature = create :creature, campaign: map.campaign
-    token = create :token, map: map, stashed: true, tokenable: creature
+    token = create :token, map: map, stashed: true, token_template: creature
 
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection

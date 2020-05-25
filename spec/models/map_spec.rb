@@ -135,31 +135,31 @@ RSpec.describe Map, type: :model do
 
       expect(map.tokens.size).to eq map.campaign.characters.size
       expect(map.tokens.first.image.blob).to eq character.image.blob
-      expect(map.tokens.first.tokenable).to eq character
+      expect(map.tokens.first.token_template).to eq character
     end
   end
 
   describe "#copy_token" do
-    describe "when there are only stashed matching tokenables" do
-      it "adds the first instance of the tokenable to the map" do
+    describe "when there are only stashed matching token_template" do
+      it "adds the first instance of the token_template to the map" do
         map = create(:map)
         creature = create(:creature)
-        token = Token.create!(map: map, tokenable: creature, stashed: true)
+        token = Token.create!(map: map, token_template: creature, stashed: true)
 
         map.copy_token(token)
 
         expect(map.tokens.where(stashed: false).size).to eq 1
         new_token = map.tokens.where(stashed: false).first
-        expect(new_token.tokenable).to eq creature
+        expect(new_token.token_template).to eq creature
         expect(new_token.identifier).to eq "1"
       end
     end
 
-    describe "when there are matching tokenables not stashed" do
+    describe "when there are matching token_template not stashed" do
       it "adds an identifier to the copied token" do
         map = create(:map)
         creature = create(:creature)
-        token = Token.create!(map: map, tokenable: creature, stashed: true)
+        token = Token.create!(map: map, token_template: creature, stashed: true)
 
         map.copy_token(token)
 

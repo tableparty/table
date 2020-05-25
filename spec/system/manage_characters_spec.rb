@@ -39,7 +39,7 @@ RSpec.describe "manage characters", type: :system do
   it "moves character tokens from the drawer to the map" do
     map = create :map
     character = create :character, campaign: map.campaign
-    token = create :token, map: map, stashed: true, tokenable: character
+    token = create :token, map: map, stashed: true, token_template: character
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
     find(".map-selector__option", text: map.name).click

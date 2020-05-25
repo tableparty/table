@@ -26,6 +26,6 @@ class TokensController < ApplicationController
   private
 
   def token_params
-    params.require(:token).permit(:name, :image, :tokenable_type, :tokenable_id)
+    params.require(:token).permit(:name, :image, :token_template_id)
   end
 end

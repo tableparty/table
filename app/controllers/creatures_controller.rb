@@ -4,7 +4,7 @@ class CreaturesController < ApplicationController
   def create
     creature = campaign.creatures.new(creature_params)
     if creature.save
-      campaign.current_map.tokens.create(tokenable: creature)
+      campaign.current_map.tokens.create(token_template: creature)
       head :ok
     else
       render(

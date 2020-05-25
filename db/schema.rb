@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_23_115746) do
+ActiveRecord::Schema.define(version: 2020_05_25_110828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -47,24 +47,6 @@ ActiveRecord::Schema.define(version: 2020_05_23_115746) do
     t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
-  create_table "characters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "campaign_id", null: false
-    t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "size", default: "medium", null: false
-    t.index ["campaign_id"], name: "index_characters_on_campaign_id"
-  end
-
-  create_table "creatures", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "campaign_id", null: false
-    t.string "name", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "size", default: "medium", null: false
-    t.index ["campaign_id"], name: "index_creatures_on_campaign_id"
-  end
-
   create_table "maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "campaign_id", null: false
     t.string "name"
@@ -77,6 +59,16 @@ ActiveRecord::Schema.define(version: 2020_05_23_115746) do
     t.index ["campaign_id"], name: "index_maps_on_campaign_id"
   end
 
+  create_table "token_templates", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type", null: false
+    t.uuid "campaign_id", null: false
+    t.string "name", null: false
+    t.string "size", default: "medium", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["campaign_id"], name: "index_token_templates_on_campaign_id"
+  end
+
   create_table "tokens", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "map_id", null: false
     t.string "name"
@@ -84,13 +76,11 @@ ActiveRecord::Schema.define(version: 2020_05_23_115746) do
     t.integer "y"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.uuid "tokenable_id"
-    t.string "tokenable_type"
+    t.uuid "token_template_id"
     t.boolean "stashed", default: true
     t.string "identifier"
     t.string "size"
     t.index ["map_id"], name: "index_tokens_on_map_id"
-    t.index ["tokenable_type", "tokenable_id"], name: "index_tokens_on_tokenable_type_and_tokenable_id"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -108,8 +98,7 @@ ActiveRecord::Schema.define(version: 2020_05_23_115746) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns", "maps", column: "current_map_id"
   add_foreign_key "campaigns", "users"
-  add_foreign_key "characters", "campaigns"
-  add_foreign_key "creatures", "campaigns"
   add_foreign_key "maps", "campaigns"
+  add_foreign_key "token_templates", "campaigns"
   add_foreign_key "tokens", "maps"
 end

@@ -53,13 +53,13 @@ class Map < ApplicationRecord
 
   def populate_characters
     campaign.characters.each do |character|
-      tokens.find_or_create_by(tokenable: character)
+      tokens.find_or_create_by(token_template: character)
     end
   end
 
   def copy_token(token)
     tokens.create(
-      tokenable: token.tokenable,
+      token_template: token.token_template,
       identifier: generate_identifier(token),
       x: token.x,
       y: token.y,
@@ -70,8 +70,8 @@ class Map < ApplicationRecord
   private
 
   def generate_identifier(token)
-    if token.tokenable
-      tokens.where(tokenable: token.tokenable).size
+    if token.token_template
+      tokens.where(token_template: token.token_template).size
     elsif token.name.present?
       tokens.where(name: token.name).size
     end
