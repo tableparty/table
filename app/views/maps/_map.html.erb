@@ -4,6 +4,7 @@
     action: "click->campaign#chooseMapOption",
     map_id: map.id
   } do %>
+    <%= link_to "Edit", edit_map_path(map), remote: true %>
     <%= content_tag :span, map.name, class: "map-selector__option-text" %>
   <% end %>
 </div>

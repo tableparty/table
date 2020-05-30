@@ -1,4 +1,4 @@
-<%= form_with model: [map.campaign, map], html: { data: { action: "ajax:success->modal#close ajax:error->modal#onPostError" } } do |form| %>
+<%= form_with model: map_model_for_form(map), html: { data: { action: "ajax:success->modal#close ajax:error->modal#onPostError" } } do |form| %>
   <% if map.errors.any? %>
     <ul class="errors">
     <% map.errors.full_messages.each do |error| %>
@@ -19,5 +19,8 @@
   <div class="flex items-center justify-between">
     <%= form.submit class: "btn" %>
     <%= link_to "Cancel", "#", data: { action: "click->modal#close" }, class: "inline-block align-baseline text-sm text-gray-500 hover:text-gray-800" %>
+    <% if map.persisted? %>
+      <%= link_to "Delete", map_path(map), method: :delete, remote: true, data: { confirm: "Are you sure you want to delete #{map.name}?" }, class: "inline-block align-baseline text-sm text-red-500 hover:text-red-800" %>
+    <% end %>
   </div>
 <% end %>

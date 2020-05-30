@@ -26,10 +26,39 @@ class MapsController < ApplicationController
     end
   end
 
+  def edit
+    respond_to :js
+
+    map = current_user.maps.find(params[:id])
+    render layout: "modal", locals: { map: map }
+  end
+
+  def update
+    map = current_user.maps.find(params[:id])
+    if map.update(map_params)
+      CampaignChannel.broadcast_map_selector(map.campaign)
+      if map.campaign.current_map == map
+        CampaignChannel.broadcast_current_map(campaign)
+      end
+      head :ok
+    else
+      render(
+        partial: "form",
+        locals: { map: map },
+        status: :bad_request
+      )
+    end
+  end
+
   def destroy
     map = current_user.maps.find(params[:id])
+    if map.campaign.current_map == map
+      map.campaign.update(current_map: nil)
+      CampaignChannel.broadcast_current_map(map.campaign)
+    end
     if map.destroy
-      redirect_to campaign, success: "Map successfully deleted."
+      CampaignChannel.broadcast_map_selector(map.campaign)
+      head :ok
     else
       redirect_to campaign, failure: "Map could not be deleted."
     end
@@ -40,4 +69,13 @@ class MapsController < ApplicationController
   def map_params
     params.require(:map).permit(:name, :image, :grid_size)
   end
+
+  def map_model_for_form(map)
+    if map.persisted?
+      map
+    else
+      [map.campaign, map]
+    end
+  end
+  helper_method :map_model_for_form
 end

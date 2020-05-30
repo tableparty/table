@@ -45,6 +45,16 @@ RSpec.describe "manage maps", type: :system do
     end
   end
 
+  it "validates parameters for new map" do
+    user = create(:user)
+    campaign = create :campaign, user: user
+    visit campaign_path(campaign, as: user)
+    click_on "New Map"
+    fill_in "Name", with: ""
+    click_on "Create Map"
+    expect(page).to have_content "Name can't be blank"
+  end
+
   it "can edit a map" do
     user = create(:user)
     campaign = create(:campaign, user: user)
@@ -53,20 +63,39 @@ RSpec.describe "manage maps", type: :system do
     visit campaign_path(campaign, as: user)
     click_on "Edit"
     fill_in "Name", with: "Edited Map Name"
-    click_on "Save Map"
+    click_on "Update Map"
 
     expect(page).to have_content "Edited Map Name"
     expect(map.reload.name).to eq "Edited Map Name"
   end
 
-  it "validates parameters for map" do
+  it "validates parameters when editing maps" do
     user = create(:user)
-    campaign = create :campaign, user: user
+    campaign = create(:campaign, user: user)
+    create(:map, campaign: campaign)
+
     visit campaign_path(campaign, as: user)
-    click_on "New Map"
+    click_on "Edit"
     fill_in "Name", with: ""
-    click_on "Create Map"
+    click_on "Update Map"
+
     expect(page).to have_content "Name can't be blank"
+  end
+
+  it "can delete the current map" do
+    user = create(:user)
+    campaign = create(:campaign, user: user)
+    map = create(:map, campaign: campaign)
+    campaign.update(current_map: map)
+
+    visit campaign_path(campaign, as: user)
+    click_on "Edit"
+    accept_confirm do
+      click_on "Delete"
+    end
+
+    expect(page).not_to have_content map.name
+    expect(page).to have_content "No Current Map"
   end
 
   it "switches maps" do
