@@ -60,7 +60,7 @@ class MapsController < ApplicationController
       CampaignChannel.broadcast_map_selector(map.campaign)
       head :ok
     else
-      redirect_to campaign, failure: "Map could not be deleted."
+      head :bad_request
     end
   end
 
