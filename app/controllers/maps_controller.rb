@@ -2,8 +2,13 @@ class MapsController < ApplicationController
   before_action :require_login
 
   def new
+    respond_to :js
+
     campaign = current_user.campaigns.find(params[:campaign_id])
-    render locals: { map: campaign.maps.new }
+
+    render layout: "modal", locals: {
+      map: campaign.maps.new
+    }
   end
 
   def create
@@ -12,9 +17,12 @@ class MapsController < ApplicationController
     if map.save
       map.center_image
       map.populate_characters
-      redirect_to campaign
+      campaign.update(current_map: map)
+      CampaignChannel.broadcast_current_map(campaign)
+      CampaignChannel.broadcast_map_selector(campaign)
+      head :ok
     else
-      render :new, locals: { map: map }
+      render partial: "form", locals: { map: map }, status: :bad_request
     end
   end
 
