@@ -14,22 +14,38 @@ class CampaignChannel < ApplicationCable::Channel
     return if !dm?(campaign) || campaign.current_map == map
 
     campaign.update(current_map: map)
-    broadcast_to(
-      campaign,
-      current_map_html: render_current_map(campaign, admin: false)
-    )
-    broadcast_to(
-      [campaign, campaign.user],
-      current_map_html: render_current_map(campaign, admin: true)
-    )
+    CampaignChannel.broadcast_current_map(campaign)
   end
 
-  private
+  class << self
+    def broadcast_current_map(campaign)
+      broadcast_to(
+        campaign,
+        current_map_html: render_current_map(campaign, admin: false)
+      )
+      broadcast_to(
+        [campaign, campaign.user],
+        current_map_html: render_current_map(campaign, admin: true)
+      )
+    end
 
-  def render_current_map(campaign, admin: false)
-    render_partial(
-      "campaigns/current_map",
-      locals: { campaign: campaign, admin: admin }
-    )
+    def broadcast_map_selector(campaign)
+      broadcast_to(
+        [campaign, campaign.user],
+        map_selector_html: CampaignsController.render(
+          partial: "campaigns/map_selector",
+          locals: { campaign: campaign }
+        )
+      )
+    end
+
+    private
+
+    def render_current_map(campaign, admin: false)
+      CampaignsController.render(
+        partial: "campaigns/current_map",
+        locals: { campaign: campaign, admin: admin }
+      )
+    end
   end
 end

@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["mapOption", "currentMap", "statusIndicator"]
+  static targets = ["mapOption", "currentMap", "statusIndicator", "mapSelector"]
 
   connect() {
     this.campaignId = this.element.dataset.campaignId
@@ -27,6 +27,10 @@ export default class extends Controller {
   }
 
   cableReceived(data) {
-    this.currentMapTarget.innerHTML = data.current_map_html
+    if (data.current_map_html) {
+      this.currentMapTarget.innerHTML = data.current_map_html
+    } else if (data.map_selector_html) {
+      this.mapSelectorTarget.outerHTML = data.map_selector_html
+    }
   }
 }

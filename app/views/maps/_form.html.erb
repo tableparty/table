@@ -1,0 +1,23 @@
+<%= form_with model: [map.campaign, map], html: { data: { action: "ajax:success->modal#close ajax:error->modal#onPostError" } } do |form| %>
+  <% if map.errors.any? %>
+    <ul class="errors">
+    <% map.errors.full_messages.each do |error| %>
+      <%= content_tag :li, error %>
+    <% end %>
+    </ul>
+  <% end %>
+
+  <%= form.label :name %>
+  <%= form.text_field :name, class: "input" %>
+
+  <%= form.label :image %>
+  <%= form.file_field :image, class: "input" %>
+
+  <%= form.label :grid_size %>
+  <%= form.text_field :grid_size, class: "input" %>
+
+  <div class="flex items-center justify-between">
+    <%= form.submit class: "btn" %>
+    <%= link_to "Cancel", "#", data: { action: "click->modal#close" }, class: "inline-block align-baseline text-sm text-gray-500 hover:text-gray-800" %>
+  </div>
+<% end %>
