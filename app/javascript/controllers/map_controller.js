@@ -318,8 +318,4 @@ export default class extends Controller {
       )
     }
   }
-
-  addMap(response) {
-    console.log(response)
-  }
 }
