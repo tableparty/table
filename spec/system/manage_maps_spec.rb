@@ -45,6 +45,20 @@ RSpec.describe "manage maps", type: :system do
     end
   end
 
+  it "can edit a map" do
+    user = create(:user)
+    campaign = create(:campaign, user: user)
+    map = create(:map, campaign: campaign)
+
+    visit campaign_path(campaign, as: user)
+    click_on "Edit"
+    fill_in "Name", with: "Edited Map Name"
+    click_on "Save Map"
+
+    expect(page).to have_content "Edited Map Name"
+    expect(map.reload.name).to eq "Edited Map Name"
+  end
+
   it "validates parameters for map" do
     user = create(:user)
     campaign = create :campaign, user: user
