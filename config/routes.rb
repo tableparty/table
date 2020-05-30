@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :campaigns, only: %i[index new create show] do
     resources :characters, only: %i[create edit update destroy]
     resources :creatures, only: %i[create edit update destroy]
-    resources :maps, only: %i[new create], shallow: true do
+    resources :maps, only: %i[new create edit update destroy] do
       resources :tokens, only: %i[new create]
     end
   end

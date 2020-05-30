@@ -21,6 +21,37 @@ class MapsController < ApplicationController
     end
   end
 
+  def edit
+    respond_to :js
+
+    map = current_user.maps.find(params[:id])
+    render layout: "modal", locals: { map: map }
+  end
+
+  def update
+    map = current_user.maps.find(params[:id])
+    result = UpdateMap.call(
+      campaign: map.campaign,
+      map: map,
+      map_params: map_params
+    )
+    if result.success?
+      head :ok
+    else
+      render partial: "form", locals: { map: map }, status: :bad_request
+    end
+  end
+
+  def destroy
+    map = current_user.maps.find(params[:id])
+    result = DeleteMap.call(campaign: map.campaign, map: map)
+    if result.success?
+      head :ok
+    else
+      head :bad_request
+    end
+  end
+
   private
 
   def map_params

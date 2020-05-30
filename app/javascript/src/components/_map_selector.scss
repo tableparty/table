@@ -1,3 +1,5 @@
+$map-selector-text-background: rgba(0, 0, 0, 0.5);
+
 .map-selector {
   @apply
     my-4
@@ -19,6 +21,24 @@
     rounded-lg
     mx-3
   ;
+
+  &:hover {
+    .map-selector__option-edit {
+      background-color: $map-selector-text-background;
+      display: block;
+    }
+
+    .map-selector__option-text {
+      @apply
+        rounded
+        bg-black
+        text-white
+        px-2
+      ;
+
+      background-color: $map-selector-text-background;
+    }
+  }
 }
 
 .map-selector__option-background {

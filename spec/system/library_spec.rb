@@ -22,7 +22,9 @@ RSpec.describe "manage creatures", type: :system do
     visit campaign_path(campaign, as: campaign.user)
     view_library
     find("[data-creature-id='#{creature.id}']").hover
-    click_on "Edit"
+    within ".library__list" do
+      click_on "Edit"
+    end
     fill_in "Name", with: "New Name"
     click_on "Update Creature"
     view_library
@@ -39,7 +41,9 @@ RSpec.describe "manage creatures", type: :system do
     visit campaign_path(campaign, as: campaign.user)
     view_library
     find("[data-creature-id='#{creature.id}']").hover
-    click_on "Edit"
+    within ".library__list" do
+      click_on "Edit"
+    end
     accept_confirm do
       click_on "Delete #{creature.name}"
     end
@@ -83,7 +87,9 @@ RSpec.describe "manage creatures", type: :system do
     visit campaign_path(campaign, as: campaign.user)
     view_library
     find("[data-character-id='#{character.id}']").hover
-    click_on "Edit"
+    within ".library__list" do
+      click_on "Edit"
+    end
     fill_in "Name", with: "New Name"
     click_on "Update Character"
     view_library
@@ -101,7 +107,9 @@ RSpec.describe "manage creatures", type: :system do
     visit campaign_path(campaign, as: campaign.user)
     view_library
     find("[data-character-id='#{character.id}']").hover
-    click_on "Edit"
+    within ".library__list" do
+      click_on "Edit"
+    end
     accept_confirm do
       click_on "Delete #{character.name}"
     end

@@ -6,4 +6,5 @@
   } do %>
     <%= content_tag :span, map.name, class: "map-selector__option-text" %>
   <% end %>
+  <%= link_to "Edit", edit_campaign_map_path(map.campaign, map), remote: true, class: "map-selector__option-edit hidden absolute top-0 right-0 m-2 rounded inline-block bg-black text-white text-sm px-2" %>
 </div>

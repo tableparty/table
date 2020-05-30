@@ -15,4 +15,9 @@ export default class extends Controller {
   onPostError(event) {
     event.target.outerHTML = event.detail[2].response;
   }
+
+  onDeleteError(event) {
+    event.stopPropagation()
+    alert("There was an problem when attempting to delete.")
+  }
 }
