@@ -47,8 +47,7 @@ namespace :dev do
           filename: details[:image_filename]
         )
       end
-      map.center_image
-      map.populate_characters
+      SetupMap.call(map: map)
     end
   end
 end

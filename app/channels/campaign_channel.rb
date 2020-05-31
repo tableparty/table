@@ -13,8 +13,7 @@ class CampaignChannel < ApplicationCable::Channel
     map = campaign.maps.find(data["map_id"])
     return if !dm?(campaign) || campaign.current_map == map
 
-    campaign.update(current_map: map)
-    CampaignChannel.broadcast_current_map(campaign)
+    ChangeCurrentMap.call(campaign: campaign, map: map)
   end
 
   class << self

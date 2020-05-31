@@ -13,16 +13,11 @@ class MapsController < ApplicationController
 
   def create
     campaign = current_user.campaigns.find(params[:campaign_id])
-    map = campaign.maps.new(map_params)
-    if map.save
-      map.center_image
-      map.populate_characters
-      campaign.update(current_map: map)
-      CampaignChannel.broadcast_current_map(campaign)
-      CampaignChannel.broadcast_map_selector(campaign)
+    result = CreateNewMap.call(campaign: campaign, map_params: map_params)
+    if result.success?
       head :ok
     else
-      render partial: "form", locals: { map: map }, status: :bad_request
+      render partial: "form", locals: { map: result.map }, status: :bad_request
     end
   end
 
