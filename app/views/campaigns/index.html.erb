@@ -2,12 +2,21 @@
 
 <hr class="my-2" />
 
-<ul class="py-4">
-  <% campaigns.each do |campaign| %>
-    <%= content_tag :li do %>
-      <%= link_to campaign.name, campaign, class: "cursor-pointer text-blue-800" %>
+<% campaigns.each do |campaign| %>
+  <%= link_to campaign do %>
+    <%= content_tag :div, class: "shadow my-4 rounded-lg flex justify-between items-center overflow-hidden h-32" do %>
+      <%= content_tag :span, campaign.name, class: "cursor-pointer text-blue-700 text-4xl font-thin m-4" %>
+      <%= content_tag :div, class: "flex flex-row items-center h-full bg-cover bg-center p-4", style: (background_image(campaign.current_map.image) if campaign.current_map) do %>
+        <% campaign.characters.each do |character| %>
+          <%= content_tag :div, "", style: background_image(character.image), class: "h-16 w-16 rounded-full m-2 shadow border-2 border-white bg-cover bg-center" %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
-</ul>
+<% end %>
 
-<%= link_to "New Campaign", new_campaign_path, class: "btn" %>
+<%= link_to new_campaign_path do %>
+  <%= content_tag :div, class: "shadow my-4 rounded-lg flex justify-between items-center overflow-hidden h-32" do %>
+    <%= content_tag :span,"+ New Campaign", class: "cursor-pointer text-gray-600 text-4xl font-thin m-4" %>
+  <% end %>
+<% end %>
