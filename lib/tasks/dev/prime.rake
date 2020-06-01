@@ -11,7 +11,7 @@ namespace :dev do
     end
 
     campaign = Campaign.find_or_create_by(
-      name: "Dragon of Icespire Peak",
+      name: "Rosewood Street Sewers",
       user: dm
     )
 
