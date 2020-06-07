@@ -6,6 +6,7 @@ RSpec.describe Map, type: :model do
     it { is_expected.to have_one(:image_attachment) }
     it { is_expected.to have_one(:image_blob) }
     it { is_expected.to have_many(:tokens).dependent(:destroy) }
+    it { is_expected.to have_many(:fog_areas).dependent(:destroy) }
   end
 
   describe "validations" do

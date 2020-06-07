@@ -4,6 +4,7 @@ class Map < ApplicationRecord
 
   belongs_to :campaign
   has_many :tokens, dependent: :destroy
+  has_many :fog_areas, dependent: :destroy
 
   has_one_attached :image
 

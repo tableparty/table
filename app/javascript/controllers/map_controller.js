@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer", "tokenDrawer"]
+  static targets = ["image", "zoomIn", "zoomOut", "token", "tokenContainer", "tokenDrawer", "fogMask", "fogArea"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
@@ -318,4 +318,5 @@ export default class extends Controller {
       )
     }
   }
+
 }

@@ -1,0 +1,43 @@
+$show: #000;
+$hide: #fff;
+$mask-color: #000;
+$mask-dm-opacity: 0.5;
+
+.fog {
+  height: calc(var(--height) * 1px);
+  left: calc(((var(--viewport-x) / 2) - var(--x)) * 1px);
+  pointer-events: none;
+  position: absolute;
+  top: calc(((var(--viewport-y) / 2) - var(--y)) * 1px);
+  width: calc(var(--width) * 1px);
+}
+
+.fog__layer {
+  fill: $mask-color;
+  mask: url("#fogMask");
+}
+
+.fog__layer--dm {
+  fill-opacity: $mask-dm-opacity;
+}
+
+.fog__mask-base-layer {
+  fill: $hide;
+  height: 100%;
+  width: 100%;
+}
+
+@keyframes reveal {
+  from {
+    fill-opacity: 0;
+  }
+
+  to {
+    fill-opacity: 1;
+  }
+}
+
+.fog__revealed {
+  animation: 2s reveal;
+  fill: $show;
+}

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_05_25_110828) do
+ActiveRecord::Schema.define(version: 2020_06_21_080349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -47,6 +47,14 @@ ActiveRecord::Schema.define(version: 2020_05_25_110828) do
     t.index ["user_id"], name: "index_campaigns_on_user_id"
   end
 
+  create_table "fog_areas", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "map_id", null: false
+    t.string "path", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["map_id"], name: "index_fog_areas_on_map_id"
+  end
+
   create_table "maps", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "campaign_id", null: false
     t.string "name"
@@ -56,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_110828) do
     t.integer "y", default: 0, null: false
     t.integer "zoom", default: 0, null: false
     t.integer "grid_size", null: false
+    t.boolean "fog_enabled", default: false, null: false
     t.index ["campaign_id"], name: "index_maps_on_campaign_id"
   end
 
@@ -98,6 +107,7 @@ ActiveRecord::Schema.define(version: 2020_05_25_110828) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "campaigns", "maps", column: "current_map_id"
   add_foreign_key "campaigns", "users"
+  add_foreign_key "fog_areas", "maps"
   add_foreign_key "maps", "campaigns"
   add_foreign_key "token_templates", "campaigns"
   add_foreign_key "tokens", "maps"

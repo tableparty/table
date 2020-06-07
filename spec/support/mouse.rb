@@ -25,10 +25,49 @@ def alt_click_at(element, x:, y:)
   )
 end
 
+def shift_click_at(element, x:, y:)
+  dispatch_event(
+    element,
+    "this",
+    mouse_event(
+      "mousedown",
+      client_x: x,
+      client_y: y,
+      shift_key: true
+    )
+  )
+end
+
+def mouse_move_to(x:, y:)
+  dispatch_event(
+    page,
+    "document",
+    mouse_event(
+      "mousemove",
+      client_x: x,
+      client_y: y
+    )
+  )
+end
+
+def mouse_release
+  dispatch_event(
+    page,
+    "document",
+    mouse_event(
+      "mouseup"
+    )
+  )
+end
+
 def middle_of(element)
+  relative_position_of(element, x: 0.5, y: 0.5)
+end
+
+def relative_position_of(element, x:, y:)
   {
-    x: element.native.location.x + element.native.size.width / 2,
-    y: element.native.location.y + element.native.size.height / 2
+    x: element.native.location.x + element.native.size.width * x,
+    y: element.native.location.y + element.native.size.height * y
   }
 end
 
@@ -58,7 +97,7 @@ def click_and_move_token(token, by:)
     )
   )
   dispatch_event(
-    element.ancestor("[data-controller='map']"),
+    element.ancestor("[data-controller~='map']"),
     "this",
     drag_event(
       "dragover",
@@ -103,7 +142,7 @@ def drag_event(event, options)
   )
 end
 
-def mouse_event(event, options)
+def mouse_event(event, options = {})
   js_event("MouseEvent", event, options)
 end
 

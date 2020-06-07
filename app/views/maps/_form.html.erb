@@ -16,6 +16,11 @@
   <%= form.label :grid_size %>
   <%= form.text_field :grid_size, class: "input" %>
 
+  <% if FogFeature.enabled_for?(current_user) %>
+    <%= form.label :fog_enabled, "Enable fog" %>
+    <%= form.check_box :fog_enabled, class: "input" %>
+  <% end %>
+
   <div class="flex items-center justify-between">
     <div>
       <%= form.submit class: "btn" %>

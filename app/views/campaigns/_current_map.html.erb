@@ -2,7 +2,7 @@
   <%= content_tag :div,
     class: "flex-1 flex flex-row h-full",
     data: {
-      controller: "map",
+      controller: "map #{"map--fog" if campaign.current_map.fog_enabled?}",
       "map-id": campaign.current_map.id,
       action: "dragover->map#dragOver"
     } do %>
@@ -20,8 +20,8 @@
       data: {
         controller: "css-var",
         "map-id": campaign.current_map.id,
-        target: "map.image",
-        action: "dragover->map#dragOverMap drop->map#dropOnMap mousedown->map#pointTo #{"mousedown->map#moveMap" if admin}",
+        target: "map.image #{"map--fog.image" if campaign.current_map.fog_enabled?}",
+        action: "dragover->map#dragOverMap drop->map#dropOnMap mousedown->map#pointTo #{"mousedown->map--fog#startDrawingFog" if campaign.current_map.fog_enabled? && admin} #{"mousedown->map#moveMap" if admin}",
         x: campaign.current_map.x,
         y: campaign.current_map.y,
         zoom: campaign.current_map.zoom,
@@ -35,6 +35,20 @@
       <div class="current-map__token-container" data-target="map.tokenContainer">
         <%= render campaign.current_map.tokens.where(stashed: false) %>
       </div>
+
+      <% if campaign.current_map.fog_enabled? %>
+        <%= content_tag :svg, xmlns: "http://www.w3.org/2000/svg", class: "fog", viewBox: "0 0 #{campaign.current_map.scaled_width} #{campaign.current_map.scaled_height}" do %>
+          <defs>
+            <mask data-target="map--fog.fogMask" id="fogMask">
+              <rect class="fog__mask-base-layer" />
+              <%= render campaign.current_map.fog_areas %>
+            </mask>
+          </defs>
+
+          <%= content_tag :rect, "", width: campaign.current_map.scaled_width, height: campaign.current_map.scaled_height, class: "fog__layer #{"fog__layer--dm" if admin}" %>
+        <% end %>
+      <% end %>
+
       <div class="current-map__map-name">
         <%= content_tag :h2, campaign.current_map.name %>
       </div>
