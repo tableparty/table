@@ -13,6 +13,7 @@ class MapChannel < ApplicationCable::Channel
         map,
         {
           operation: "move",
+          operator: data["operator"],
           x: map.x,
           y: map.y
         }
@@ -50,6 +51,7 @@ class MapChannel < ApplicationCable::Channel
       map,
       {
         operation: "moveToken",
+        operator: data["operator"],
         token_id: token.id,
         x: token.x,
         y: token.y

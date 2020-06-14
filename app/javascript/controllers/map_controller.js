@@ -6,6 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.mapId = this.element.dataset.mapId
+    this.operatorCode = this.generateOperatorCode()
 
     this.setViewportSize()
     this.updateZoomButtons()
@@ -80,6 +81,7 @@ export default class extends Controller {
         this.channel.perform(
           "move_map",
           {
+            operator: this.operatorCode,
             map_id: this.mapId,
             x: this.imageTarget.dataset.x,
             y: this.imageTarget.dataset.y
@@ -183,6 +185,7 @@ export default class extends Controller {
         "move_token",
         {
           map_id: this.mapId,
+          operator: this.operatorCode,
           token_id: tokenId,
           x: target.dataset.x,
           y: target.dataset.y
@@ -216,7 +219,7 @@ export default class extends Controller {
   cableReceived(data) {
     switch (data.operation) {
       case "move": {
-        if (this.imageTarget.dataset.beingDragged) {
+        if (this.imageTarget.dataset.beingDragged || data.operator === this.operatorCode) {
           return
         }
         this.setMapPosition(data.x, data.y)
@@ -229,7 +232,7 @@ export default class extends Controller {
       }
       case "moveToken": {
         const token = this.findToken(data.token_id)
-        if (token.dataset.beingDragged) {
+        if (token.dataset.beingDragged || data.operator === this.operatorCode) {
           return
         }
         this.setTokenLocation(token, data.x, data.y)
@@ -319,4 +322,9 @@ export default class extends Controller {
     }
   }
 
+  generateOperatorCode() {
+    return Array
+      .from(window.crypto.getRandomValues(new Uint8Array(32)))
+      .map(c => (c < 16 ? "0" : "") + c.toString(16)).join([]);
+  }
 }
