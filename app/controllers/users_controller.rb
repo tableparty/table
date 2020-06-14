@@ -1,11 +1,13 @@
 class UsersController < Clearance::UsersController
   def create
     @user = user_from_params
+    result = CreateUser.call(sponsor_code: params[:sign_up_code], user: @user)
 
-    if sign_up_code_correct && @user.save
+    if result.success?
       sign_in @user
       redirect_back_or url_after_create
     else
+      flash.now[:error] = result.message
       render template: "users/new"
     end
   end
@@ -18,10 +20,6 @@ class UsersController < Clearance::UsersController
     else
       Hash.new
     end
-  end
-
-  def sign_up_code_correct
-    params[:sign_up_code] == ENV["SIGN_UP_CODE"]
   end
 
   def url_after_create

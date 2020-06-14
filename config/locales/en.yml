@@ -30,4 +30,10 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  incorrect_sponsor_code_html: >
+    Incorrect sponsor code. If you have a sponsor code, please double-check it.
+    If you can offer your support then we'd love for you to
+    <a href="%{patreon_url}">join us on Patreon</a>.
+    If you can't financially back the project but would still like to be
+    involved in testing, please email
+    <a href="mailto:%{support_email}">%{support_email}</a>.

@@ -1,3 +1,5 @@
+<%= render "errors", model: form.object %>
+
 <div class="text-field">
   <%= form.label :name %>
   <%= form.text_field :name, class: "input"%>
@@ -15,6 +17,6 @@
 
 <div class="text-field">
   <%= label_tag :sign_up_code %>
-  <span class="text-sm text-gray-500">Available to <a href="https://www.patreon.com/tableparty" class="text-blue-500 hover:text-blue-800">Patreon supporters</a></span>
+  <span class="text-sm text-gray-500">Available to <%= link_to "Patreon supporters", patreon_url, class: "text-blue-500 hover:text-blue-800" %></span>
   <%= text_field_tag :sign_up_code, nil, class: "input" %>
 </div>

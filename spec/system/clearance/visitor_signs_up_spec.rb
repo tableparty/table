@@ -36,6 +36,7 @@ RSpec.describe "Visitor signs up", type: :system do
   it "tries with wrong code" do
     sign_up_with "Name", "valid@example.com", "password", "howaboutthis?"
 
+    expect(page).to have_content("Incorrect sponsor code")
     expect_user_to_be_signed_out
   end
 end
