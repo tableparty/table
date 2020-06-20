@@ -8,10 +8,11 @@
 
     <%= stylesheet_pack_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
 
-  <body class="bg-gray-200 h-screen flex justify-center items-center">
-    <div class="w-full max-w-sm">
+  <body class="bg-gray-200 md:h-screen flex justify-center items-center m-8 md:mx-0">
+    <div class="w-full md:max-w-sm">
       <%= render "flashes" %>
 
       <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
