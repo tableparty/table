@@ -12,7 +12,10 @@ RSpec.describe "map fog", type: :system do
       fill_in "Grid size", with: "43"
       check "Enable fog"
       click_on "Create Map"
-      expect(page).to have_content "Dwarven Excavation"
+      expect(page).to have_css(
+        "[data-target='map--fog.fogMask']",
+        visible: false
+      )
     end
   end
 
