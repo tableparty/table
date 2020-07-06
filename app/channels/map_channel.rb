@@ -8,37 +8,14 @@ class MapChannel < ApplicationCable::Channel
     map = Map.find(data["map_id"])
     return if !dm?(map.campaign) || map.x == data["x"] && map.y == data["y"]
 
-    if map.update(x: data["x"], y: data["y"])
-      broadcast_to(
-        map,
-        {
-          operation: "move",
-          operator: data["operator"],
-          x: map.x,
-          y: map.y
-        }
-      )
-    end
+    map.update(x: data["x"], y: data["y"])
   end
 
   def set_zoom(data)
     map = Map.find(data["map_id"])
     return if !dm?(map.campaign) || map.zoom == data["zoom"]
 
-    if map.update(zoom: data["zoom"])
-      broadcast_to(
-        map,
-        {
-          operation: "zoom",
-          zoom: map.zoom,
-          zoomAmount: map.zoom_amount,
-          width: map.width,
-          height: map.height,
-          x: map.x,
-          y: map.y
-        }
-      )
-    end
+    map.update(zoom: data["zoom"])
   end
 
   def move_token(data)

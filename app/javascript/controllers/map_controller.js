@@ -224,17 +224,6 @@ export default class extends Controller {
 
   cableReceived(data) {
     switch (data.operation) {
-      case "move": {
-        if (this.imageTarget.dataset.beingDragged || data.operator === this.operatorCode) {
-          return
-        }
-        this.setMapPosition(data.x, data.y)
-        break
-      }
-      case "zoom": {
-        this.setMapZoom(data.zoom)
-        break
-      }
       case "moveToken": {
         const token = this.findToken(data.token_id)
         if (token.dataset.beingDragged || data.operator === this.operatorCode) {

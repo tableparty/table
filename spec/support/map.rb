@@ -1,7 +1,24 @@
-def have_map_with_data(map, attribute, value)
-  have_css(
-    ".current-map[data-map-id='#{map.id}'][data-#{attribute}='#{value}']"
-  )
+RSpec::Matchers.define :have_map_with_data do |map, attribute, value|
+  match do |container|
+    container.has_css?(
+      ".current-map[data-map-id='#{map.id}'][data-#{attribute}='#{value}']"
+    )
+  end
+
+  failure_message do |container|
+    map_element = container.find(".current-map[data-map-id='#{map.id}']")
+    actual_value = map_element.native.attribute("data-#{attribute}")
+    <<~MSG
+      expected map to have attribute '#{attribute}' with value '#{value}' but
+      instead had value '#{actual_value}'
+    MSG
+  end
+
+  failure_message_when_negated do
+    <<~MSG
+      expected map not to have attribute '#{attribute}' with value '#{value}'
+    MSG
+  end
 end
 
 RSpec::Matchers.define :have_token do |token|

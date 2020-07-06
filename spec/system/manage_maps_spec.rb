@@ -174,24 +174,6 @@ RSpec.describe "manage maps", type: :system do
     expect(page).to have_map_with_data(map, "y", "550")
   end
 
-  it "moves the map for other users" do
-    campaign = create :campaign
-    map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
-    visit campaign_path(campaign, as: campaign.user)
-    find(".map-selector__option", text: "Dwarven Excavation").click
-
-    using_session "other user" do
-      visit campaign_path(campaign)
-    end
-
-    click_and_move_map(map, from: { x: 300, y: 300 }, to: { x: 50, y: 50 })
-
-    using_session "other user" do
-      expect(page).to have_map_with_data(map, "x", "550")
-      expect(page).to have_map_with_data(map, "y", "550")
-    end
-  end
-
   it "zooms the map" do
     campaign = create :campaign
     map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
@@ -208,29 +190,6 @@ RSpec.describe "manage maps", type: :system do
 
     expect(page).to have_map_with_data(map, "width", "200")
     expect(page).to have_map_with_data(map, "height", "200")
-  end
-
-  it "zooms the map for other users" do
-    campaign = create :campaign
-    map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
-    map.center_image
-
-    visit campaign_path(campaign, as: campaign.user)
-    find(".map-selector__option", text: "Dwarven Excavation").click
-    using_session "other user" do
-      visit campaign_path(campaign)
-    end
-
-    expect(page).to have_map_with_data(map, "width", "100")
-    expect(page).to have_map_with_data(map, "height", "100")
-    expect(page).to have_button("-", disabled: true)
-
-    find(".current-map__zoom-in").click
-
-    using_session "other user" do
-      expect(page).to have_map_with_data(map, "width", "200")
-      expect(page).to have_map_with_data(map, "height", "200")
-    end
   end
 
   it "switches maps for other users" do
