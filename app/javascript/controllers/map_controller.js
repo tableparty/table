@@ -226,7 +226,6 @@ export default class extends Controller {
         break
       }
       case "zoom": {
-        this.setMapPosition(data.x, data.y)
         this.setMapZoom(data.zoom, data.zoomAmount, data.width, data.height)
         break
       }

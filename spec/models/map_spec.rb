@@ -105,28 +105,6 @@ RSpec.describe Map, type: :model do
     end
   end
 
-  describe "updating the zoom level" do
-    it "transforms the current x coordinate to match the new size" do
-      original_x = 50
-      zoom_change = (Map::ZOOM_LEVELS[1] / Map::ZOOM_LEVELS[0])
-      map = create(:map, zoom: 0, x: original_x)
-
-      map.update(zoom: 1)
-
-      expect(map.x).to eq original_x * zoom_change
-    end
-
-    it "transforms the current y coordinate to match the new size" do
-      original_y = 50
-      zoom_change = (Map::ZOOM_LEVELS[1] / Map::ZOOM_LEVELS[0])
-      map = create(:map, zoom: 0, y: original_y)
-
-      map.update(zoom: 1)
-
-      expect(map.y).to eq original_y * zoom_change
-    end
-  end
-
   describe "#populate_characters" do
     it "creates a token for each character in the campaign" do
       map = create(:map)

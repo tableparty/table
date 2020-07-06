@@ -13,8 +13,6 @@ class Map < ApplicationRecord
   validates :grid_size, presence: true, numericality: true
   validates_inclusion_of :zoom, in: ->(map) { (0..map.zoom_max) }
 
-  before_update :scale_coordinates
-
   def zoom_max
     ZOOM_LEVELS.length - 1
   end
@@ -75,14 +73,6 @@ class Map < ApplicationRecord
       tokens.where(token_template: token.token_template).size
     elsif token.name.present?
       tokens.where(name: token.name).size
-    end
-  end
-
-  def scale_coordinates
-    if zoom_changed?
-      zoom_factor = zoom_amount / ZOOM_LEVELS[zoom_was]
-      self.x = x * zoom_factor
-      self.y = y * zoom_factor
     end
   end
 
