@@ -4,7 +4,7 @@
   background-position-x: calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px);
   background-position-y: calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px);
   background-repeat: no-repeat;
-  background-size: calc(var(--width) * 1px) calc(var(--height) * 1px);
+  background-size: calc(var(--original-width) * var(--zoom-amount) * 1px) calc(var(--original-height) * var(--zoom-amount) * 1px);
   cursor: move;
   user-select: none;
 

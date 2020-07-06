@@ -2,19 +2,17 @@ require "rails_helper"
 
 RSpec.describe "Visitor viewing a map", type: :system do
   it "can zoom the map" do
-    map = create :map, name: "Dwarven Excavation"
+    map = create :map, name: "Dwarven Excavation", zoom: 0
     map.campaign.update(current_map: map)
 
     visit campaign_path(map.campaign)
 
-    expect(page).to have_map_with_data(map, "width", "100")
-    expect(page).to have_map_with_data(map, "height", "100")
+    expect(page).to have_map_with_data(map, "zoom", "0")
     expect(page).to have_button("-", disabled: true)
 
     find(".current-map__zoom-in").click
 
-    expect(page).to have_map_with_data(map, "width", "200")
-    expect(page).to have_map_with_data(map, "height", "200")
+    expect(page).to have_map_with_data(map, "zoom", "1")
   end
 
   it "can move the map" do

@@ -182,14 +182,12 @@ RSpec.describe "manage maps", type: :system do
     visit campaign_path(campaign, as: campaign.user)
     find(".map-selector__option", text: "Dwarven Excavation").click
 
-    expect(page).to have_map_with_data(map, "width", "100")
-    expect(page).to have_map_with_data(map, "height", "100")
+    expect(page).to have_map_with_data(map, "zoom", "0")
     expect(page).to have_button("-", disabled: true)
 
     find(".current-map__zoom-in").click
 
-    expect(page).to have_map_with_data(map, "width", "200")
-    expect(page).to have_map_with_data(map, "height", "200")
+    expect(page).to have_map_with_data(map, "zoom", "1")
   end
 
   it "switches maps for other users" do

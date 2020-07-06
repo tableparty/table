@@ -128,8 +128,6 @@ export default class extends Controller {
 
     const zoomAmount = this.zoomAmounts[zoom]
     this.imageTarget.dataset.zoom = zoom
-    this.imageTarget.dataset.width = this.imageTarget.dataset.originalWidth * zoomAmount
-    this.imageTarget.dataset.height = this.imageTarget.dataset.originalHeight * zoomAmount
     this.imageTarget.dataset.zoomAmount = zoomAmount
     this.updateZoomButtons()
 
