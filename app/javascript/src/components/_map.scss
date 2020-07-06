@@ -18,8 +18,8 @@
 .current-map__token-container {
   @apply relative;
 
-  left: calc(((var(--viewport-x) / 2) - var(--x)) * 1px);
-  top: calc(((var(--viewport-y) / 2) - var(--y)) * 1px);
+  left: calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px);
+  top: calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px);
 }
 
 .current-map__map-name {

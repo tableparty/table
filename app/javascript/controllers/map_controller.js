@@ -7,6 +7,7 @@ export default class extends Controller {
   connect() {
     this.mapId = this.element.dataset.mapId
     this.operatorCode = this.generateOperatorCode()
+    this.zoomAmounts = this.imageTarget.dataset.zoomAmounts.split(",").map(parseFloat)
 
     this.setViewportSize()
     this.updateZoomButtons()
@@ -35,8 +36,8 @@ export default class extends Controller {
     const { viewportX, viewportY, x: mapX, y: mapY, zoomAmount } = this.imageTarget.dataset
     const { left: imageLeft, top: imageTop } = this.imageTarget.getBoundingClientRect()
 
-    const x = Math.round((clientX - imageLeft) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2) - parseFloat(mapX)) / parseFloat(zoomAmount)))
-    const y = Math.round((clientY - imageTop) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2) - parseFloat(mapY)) / parseFloat(zoomAmount)))
+    const x = Math.round((clientX - imageLeft) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2)) / parseFloat(zoomAmount)) + parseFloat(mapX))
+    const y = Math.round((clientY - imageTop) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2)) / parseFloat(zoomAmount)) + parseFloat(mapY))
     return { x, y }
   }
 
@@ -108,22 +109,35 @@ export default class extends Controller {
 
   zoomIn(event) {
     event.preventDefault()
-    this.channel.perform(
-      "set_zoom",
-      {
-        map_id: this.mapId,
-        zoom: parseInt(this.imageTarget.dataset.zoom) + 1
-      }
-    )
+
+    const zoom = parseInt(this.imageTarget.dataset.zoom) + 1
+    this.setMapZoom(zoom)
   }
 
   zoomOut(event) {
     event.preventDefault()
+
+    const zoom = parseInt(this.imageTarget.dataset.zoom) - 1
+    this.setMapZoom(zoom)
+  }
+
+  setMapZoom(zoom) {
+    if (zoom < 0 || zoom >= this.zoomAmounts.length) {
+      return
+    }
+
+    const zoomAmount = this.zoomAmounts[zoom]
+    this.imageTarget.dataset.zoom = zoom
+    this.imageTarget.dataset.width = this.imageTarget.dataset.originalWidth * zoomAmount
+    this.imageTarget.dataset.height = this.imageTarget.dataset.originalHeight * zoomAmount
+    this.imageTarget.dataset.zoomAmount = zoomAmount
+    this.updateZoomButtons()
+
     this.channel.perform(
       "set_zoom",
       {
         map_id: this.mapId,
-        zoom: parseInt(this.imageTarget.dataset.zoom) - 1
+        zoom
       }
     )
   }
@@ -200,14 +214,6 @@ export default class extends Controller {
     delete target.dataset.offsetY
   }
 
-  setMapZoom(zoom, amount, width, height) {
-    this.imageTarget.dataset.zoom = zoom
-    this.imageTarget.dataset.width = width
-    this.imageTarget.dataset.height = height
-    this.imageTarget.dataset.zoomAmount = amount
-    this.updateZoomButtons()
-  }
-
   updateZoomButtons() {
     if (this.hasZoomOutTarget && this.hasZoomInTarget) {
       const zoom = parseInt(this.imageTarget.dataset.zoom)
@@ -226,7 +232,7 @@ export default class extends Controller {
         break
       }
       case "zoom": {
-        this.setMapZoom(data.zoom, data.zoomAmount, data.width, data.height)
+        this.setMapZoom(data.zoom)
         break
       }
       case "moveToken": {
