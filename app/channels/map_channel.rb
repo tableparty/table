@@ -18,24 +18,6 @@ class MapChannel < ApplicationCable::Channel
     map.update(zoom: data["zoom"])
   end
 
-  def move_token(data)
-    map = Map.find(data["map_id"])
-    token = map.tokens.find(data["token_id"])
-    return if token.x == data["x"] && token.y == data["y"]
-
-    token.update(x: data["x"], y: data["y"])
-    broadcast_to(
-      map,
-      {
-        operation: "moveToken",
-        operator: data["operator"],
-        token_id: token.id,
-        x: token.x,
-        y: token.y
-      }
-    )
-  end
-
   def stash_token(data)
     map = Map.find(data["map_id"])
     token = map.tokens.find(data["token_id"])

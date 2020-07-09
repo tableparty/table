@@ -2,7 +2,7 @@
   class: "token",
   draggable: true,
   data: {
-    controller: "css-var",
+    controller: "css-var sync-values",
     target: "map.token",
     action: "dragstart->map#startMoveToken drag->map#moveToken dragend->map#endMoveToken mousedown->map#stopPropagation",
     token_id: token.id,
@@ -10,7 +10,11 @@
     y: token.y,
     "size-scale": token.size_scale,
     copy_on_place: token.copy_on_place?,
-    "css-vars": "x y size-scale"
+    "css-vars": "x y size-scale",
+    "sync-values-channel": "TokenChannel",
+    "sync-values-action": "move",
+    "sync-values-channel-id": token.id,
+    "sync-values-keys": "x y"
   } do %>
   <%= content_tag :div, "", class: "token__image", style: background_image(token.image) do %>
     <% if token.identifier.present? %>

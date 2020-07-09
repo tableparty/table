@@ -192,17 +192,6 @@ export default class extends Controller {
         newX,
         newY
       )
-
-      this.channel.perform(
-        "move_token",
-        {
-          map_id: this.mapId,
-          operator: this.operatorCode,
-          token_id: tokenId,
-          x: target.dataset.x,
-          y: target.dataset.y
-        }
-      )
     }
   }
 
@@ -222,14 +211,6 @@ export default class extends Controller {
 
   cableReceived(data) {
     switch (data.operation) {
-      case "moveToken": {
-        const token = this.findToken(data.token_id)
-        if (token.dataset.beingDragged || data.operator === this.operatorCode) {
-          return
-        }
-        this.setTokenLocation(token, data.x, data.y)
-        break
-      }
       case "addToken": {
         if (this.findToken(data.token_id)) {
           return
