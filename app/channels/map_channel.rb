@@ -5,7 +5,7 @@ class MapChannel < ApplicationCable::Channel
   end
 
   def move_map(data)
-    map = Map.find(data["map_id"])
+    map = Map.find(data["id"])
     return if !dm?(map.campaign) || map.x == data["x"] && map.y == data["y"]
 
     map.update(x: data["x"], y: data["y"])

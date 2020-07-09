@@ -79,15 +79,6 @@ export default class extends Controller {
           original.x - ((mousepos.x - mousedown.x) * speedFactor),
           original.y - ((mousepos.y - mousedown.y) * speedFactor)
         )
-        this.channel.perform(
-          "move_map",
-          {
-            operator: this.operatorCode,
-            map_id: this.mapId,
-            x: this.imageTarget.dataset.x,
-            y: this.imageTarget.dataset.y
-          }
-        )
       }
     }
     document.addEventListener("mouseup", () => {
