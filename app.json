@@ -6,5 +6,15 @@
   ],
   "scripts": {
     "postdeploy": "rails dev:prime"
+  },
+  "environments": {
+    "review": {
+      "formation": {
+        "web": {
+          "quantity": 1,
+          "size": "free"
+        }
+      }
+    }
   }
 }
