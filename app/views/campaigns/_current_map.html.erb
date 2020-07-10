@@ -37,8 +37,8 @@
         "sync-values-action": "move_map",
         "sync-values-channel-id": campaign.current_map.id,
         "sync-values-keys": "x y"
-      },
-      style: background_image(campaign.current_map.image) do %>
+      } do %>
+      <%= content_tag :div, "", class: "current-map__image", style: background_image(campaign.current_map.image) %>
       <div class="current-map__token-container" data-target="map.tokenContainer">
         <%= render campaign.current_map.tokens.where(stashed: false) %>
       </div>
