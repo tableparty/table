@@ -13,11 +13,14 @@
 
 .current-map__image {
   background-size: cover;
-  height: calc(var(--original-height) * var(--zoom-amount) * 1px);
-  left: calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px);
+  height: calc(var(--original-height) * 1px);
   position: absolute;
-  top: calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px);
-  width: calc(var(--original-width) * var(--zoom-amount) * 1px);
+  transform: translateX(calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px))
+    translateY(calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px))
+    scaleX(var(--zoom-amount))
+    scaleY(var(--zoom-amount));
+  transform-origin: 0 0 0;
+  width: calc(var(--original-width) * 1px);
 }
 
 .current-map__token-container {
