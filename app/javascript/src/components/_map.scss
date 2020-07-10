@@ -17,6 +17,7 @@
   position: absolute;
   transform: translateX(calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px))
     translateY(calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px))
+    translateZ(0)
     scaleX(var(--zoom-amount))
     scaleY(var(--zoom-amount));
   transform-origin: 0 0 0;
@@ -27,7 +28,8 @@
   @apply absolute;
 
   transform: translateX(calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px))
-    translateY(calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px));
+    translateY(calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px))
+    translateZ(0);
 }
 
 .current-map__map-name {
