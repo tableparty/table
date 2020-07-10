@@ -24,10 +24,10 @@
 }
 
 .current-map__token-container {
-  @apply relative;
+  @apply absolute;
 
-  left: calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px);
-  top: calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px);
+  transform: translateX(calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px))
+    translateY(calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px));
 }
 
 .current-map__map-name {
