@@ -12,10 +12,7 @@ RSpec.describe "map fog", type: :system do
       fill_in "Grid size", with: "43"
       check "Enable fog"
       click_on "Create Map"
-      expect(page).to have_css(
-        "[data-target='map--fog.fogMask']",
-        visible: false
-      )
+      expect(page).to have_css("[data-target='map--fog.canvas']")
     end
   end
 
@@ -35,10 +32,9 @@ RSpec.describe "map fog", type: :system do
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
     find(".map-selector__option", text: map.name).click
-    mask_node = find("[data-target='map--fog.fogMask']", visible: false)
-    path_node = mask_node.find("path", visible: false)
-    path_with_four_points = /M (?:-?\d+ ){2}(?:L (?:-?\d+ ){2}){3}Z/
-    expect(path_node["d"]).to match(path_with_four_points)
+    fog_controller = find("[data-target~='map--fog.canvas']", visible: false)
+    fog_areas = JSON.parse(fog_controller["data-map--fog-areas"])
+    expect(fog_areas.count).to eq 1
   end
 
   it "adds a new path to the fog mask" do
@@ -52,10 +48,9 @@ RSpec.describe "map fog", type: :system do
     mouse_move_to(relative_position_of(map_node, x: 0.9, y: 0.9))
     mouse_move_to(relative_position_of(map_node, x: 0.1, y: 0.9))
     mouse_release
-    mask_node = find("[data-target='map--fog.fogMask']", visible: false)
-    path_node = mask_node.find("path", visible: false)
-    path_with_four_points = /M (?:-?\d+ ){2}(?:L (?:-?\d+ ){2}){3}Z/
-    expect(path_node["d"]).to match(path_with_four_points)
+    fog_controller = find("[data-target~='map--fog.canvas']", visible: false)
+    fog_areas = JSON.parse(fog_controller["data-map--fog-areas"])
+    expect(fog_areas.count).to eq 1
   end
 
   it "adds a new path to the fog mask for other users" do
@@ -77,10 +72,12 @@ RSpec.describe "map fog", type: :system do
     mouse_release
 
     using_session "other user" do
-      mask_node = find("[data-target='map--fog.fogMask']", visible: false)
-      path_node = mask_node.find("path", visible: false)
-      path_with_four_points = /M (?:-?\d+ ){2}(?:L (?:-?\d+ ){2}){3}Z/
-      expect(path_node["d"]).to match(path_with_four_points)
+      # Wait for the cable
+      find("[data-target~='map--fog.canvas'][data-map--fog-areas*='id']")
+
+      fog_controller = find("[data-target~='map--fog.canvas']", visible: false)
+      fog_areas = JSON.parse(fog_controller["data-map--fog-areas"])
+      expect(fog_areas.count).to eq 1
     end
   end
 
@@ -91,7 +88,7 @@ RSpec.describe "map fog", type: :system do
       wait_for_connection
       find(".map-selector__option", text: map.name).click
       expect(page).not_to have_css(
-        "[data-target='map--fog.fogMask']", visible: false
+        "[data-target='map--fog.canvas']", visible: false
       )
     end
   end

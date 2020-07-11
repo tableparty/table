@@ -16,6 +16,10 @@ $mask-dm-opacity: 0.5;
   width: calc(var(--original-width) * 1px);
 }
 
+.fog--dm {
+  opacity: $mask-dm-opacity;
+}
+
 .fog__layer {
   fill: $mask-color;
   mask: url("#fogMask");

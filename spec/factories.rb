@@ -31,7 +31,7 @@ FactoryBot.define do
   factory :fog_area do
     map
     id { SecureRandom.uuid } # For attributes_for calls as declared by JS
-    path { "M 10 10 L 10 90 L 90 90 L 90 10 Z" }
+    path { [{ x: 10, y: 10 }].to_json }
   end
 
   factory :map do

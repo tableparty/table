@@ -44,16 +44,7 @@
       </div>
 
       <% if campaign.current_map.fog_enabled? %>
-        <%= content_tag :svg, xmlns: "http://www.w3.org/2000/svg", class: "fog", viewBox: "0 0 #{campaign.current_map.scaled_width} #{campaign.current_map.scaled_height}" do %>
-          <defs>
-            <mask data-target="map--fog.fogMask" id="fogMask">
-              <rect class="fog__mask-base-layer" />
-              <%= render campaign.current_map.fog_areas %>
-            </mask>
-          </defs>
-
-          <%= content_tag :rect, "", width: campaign.current_map.scaled_width, height: campaign.current_map.scaled_height, class: "fog__layer #{"fog__layer--dm" if admin}" %>
-        <% end %>
+        <%= content_tag :canvas, "", width: campaign.current_map.scaled_width, height: campaign.current_map.scaled_height, class: "absolute fog #{"fog--dm" if admin}", data: { target: "map--fog.canvas", "map--fog-areas": serialize_fog_areas(campaign.current_map.fog_areas) } %>
       <% end %>
 
       <div class="current-map__map-name">
