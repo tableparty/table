@@ -24,6 +24,10 @@ export default class extends Controller {
     this.disconnectObserver()
 
     this.syncedVariables.forEach(variable => {
+      if (data[variable] == undefined) {
+        return
+      }
+
       this.element.dataset[variable] = data[variable]
     })
 
