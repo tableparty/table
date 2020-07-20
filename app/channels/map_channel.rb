@@ -18,35 +18,6 @@ class MapChannel < ApplicationCable::Channel
     map.update(zoom: data["zoom"])
   end
 
-  def stash_token(data)
-    map = Map.find(data["map_id"])
-    token = map.tokens.find(data["token_id"])
-    return if !dm?(map.campaign)
-
-    token.update(stashed: true)
-    broadcast_to(
-      map,
-      {
-        operation: "stashToken",
-        token_id: token.id,
-        stashed: true
-      }
-    )
-  end
-
-  def place_token(data)
-    map = Map.find(data["map_id"])
-    token = map.tokens.find(data["token_id"])
-    return if !dm?(map.campaign)
-
-    if token.copy_on_place?
-      map.copy_token(token)
-    else
-      token.update(stashed: false)
-      MapChannel.add_token(token)
-    end
-  end
-
   def point_to(data)
     map = Map.find(data["map_id"])
     pointer = Pointer.new(map: map, x: data["x"], y: data["y"])
@@ -65,33 +36,12 @@ class MapChannel < ApplicationCable::Channel
       )
     end
 
-    def add_token(token)
-      broadcast_to(
-        token.map,
-        {
-          operation: "addToken",
-          token_id: token.id,
-          token_html: render_token(token),
-          x: token.x,
-          y: token.y,
-          stashed: token.stashed
-        }
-      )
-    end
-
     private
 
     def render_pointer(pointer)
       ApplicationController.renderer.render(
         partial: "pointers/pointer",
         locals: { pointer: pointer }
-      )
-    end
-
-    def render_token(token)
-      ApplicationController.renderer.render(
-        partial: "tokens/token",
-        locals: { token: token }
       )
     end
   end

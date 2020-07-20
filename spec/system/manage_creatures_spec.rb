@@ -14,7 +14,7 @@ RSpec.describe "manage creatures", type: :system do
     click_on "Create Creature"
 
     # if we don't use find here, capybara doesn't wait for the ajax to complete
-    html_token = find(".token[data-target='map.token']")
+    html_token = find(".token[data-target='map--tokens.token']")
     token = campaign.current_map.tokens.last
     expect(html_token["data-token-id"]).to eq token.id
     expect(token.name).to eq "Orc"
@@ -37,14 +37,14 @@ RSpec.describe "manage creatures", type: :system do
     click_on "Create Creature"
 
     drawer_token = find(
-      ".current-map__token-drawer .token[data-target='map.token']"
+      ".current-map__token-drawer .token[data-target='map--tokens.token']"
     )
     expect(drawer_token.native.size.width).to eq base_drawer_size
     expect(drawer_token.native.size.height).to eq base_drawer_size
 
     drawer_token.drag_to(map_element(map), html5: true)
 
-    map_token = find(".current-map .token[data-target='map.token']")
+    map_token = find(".current-map .token[data-target='map--tokens.token']")
     expect(map_token.native.size.width).to eq large_map_size
     expect(map_token.native.size.height).to eq large_map_size
   end

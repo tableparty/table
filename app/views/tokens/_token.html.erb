@@ -3,8 +3,8 @@
   draggable: true,
   data: {
     controller: "css-var sync-values",
-    target: "map.token",
-    action: "dragstart->map#startMoveToken drag->map#moveToken dragend->map#endMoveToken mousedown->map#stopPropagation",
+    target: "map--tokens.token",
+    action: "dragstart->map--tokens#startMoveToken drag->map--tokens#moveToken dragend->map--tokend#endMoveToken mousedown->map--tokens#stopPropagation",
     token_id: token.id,
     x: token.x,
     y: token.y,

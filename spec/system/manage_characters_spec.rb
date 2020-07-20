@@ -15,7 +15,7 @@ RSpec.describe "manage characters", type: :system do
     click_on "Create Character"
 
     # if we don't use find here, capybara doesn't wait for the ajax to complete
-    html_token = find(".token[data-target='map.token']")
+    html_token = find(".token[data-target='map--tokens.token']")
     character = campaign.characters.last
     expect(character.name).to eq "Uxil"
     expect(html_token["data-token-id"]).to eq character.tokens.first.id

@@ -18,7 +18,7 @@ RSpec.describe "create tokens", type: :system do
     end
 
     # if we don't use find here, capybara doesn't wait for the ajax to complete
-    html_token = find(".token[data-target='map.token']")
+    html_token = find(".token[data-target='map--tokens.token']")
     token = map.reload.tokens.first
     expect(html_token["data-token-id"]).to eq token.id
   end
