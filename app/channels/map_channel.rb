@@ -17,32 +17,4 @@ class MapChannel < ApplicationCable::Channel
 
     map.update(zoom: data["zoom"])
   end
-
-  def point_to(data)
-    map = Map.find(data["map_id"])
-    pointer = Pointer.new(map: map, x: data["x"], y: data["y"])
-
-    MapChannel.add_pointer(pointer)
-  end
-
-  class << self
-    def add_pointer(pointer)
-      broadcast_to(
-        pointer.map,
-        {
-          operation: "addPointer",
-          pointer_html: render_pointer(pointer)
-        }
-      )
-    end
-
-    private
-
-    def render_pointer(pointer)
-      ApplicationController.renderer.render(
-        partial: "pointers/pointer",
-        locals: { pointer: pointer }
-      )
-    end
-  end
 end

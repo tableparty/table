@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["image", "zoomIn", "zoomOut", "fogMask", "fogArea", "tokenContainer"]
+  static targets = ["image", "zoomIn", "zoomOut"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
@@ -14,8 +14,6 @@ export default class extends Controller {
     this.channel = consumer.subscriptions.create({
       channel: "MapChannel",
       id: this.mapId
-    }, {
-      received: this.cableReceived.bind(this)
     })
 
     this.onWindowResize = this.setViewportSize.bind(this)
@@ -34,23 +32,6 @@ export default class extends Controller {
     const x = Math.round((clientX - imageLeft) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2)) / parseFloat(zoomAmount)) + parseFloat(mapX))
     const y = Math.round((clientY - imageTop) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2)) / parseFloat(zoomAmount)) + parseFloat(mapY))
     return { x, y }
-  }
-
-  pointTo(event) {
-    if (event.altKey) {
-      event.preventDefault()
-      event.stopPropagation()
-
-      const { x, y } = this.mapPositionOf(event)
-
-      this.channel.perform(
-        "point_to",
-        {
-          map_id: this.mapId,
-          x, y
-        }
-      )
-    }
   }
 
   moveMap(event) {
@@ -131,15 +112,6 @@ export default class extends Controller {
       const zoom = parseInt(this.imageTarget.dataset.zoom)
       this.zoomOutTarget.disabled = (zoom === 0)
       this.zoomInTarget.disabled = (zoom === parseInt(this.imageTarget.dataset.zoomMax))
-    }
-  }
-
-  cableReceived(data) {
-    switch (data.operation) {
-      case "addPointer": {
-        this.tokenContainerTarget.insertAdjacentHTML("beforeend", data.pointer_html)
-        break;
-      }
     }
   }
 }
