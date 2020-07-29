@@ -77,3 +77,16 @@ RSpec::Matchers.define :have_token_with_data do |token, key, value|
     MSG
   end
 end
+
+def open_map_selector
+  find("button[title=Maps]").click
+end
+
+def switch_to_map(map_name)
+  find(".map-selector__option", text: map_name).click
+end
+
+def open_selector_and_switch_to_map(map_name)
+  open_map_selector
+  switch_to_map(map_name)
+end

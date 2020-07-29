@@ -27,21 +27,22 @@ RSpec.describe "map fog", type: :system do
   end
 
   it "renders existing fog areas" do
-    map = create :map, fog_enabled: true
+    map = create :map, :current, fog_enabled: true
     create :fog_area, map: map
+
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-    find(".map-selector__option", text: map.name).click
+
     fog_controller = find("[data-target~='map--fog.canvas']", visible: false)
     fog_areas = JSON.parse(fog_controller["data-map--fog-areas"])
     expect(fog_areas.count).to eq 1
   end
 
   it "adds a new path to the fog mask" do
-    map = create :map, fog_enabled: true
+    map = create :map, :current, fog_enabled: true
+
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-    find(".map-selector__option", text: map.name).click
     map_node = map_element(map)
     shift_click_at(map_node, relative_position_of(map_node, x: 0.1, y: 0.1))
     mouse_move_to(relative_position_of(map_node, x: 0.9, y: 0.1))
@@ -50,14 +51,15 @@ RSpec.describe "map fog", type: :system do
     mouse_release
     fog_controller = find("[data-target~='map--fog.canvas']", visible: false)
     fog_areas = JSON.parse(fog_controller["data-map--fog-areas"])
+
     expect(fog_areas.count).to eq 1
   end
 
   it "adds a new path to the fog mask for other users" do
-    map = create :map, fog_enabled: true
+    map = create :map, :current, fog_enabled: true
+
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-    find(".map-selector__option", text: map.name).click
 
     using_session "other user" do
       visit campaign_path(map.campaign)
@@ -83,10 +85,11 @@ RSpec.describe "map fog", type: :system do
 
   context "with fog disabled" do
     it "doesn't add a new path to the fog mask" do
-      map = create :map
+      map = create :map, :current
+
       visit campaign_path(map.campaign, as: map.campaign.user)
       wait_for_connection
-      find(".map-selector__option", text: map.name).click
+
       expect(page).not_to have_css(
         "[data-target='map--fog.canvas']", visible: false
       )

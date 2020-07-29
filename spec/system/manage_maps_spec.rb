@@ -1,10 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "manage maps", type: :system do
-  it "lists maps" do
+  it "lists maps when no map selected" do
     campaign = create :campaign
     create :map, campaign: campaign, name: "Dwarven Excavation"
+
     visit campaign_path(campaign, as: campaign.user)
+
     expect(page).to have_content "Dwarven Excavation"
   end
 
@@ -18,7 +20,7 @@ RSpec.describe "manage maps", type: :system do
     fill_in "Grid size", with: "43"
     click_on "Create Map"
     expect(page).to have_content "Dwarven Excavation"
-    find(".map-selector__option", text: "Dwarven Excavation").click
+    open_selector_and_switch_to_map("Dwarven Excavation")
 
     map = campaign.maps.first
     expect(page).to have_map_with_data(map, "x", (map.width / 2).to_s)
@@ -38,7 +40,7 @@ RSpec.describe "manage maps", type: :system do
       fill_in "Grid size", with: "43"
       click_on "Create Map"
       expect(page).to have_content "Dwarven Excavation"
-      find(".map-selector__option", text: "Dwarven Excavation").click
+      open_selector_and_switch_to_map("Dwarven Excavation")
 
       token = campaign.maps.first.tokens.first
       expect(page).to have_token_with_data(token, "token-id", token.id)
@@ -48,10 +50,12 @@ RSpec.describe "manage maps", type: :system do
   it "validates parameters for new map" do
     user = create(:user)
     campaign = create :campaign, user: user
+
     visit campaign_path(campaign, as: user)
     click_on "New Map"
     fill_in "Name", with: ""
     click_on "Create Map"
+
     expect(page).to have_content "Name can't be blank"
   end
 
@@ -73,14 +77,14 @@ RSpec.describe "manage maps", type: :system do
   it "can edit a map for other users" do
     user = create(:user)
     campaign = create(:campaign, user: user)
-    map = create(:map, campaign: campaign)
-    campaign.update(current_map: map)
+    map = create(:map, :current, campaign: campaign)
 
     using_session "other user" do
       visit campaign_path(campaign)
     end
 
     visit campaign_path(campaign, as: user)
+    open_map_selector
     hover_over_map_selector_for(map)
     click_on "Edit"
     fill_in "Name", with: "Edited Map Name"
@@ -111,10 +115,10 @@ RSpec.describe "manage maps", type: :system do
   it "can delete the current map" do
     user = create(:user)
     campaign = create(:campaign, user: user)
-    map = create(:map, campaign: campaign)
-    campaign.update(current_map: map)
+    map = create(:map, :current, campaign: campaign)
 
     visit campaign_path(campaign, as: user)
+    open_map_selector
     hover_over_map_selector_for(map)
     click_on "Edit"
     accept_confirm do
@@ -128,14 +132,14 @@ RSpec.describe "manage maps", type: :system do
   it "deletes the map for other users" do
     user = create(:user)
     campaign = create(:campaign, user: user)
-    map = create(:map, campaign: campaign)
-    campaign.update(current_map: map)
+    map = create(:map, :current, campaign: campaign)
 
     using_session "other user" do
       visit campaign_path(campaign)
     end
 
     visit campaign_path(campaign, as: user)
+    open_map_selector
     hover_over_map_selector_for(map)
     click_on "Edit"
     accept_confirm do
@@ -155,19 +159,20 @@ RSpec.describe "manage maps", type: :system do
     campaign = create :campaign
     create :map, campaign: campaign, name: "Dwarven Excavation"
     create :map, campaign: campaign, name: "Gnomengarde"
+
     visit campaign_path(campaign, as: campaign.user)
     expect(page).to have_css "h2", text: "No Current Map"
-    find(".map-selector__option", text: "Dwarven Excavation").click
+    switch_to_map("Dwarven Excavation")
     expect(page).to have_css "h2", text: "Dwarven Excavation"
-    find(".map-selector__option", text: "Gnomengarde").click
+    open_selector_and_switch_to_map("Gnomengarde")
     expect(page).to have_css "h2", text: "Gnomengarde"
   end
 
   it "moves the map" do
     campaign = create :campaign
-    map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
+    map = create :map, :current, campaign: campaign, zoom: 0
+
     visit campaign_path(campaign, as: campaign.user)
-    find(".map-selector__option", text: "Dwarven Excavation").click
     click_and_move_map(map, from: { x: 300, y: 300 }, to: { x: 50, y: 50 })
 
     expect(page).to have_map_with_data(map, "x", "550")
@@ -176,14 +181,13 @@ RSpec.describe "manage maps", type: :system do
 
   it "zooms the map" do
     campaign = create :campaign
-    map = create :map, campaign: campaign, name: "Dwarven Excavation", zoom: 0
+    map = create :map, :current, campaign: campaign, zoom: 0
     map.center_image
 
     visit campaign_path(campaign, as: campaign.user)
-    find(".map-selector__option", text: "Dwarven Excavation").click
 
     expect(page).to have_map_with_data(map, "zoom", "0")
-    expect(page).to have_button("-", disabled: true)
+    expect(find("[data-target='map.zoomOut']")).to be_disabled
 
     find(".current-map__zoom-in").click
 
@@ -201,13 +205,13 @@ RSpec.describe "manage maps", type: :system do
       expect(page).to have_css "h2", text: "No Current Map"
     end
 
-    find(".map-selector__option", text: "Dwarven Excavation").click
+    switch_to_map("Dwarven Excavation")
     using_session "other user" do
       expect(page).to have_css "h2", text: "Dwarven Excavation"
       expect(page).not_to have_css("[data-target='map.tokenDrawer']")
     end
 
-    find(".map-selector__option", text: "Gnomengarde").click
+    open_selector_and_switch_to_map("Gnomengarde")
     using_session "other user" do
       expect(page).to have_css "h2", text: "Gnomengarde"
       expect(page).not_to have_css("[data-target='map.tokenDrawer']")

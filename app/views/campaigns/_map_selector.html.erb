@@ -1,9 +1,9 @@
-<div class="map-selector" data-target="campaign.mapSelector">
+<div class="map-selector <%= "empty" if campaign.maps.none? %> <%= "show" if campaign.current_map.blank? %> absolute z-40 mx-4 p-2 rounded-lg border whitespace-no-wrap overflow-x-auto overflow-y-hidden bg-white shadow-lg" data-target="campaign.mapSelector">
   <%= render campaign.maps %>
 
   <%= link_to new_campaign_map_path(campaign), remote: true, class: "map-selector__option map-selector__new" do %>
-    <div class="absolute">
-      <span class="">New Map</span>
-    </div>
+    <%= content_tag :div, class: "map-selector__option-overlay" do %>
+      <%= content_tag :span, "New Map", class: "map-selector__option-text" %>
+    <% end %>
   <% end %>
 </div>

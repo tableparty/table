@@ -7,7 +7,7 @@
       action: "dragover->map--tokens#dragOver"
     } do %>
     <% if admin %>
-      <div class="current-map__token-drawer token-drawer" data-target="map--tokens.drawer" data-action="dragover->map--tokens#dragOverDrawer drop->map--tokens#dropOnDrawer">
+      <div class="current-map__token-drawer token-drawer select-none" data-target="map--tokens.drawer" data-action="dragover->map--tokens#dragOverDrawer drop->map--tokens#dropOnDrawer">
         <%= link_to new_campaign_map_token_path(campaign, campaign.current_map), remote: true, title: "New Token", class: "token new-token-link" do %>
           <span class="token__image token__image-add">+</span>
         <% end %>
@@ -47,19 +47,32 @@
         <%= content_tag :canvas, "", width: campaign.current_map.scaled_width, height: campaign.current_map.scaled_height, class: "absolute fog #{"fog--dm" if admin}", data: { target: "map--fog.canvas", "map--fog-areas": serialize_fog_areas(campaign.current_map.fog_areas) } %>
       <% end %>
 
-      <div class="current-map__map-name">
-        <%= content_tag :h2, campaign.current_map.name %>
-      </div>
-      <div class="controls w-16 absolute top-0 right-0 m-2 flex justify-center">
-        <%= button_tag class: "current-map__zoom-out flex-1 text-center border rounded-l-md h-6 bg-gray-200 cursor-default", data: { target: "map.zoomOut", action: "click->map#zoomOut" } do %>
-          -
+      <div class="controls relative z-50 flex h-6 items-stretch m-2">
+        <% if admin %>
+          <%= render "campaigns/map_selector_button" %>
         <% end %>
-        <%= button_tag class: "current-map__zoom-in flex-1 text-center border rounded-r-md h-6 bg-gray-200 cursor-default", data: { target: "map.zoomIn", action: "click->map#zoomIn" } do %>
-          +
-        <% end %>
+        <div class="flex-initial rounded-md bg-gray-200 border px-2 text-sm">
+          <%= content_tag :h2, campaign.current_map.name %>
+        </div>
+        <div class="flex-grow"></div>
+        <div class="flex-initial w-16 flex justify-center content-center">
+          <%= button_tag class: "current-map__zoom-out flex-1 text-right border rounded-l-md px-2 h-6 bg-gray-200 cursor-default", data: { target: "map.zoomOut", action: "click->map#zoomOut" } do %>
+            <%= inline_svg_tag "icons/minus.svg", class: "block fill-current w-3/4 h-3/4 text-black" %>
+          <% end %>
+          <%= button_tag class: "current-map__zoom-in flex-1 text-right border rounded-r-md px-2 h-6 bg-gray-200 cursor-default", data: { target: "map.zoomIn", action: "click->map#zoomIn" } do %>
+            <%= inline_svg_tag "icons/plus.svg", class: "block fill-current h-3/4 w-3/4 text-black" %>
+          <% end %>
+        </div>
       </div>
     <% end %>
   <% end %>
 <% else %>
-  <h2>No Current Map</h2>
+  <div class="controls relative z-50 flex h-6 items-stretch m-2">
+    <% if admin %>
+      <%= render "campaigns/map_selector_button" %>
+    <% end %>
+    <div class="flex-initial rounded-md bg-gray-200 border px-2 text-sm">
+      <%= content_tag :h2, "No Current Map" %>
+    </div>
+  </div>
 <% end %>

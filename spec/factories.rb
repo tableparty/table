@@ -47,6 +47,12 @@ FactoryBot.define do
     end
 
     after(:create, &:center_image)
+
+    trait :current do
+      after(:create) do |map|
+        map.campaign.update(current_map: map)
+      end
+    end
   end
 
   factory :token do

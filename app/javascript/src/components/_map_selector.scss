@@ -1,15 +1,20 @@
 $map-selector-text-background: rgba(0, 0, 0, 0.5);
 
 .map-selector {
-  @apply
-    my-4
-    overflow-x-auto
-    overflow-y-hidden
-  ;
+  left: 3.7rem;
+  right: 0;
+  top: 3rem;
+  transform: scale(0);
+  transform-origin: top left;
+  transition: all 0.2s ease-in-out;
 
-  display: grid;
-  grid-auto-columns: 24rem;
-  grid-auto-flow: column;
+  &.show {
+    transform: scale(1);
+  }
+
+  &.empty {
+    left: 0;
+  }
 }
 
 .map-selector__option {
@@ -19,8 +24,11 @@ $map-selector-text-background: rgba(0, 0, 0, 0.5);
     h-40
     relative
     rounded-lg
-    mx-3
+    mr-2
+    inline-block
   ;
+
+  width: 20rem;
 
   &:hover {
     .map-selector__option-edit {
@@ -85,12 +93,7 @@ $map-selector-text-background: rgba(0, 0, 0, 0.5);
 
 .map-selector__new {
   @apply
-    bg-gray-200
+    bg-gray-800
     border
-    flex
-    flex-col
-    items-center
-    justify-center
-    text-gray-700
   ;
 }

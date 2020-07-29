@@ -24,6 +24,11 @@ export default class extends Controller {
         campaign_id: this.campaignId
       }
     )
+    this.toggleMapSelector()
+  }
+
+  toggleMapSelector() {
+    this.mapSelectorTarget.classList.toggle("show")
   }
 
   cableReceived(data) {

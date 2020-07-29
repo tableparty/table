@@ -6,7 +6,11 @@
 
   .controls {
     [disabled] {
-      @apply cursor-not-allowed text-gray-400;
+      @apply cursor-not-allowed;
+
+      svg {
+        @apply text-gray-400;
+      }
     }
   }
 }
@@ -30,19 +34,6 @@
   transform: translateX(calc(((var(--viewport-x) / 2) - (var(--x) * var(--zoom-amount))) * 1px))
     translateY(calc(((var(--viewport-y) / 2) - (var(--y) * var(--zoom-amount))) * 1px))
     translateZ(0);
-}
-
-.current-map__map-name {
-  @apply
-    inline-block
-    m-2
-    rounded-md
-    bg-gray-200
-    border
-    px-2
-    h-6
-    text-sm
-  ;
 }
 
 .current-map__token-drawer {

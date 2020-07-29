@@ -2,22 +2,20 @@ require "rails_helper"
 
 RSpec.describe "token drawer", type: :system do
   it "moves tokens from the drawer to the map" do
-    map = create :map
+    map = create :map, :current
     token = create :token, map: map, stashed: true
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-    find(".map-selector__option", text: map.name).click
     token_element = token_element(token)
     token_element.drag_to(map_element(map), html5: true)
     expect(map_element(map)).to have_token(token)
   end
 
   it "adds the token to the map for other users" do
-    map = create :map
+    map = create :map, :current
     token = create :token, map: map, stashed: true
 
     visit campaign_path(map.campaign, as: map.campaign.user)
-    find(".map-selector__option", text: map.name).click
     wait_for_connection
     using_session "other user" do
       visit campaign_path(map.campaign)
@@ -33,11 +31,12 @@ RSpec.describe "token drawer", type: :system do
   end
 
   it "moves tokens from the map to the drawer" do
-    map = create :map
+    map = create :map, :current
     token = create :token, map: map, stashed: false
+
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-    find(".map-selector__option", text: map.name).click
+
     token_element = token_element(token)
     token_element.drag_to(token_drawer_element, html5: true)
     expect(token_drawer_element).to have_token(token)
@@ -45,12 +44,11 @@ RSpec.describe "token drawer", type: :system do
   end
 
   it "hides the token for other users" do
-    map = create :map
+    map = create :map, :current
     token = create :token, map: map, stashed: false
 
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-    find(".map-selector__option", text: map.name).click
     using_session "other user" do
       visit campaign_path(map.campaign)
       wait_for_connection

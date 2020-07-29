@@ -8,7 +8,7 @@ RSpec.describe "Visitor viewing a map", type: :system do
     visit campaign_path(map.campaign)
 
     expect(page).to have_map_with_data(map, "zoom", "0")
-    expect(page).to have_button("-", disabled: true)
+    expect(find("[data-target='map.zoomOut']")).to be_disabled
 
     find(".current-map__zoom-in").click
 
