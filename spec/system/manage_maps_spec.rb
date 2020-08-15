@@ -219,7 +219,7 @@ RSpec.describe "manage maps", type: :system do
   end
 
   def hover_over_map_selector_for(map)
-    within "[data-target='campaign.mapSelector']" do
+    within "[data-target*='campaign.mapSelector']" do
       find("[data-map-id='#{map.id}']").hover
     end
   end
