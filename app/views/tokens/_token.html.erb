@@ -4,7 +4,7 @@
   data: {
     controller: "css-var sync-values",
     target: "map--tokens.token",
-    action: "dragenter->map--tokens#dragOverToken dragstart->map--tokens#startMoveToken drag->map--tokens#moveToken dragend->map--tokens#endMoveToken mousedown->map--tokens#stopPropagation",
+    action: "dragenter->map--tokens#dragOverToken dragstart->map--tokens#startMoveToken drag->map--tokens#moveToken dragend->map--tokens#endMoveToken click->map--tokens#toggleTokenSelect mousedown->map--tokens#stopPropagation",
     token_id: token.id,
     x: token.x,
     y: token.y,

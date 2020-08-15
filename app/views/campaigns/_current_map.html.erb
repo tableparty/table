@@ -61,6 +61,17 @@
           <% end %>
         </div>
       </div>
+
+      <% if admin %>
+        <div class="controls absolute bottom-0 right-0 flex items-stetch mb-2 mr-2" data-target="map--tokens.actions">
+          <%= button_tag class: "action flex-initial block rounded-md border mr-1 px-2 text-sm bg-gray-200 hover:bg-gray-400 active:bg-gray-600 relative", data: { target: "map--tokens.action", action: "map--tokens#deleteSelected" }, disabled: true, title: "Delete" do %>
+            Delete
+          <% end %>
+          <%= button_tag class: "action flex-initial block rounded-md border mr-1 px-2 text-sm bg-gray-200 hover:bg-gray-400 active:bg-gray-600 relative", data: { target: "map--tokens.action", action: "map--tokens#stashSelected" }, disabled: true, title: "Stash" do %>
+            Stash
+          <% end %>
+        </div>
+      <% end %>
     <% end %>
   <% end %>
 <% else %>

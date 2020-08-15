@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import consumer from "../../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["container", "drawer", "token", "image"]
+  static targets = ["container", "drawer", "token", "image", "actions", "action"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
@@ -17,6 +17,8 @@ export default class extends Controller {
     }, {
       received: this.cableReceived.bind(this)
     })
+
+    document.addEventListener("keyup", this.handleKeys.bind(this))
   }
 
   cableReceived(data) {
@@ -43,6 +45,11 @@ export default class extends Controller {
         } else {
           token.remove()
         }
+        break
+      }
+      case "deleteToken": {
+        const token = this.findToken(data.token_id)
+        token.remove()
         break
       }
     }
@@ -189,6 +196,120 @@ export default class extends Controller {
     const x = Math.round((clientX - imageLeft) / parseFloat(zoomAmount) - (((parseFloat(viewportX) / 2)) / parseFloat(zoomAmount)) + parseFloat(mapX))
     const y = Math.round((clientY - imageTop) / parseFloat(zoomAmount) - (((parseFloat(viewportY) / 2)) / parseFloat(zoomAmount)) + parseFloat(mapY))
     return { x, y }
+  }
+
+  toggleTokenSelect(event) {
+    const clickedToken = event.target
+
+    if (clickedToken.dataset.selected) {
+      this.unselectToken(clickedToken)
+    } else {
+      this.selectToken(clickedToken)
+    }
+
+    if (!event.shiftKey && !event.metaKey) {
+      this.tokenTargets.forEach(token => {
+        if (token != clickedToken) {
+          this.unselectToken(token)
+        }
+      })
+    }
+  }
+
+  handleKeys(event) {
+    if (event.code == "ArrowRight" || event.code == "ArrowLeft") {
+      this.selectWithKeyboard(event)
+    } else if (event.key == "t") {
+      this.drawerTarget.dispatchEvent(new CustomEvent("toggle"))
+    } else if (this.hasTokenSelected()) {
+      switch (event.key) {
+        case "Backspace":
+        case "Delete":
+          this.deleteSelected()
+          break
+        case "s":
+          this.stashSelected()
+          break
+      }
+    }
+  }
+
+  selectWithKeyboard(event) {
+    var index = 0
+    var selectedTokens = this.tokenTargets.filter(token => {
+      return token.dataset.selected
+    })
+    var availableTokens = this.tokenTargets.filter(token => {
+      if (this.hasDrawerTarget && !this.drawerTarget.classList.contains("show") && token.parentNode == this.drawerTarget) {
+        return false
+      } else {
+        return true
+      }
+    })
+    if (availableTokens.length > 0) {
+      if (selectedTokens.length > 0) {
+        index = availableTokens.indexOf(selectedTokens[selectedTokens.length - 1]) + (event.code == "ArrowRight" ? 1 : -1)
+      }
+      if (index >= availableTokens.length) {
+        index = 0
+      }
+      if (index < 0) {
+        index = availableTokens.length - 1
+      }
+      this.toggleTokenSelect({
+        target: availableTokens[index],
+        shiftKey: event.shiftKey,
+        metaKey: event.metaKey
+      })
+    }
+  }
+
+  selectToken(token) {
+    token.dataset.selected = true
+    this.toggleTokenActions()
+  }
+
+  unselectToken(token) {
+    delete token.dataset.selected
+    this.toggleTokenActions()
+  }
+
+  hasTokenSelected() {
+    return this.tokenTargets.some(token => { return token.dataset.selected })
+  }
+
+  toggleTokenActions() {
+    if (this.hasActionsTarget) {
+      this.actionTargets.forEach(action => {
+        action.disabled = !this.hasTokenSelected()
+      })
+    }
+  }
+
+  deleteSelected() {
+    if (this.hasTokenSelected() && confirm(`Are you sure you want to delete the selected tokens?`)) {
+      this.tokenTargets.forEach(token => {
+        if (token.dataset.selected) {
+          this.unselectToken(token)
+          this.channel.perform(
+            "delete_token",
+            { map_id: this.mapId, token_id: token.dataset.tokenId }
+          )
+        }
+      })
+    }
+  }
+
+  stashSelected() {
+    this.tokenTargets.forEach(token => {
+      if (token.dataset.selected) {
+        this.unselectToken(token)
+        this.channel.perform(
+          "stash_token",
+          { map_id: this.mapId, token_id: token.dataset.tokenId }
+        )
+      }
+    })
   }
 
   stopPropagation(event) {

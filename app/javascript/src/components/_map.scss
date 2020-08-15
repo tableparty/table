@@ -5,12 +5,21 @@
   user-select: none;
 
   .controls {
-    [disabled] {
+    :disabled {
       @apply cursor-not-allowed;
 
       svg {
         @apply text-gray-400;
       }
+    }
+  }
+
+  .action {
+    @apply opacity-100;
+    transition: opacity 0.2s ease-in-out;
+
+    &:disabled {
+      @apply opacity-50;
     }
   }
 }
