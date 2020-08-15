@@ -6,6 +6,7 @@ RSpec.describe "token drawer", type: :system do
     token = create :token, map: map, stashed: true
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
+    open_token_drawer
     token_element = token_element(token)
     token_element.drag_to(map_element(map), html5: true)
     expect(map_element(map)).to have_token(token)
@@ -22,6 +23,7 @@ RSpec.describe "token drawer", type: :system do
       wait_for_connection
     end
 
+    open_token_drawer
     token_element = token_element(token)
     token_element.drag_to(map_element(map), html5: true)
 
@@ -36,10 +38,11 @@ RSpec.describe "token drawer", type: :system do
 
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
-
     token_element = token_element(token)
-    token_element.drag_to(token_drawer_element, html5: true)
-    expect(token_drawer_element).to have_token(token)
+    token_element.drag_to(token_drawer, html5: true)
+    open_token_drawer
+
+    expect(token_drawer).to have_token(token)
     expect(map_element(map)).not_to have_token(token)
   end
 
@@ -55,14 +58,10 @@ RSpec.describe "token drawer", type: :system do
     end
 
     token_element = token_element(token)
-    token_element.drag_to(token_drawer_element, html5: true)
+    token_element.drag_to(token_drawer, html5: true)
 
     using_session "other user" do
       expect(page).not_to have_token(token)
     end
-  end
-
-  def token_drawer_element
-    find(".current-map__token-drawer")
   end
 end

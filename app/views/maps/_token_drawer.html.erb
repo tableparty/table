@@ -1,0 +1,7 @@
+<div class="current-map__token-drawer token-drawer flex flex-row items-center justify-start select-none bg-gray-500 mx-4 p-2 rounded-lg border whitespace-no-wrap overflow-x-auto overflow-y-hidden shadow-lg" data-target="map--tokens.drawer toggle.content" data-action="dragover->map--tokens#dragOverDrawer drop->map--tokens#dropOnDrawer open->toggle#open close->toggle#close" data-toggle-target="token-drawer">
+  <%= link_to new_campaign_map_token_path(map.campaign, map), remote: true, title: "New Token", class: "token new-token-link" do %>
+    <span class="token__image token__image-add">+</span>
+  <% end %>
+
+  <%= render map.tokens.where(stashed: true) %>
+</div>

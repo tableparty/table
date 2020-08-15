@@ -10,8 +10,11 @@ RSpec.describe "create tokens", type: :system do
 
     visit campaign_path(map.campaign, as: user)
     wait_for_connection
-    click_on "New Token"
-    within "[data-controller=modal]" do
+    open_token_drawer
+    within token_drawer do
+      click_on "New Token"
+    end
+    within modal do
       fill_in "Name", with: "Olokas"
       attach_file "Image", file_fixture("wizard.jpg")
       click_on "Create"

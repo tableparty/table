@@ -8,10 +8,15 @@ RSpec.describe "manage creatures", type: :system do
     campaign.update(current_map: map)
 
     visit campaign_path(campaign, as: user)
-    click_on "New Token"
-    fill_in "Name", with: "Orc"
-    attach_file "Image", file_fixture("thief.jpg")
-    click_on "Create Creature"
+    open_token_drawer
+    within token_drawer do
+      click_on "New Token"
+    end
+    within modal do
+      fill_in "Name", with: "Orc"
+      attach_file "Image", file_fixture("thief.jpg")
+      click_on "Create Creature"
+    end
 
     # if we don't use find here, capybara doesn't wait for the ajax to complete
     html_token = find(".token[data-target='map--tokens.token']")
@@ -30,11 +35,16 @@ RSpec.describe "manage creatures", type: :system do
     campaign.update(current_map: map)
 
     visit campaign_path(campaign, as: user)
-    click_on "New Token"
-    fill_in "Name", with: "Ogre"
-    select "Large"
-    attach_file "Image", file_fixture("thief.jpg")
-    click_on "Create Creature"
+    open_token_drawer
+    within token_drawer do
+      click_on "New Token"
+    end
+    within modal do
+      fill_in "Name", with: "Ogre"
+      select "Large"
+      attach_file "Image", file_fixture("thief.jpg")
+      click_on "Create Creature"
+    end
 
     drawer_token = find(
       ".current-map__token-drawer .token[data-target='map--tokens.token']"
@@ -57,6 +67,7 @@ RSpec.describe "manage creatures", type: :system do
     visit campaign_path(map.campaign, as: map.campaign.user)
     wait_for_connection
     find(".map-selector__option", text: map.name).click
+    open_token_drawer
     token_element = token_element(token)
     token_element.drag_to(map_element(map), html5: true)
 
@@ -65,10 +76,7 @@ RSpec.describe "manage creatures", type: :system do
       creature.tokens.order(created_at: :asc).last,
       "1"
     )
-    expect(token_drawer_element).to have_token(token)
-  end
-
-  def token_drawer_element
-    find(".current-map__token-drawer")
+    open_token_drawer
+    expect(token_drawer).to have_token(token)
   end
 end

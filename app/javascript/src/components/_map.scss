@@ -37,16 +37,26 @@
 }
 
 .current-map__token-drawer {
-  @apply
-    bg-gray-500
-  ;
+  @apply absolute;
 
   --drawer-scale: 1.25;
+  left: 1rem;
+  right: 0;
+  top: 3rem;
+  transform: scale(0);
+  transform-origin: top left;
+  transition: all 0.2s ease-in-out;
+  z-index: 40;
+
+  &.show {
+    transform: scale(1);
+  }
 
   .token {
     @apply
       static
       m-2
+      flex-initial
     ;
 
     .token__image {

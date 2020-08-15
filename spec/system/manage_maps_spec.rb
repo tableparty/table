@@ -43,6 +43,7 @@ RSpec.describe "manage maps", type: :system do
       open_selector_and_switch_to_map("Dwarven Excavation")
 
       token = campaign.maps.first.tokens.first
+      open_token_drawer
       expect(page).to have_token_with_data(token, "token-id", token.id)
     end
   end

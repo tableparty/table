@@ -50,6 +50,9 @@ export default class extends Controller {
 
   startMoveToken(event) {
     event.stopPropagation()
+    if (this.hasDrawerTarget) {
+      this.drawerTarget.dispatchEvent(new CustomEvent('open'))
+    }
 
     const { target, clientX, clientY } = event
     this.recordPointerLocation(event.clientX, event.clientY)
@@ -111,7 +114,21 @@ export default class extends Controller {
   }
 
   dragOverDrawer(event) {
+    event.stopPropagation()
     event.preventDefault()
+    var dragging = this.tokenTargets.find(token => token.dataset.beingDragged)
+    if (dragging && dragging.parentNode != this.drawerTarget) {
+      this.drawerTarget.appendChild(dragging)
+    }
+  }
+
+  dragOverToken(event) {
+    event.stopPropagation()
+    var draggedOver = event.target
+    var dragging = this.tokenTargets.find(token => token.dataset.beingDragged)
+    if (this.hasDrawerTarget && draggedOver.parentNode == this.drawerTarget && dragging) {
+      this.drawerTarget.insertBefore(dragging, draggedOver)
+    }
   }
 
   dropOnDrawer(event) {
@@ -119,7 +136,10 @@ export default class extends Controller {
     const tokenId = event.dataTransfer.getData("text/plain")
 
     const token = this.findToken(tokenId)
-    this.drawerTarget.appendChild(token)
+    if (token.parentNode != this.drawerTarget) {
+      this.drawerTarget.appendChild(token)
+    }
+    this.drawerTarget.dispatchEvent(new CustomEvent('close'))
 
     this.channel.perform(
       "stash_token",
@@ -139,6 +159,9 @@ export default class extends Controller {
     const tokenId = event.dataTransfer.getData("text/plain")
 
     const token = this.findToken(tokenId)
+    if (this.hasDrawerTarget) {
+      this.drawerTarget.dispatchEvent(new CustomEvent('close'))
+    }
     if (token.parentNode != this.containerTarget) {
       if (token.dataset.copyOnPlace != "true") {
         this.containerTarget.appendChild(token)

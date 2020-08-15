@@ -6,7 +6,9 @@
   @apply
     flex
     items-center
-    absolute;
+    absolute
+    z-50
+  ;
 
   --base-border: 2px;
   --base-size: 40px;

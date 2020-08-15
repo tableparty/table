@@ -7,13 +7,7 @@
       action: "dragover->map--tokens#dragOver"
     } do %>
     <% if admin %>
-      <div class="current-map__token-drawer token-drawer select-none" data-target="map--tokens.drawer" data-action="dragover->map--tokens#dragOverDrawer drop->map--tokens#dropOnDrawer">
-        <%= link_to new_campaign_map_token_path(campaign, campaign.current_map), remote: true, title: "New Token", class: "token new-token-link" do %>
-          <span class="token__image token__image-add">+</span>
-        <% end %>
-
-        <%= render campaign.current_map.tokens.where(stashed: true) %>
-      </div>
+      <%= render "maps/token_drawer", map: campaign.current_map %>
     <% end %>
     <%= content_tag :div,
       class: "current-map relative overflow-hidden",
@@ -49,6 +43,9 @@
 
       <div class="controls relative z-50 flex h-6 items-stretch m-2">
         <% if admin %>
+          <%= button_tag class: "flex-initial block rounded-md border mr-1 px-2 text-sm bg-gray-200 hover:bg-gray-400 active:bg-gray-600 relative", data: { action: "toggle#toggle", "toggle-target": "token-drawer" }, title: "Tokens" do %>
+            <%= inline_svg_tag "icons/tokens.svg", class: "block fill-current h-full text-black" %>
+          <% end %>
           <%= render "campaigns/map_selector_button" %>
         <% end %>
         <div class="flex-initial rounded-md bg-gray-200 border px-2 text-sm">

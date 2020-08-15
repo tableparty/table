@@ -62,8 +62,8 @@ RSpec.describe "manage creatures", type: :system do
     view_library
     click_on "Add to map"
 
-    expect(find(".current-map__token-drawer"))
-      .to have_token(creature.tokens.first)
+    open_token_drawer
+    expect(token_drawer).to have_token(creature.tokens.first)
   end
 
   it "lists characters" do
@@ -127,8 +127,8 @@ RSpec.describe "manage creatures", type: :system do
     view_library
     click_on "Add to map"
 
-    expect(find(".current-map__token-drawer"))
-      .to have_token(character.tokens.first)
+    open_token_drawer
+    expect(token_drawer).to have_token(character.tokens.first)
   end
 
   def have_character(character)
@@ -142,7 +142,14 @@ RSpec.describe "manage creatures", type: :system do
   def view_library
     wait_for_connection
     page.has_no_css?(".modal__background")
-    click_on "New Token"
-    find("label", text: "Library").click
+    if page.has_no_css?(".current-map__token-drawer.show")
+      open_token_drawer
+    end
+    within token_drawer do
+      click_on "New Token"
+    end
+    within modal do
+      find("label", text: "Library").click
+    end
   end
 end

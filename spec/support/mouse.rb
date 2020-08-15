@@ -126,10 +126,6 @@ def click_and_move_token(token, by:)
   page.execute_script("delete window.tempDataTransfer")
 end
 
-def token_element(token)
-  find(".token[data-token-id='#{token.id}']")
-end
-
 def dispatch_event(node, element, event)
   node.execute_script("#{element}.dispatchEvent(#{event})")
 end
