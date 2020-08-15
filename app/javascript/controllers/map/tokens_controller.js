@@ -148,6 +148,7 @@ export default class extends Controller {
         token_id: tokenId
       }
     )
+    this.endMoveToken({ target: token })
   }
 
   dragOverMap(event) {
@@ -175,6 +176,7 @@ export default class extends Controller {
         }
       )
     }
+    this.endMoveToken({ target: token })
   }
 
   findToken(tokenId) {
