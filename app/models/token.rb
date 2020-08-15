@@ -45,6 +45,6 @@ class Token < ApplicationRecord
   private
 
   def broadcast_token_creation
-    TokenBroadcastJob.perform_later(self)
+    TokenCreationBroadcastJob.perform_later(self)
   end
 end

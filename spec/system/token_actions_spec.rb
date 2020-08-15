@@ -224,6 +224,64 @@ RSpec.describe "token actions", type: :system do
     end
   end
 
+  describe "editing" do
+    it "edits the token for other users" do
+      map = create :map, :current
+      token = create(
+        :token,
+        map: map,
+        stashed: false,
+        name: "Thief",
+        identifier: "1",
+        image: Rack::Test::UploadedFile.new("spec/fixtures/files/thief.jpg")
+      )
+
+      visit campaign_path(map.campaign, as: map.campaign.user)
+      wait_for_connection
+      using_session "other user" do
+        visit campaign_path(map.campaign)
+        wait_for_connection
+      end
+
+      token_element = token_element(token)
+      token_element.click
+      click_on "Edit"
+
+      within modal do
+        fill_in "Name", with: "Wizard"
+        attach_file "Image", file_fixture("wizard.jpg")
+        fill_in "Identifier", with: "A"
+        select "Large"
+        click_on "Update Token"
+      end
+
+      expect(map_element(map)).to have_token_with_identifier(token, "A")
+
+      using_session "other user" do
+        expect(map_element(map)).to have_token_with_identifier(token, "A")
+      end
+    end
+
+    it "can be opened with a keyboard shortcut" do
+      map = create :map, :current
+      token = create(:token, map: map, stashed: false)
+
+      visit campaign_path(map.campaign, as: map.campaign.user)
+      wait_for_connection
+      token_element = token_element(token)
+      token_element.click
+      page.find("body").send_keys "e"
+
+      within modal do
+        fill_in "Name", with: "Wizard"
+        fill_in "Identifier", with: "A"
+        click_on "Update Token"
+      end
+
+      expect(map_element(map)).to have_token_with_identifier(token, "A")
+    end
+  end
+
   def expect_token_actions_enabled
     page.find_all("[data-target='map--tokens.action']").each do |button|
       expect(button).not_to be_disabled

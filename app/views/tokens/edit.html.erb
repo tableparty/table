@@ -1,0 +1,15 @@
+<div class="p-4">
+  <h1 class="text-2xl">Edit <%= token.name %></h1>
+
+  <hr class="my-2" />
+
+  <% if token.token_template.present? %>
+    <div class="rounded text-sm text-white bg-blue-500 p-2 mb-3">
+      You are editing this individual token for this <%= token.token_template.type %> on this map.
+      If you would like to edit it across all maps, you can do so
+      <%= link_to "here", polymorphic_url([token.map.campaign, token.token_template], action: :edit), remote: true, data: { action: "click->modal#removeModal" }, class: "underline" %>.
+    </div>
+  <% end %>
+
+  <%= render "form", token: token %>
+</div>

@@ -1,5 +1,6 @@
 import { Controller } from "stimulus"
 import consumer from "../../channels/consumer"
+import Rails from "@rails/ujs"
 
 export default class extends Controller {
   static targets = ["container", "drawer", "token", "image", "actions", "action"]
@@ -51,6 +52,20 @@ export default class extends Controller {
         const token = this.findToken(data.token_id)
         token.remove()
         break
+      }
+      case "updateToken": {
+        const token = this.findToken(data.token_id)
+        if (token) {
+          token.outerHTML = data.token_html
+          if (data.stashed) {
+            if (this.hasDrawerTarget) {
+              this.drawerTarget.appendChild(token)
+            } else {
+              token.remove()
+            }
+          }
+        }
+        break;
       }
     }
   }
@@ -217,6 +232,10 @@ export default class extends Controller {
   }
 
   handleKeys(event) {
+    if (event.target != document.body) {
+      return
+    }
+
     if (event.code == "ArrowRight" || event.code == "ArrowLeft") {
       this.selectWithKeyboard(event)
     } else if (event.key == "t") {
@@ -229,6 +248,9 @@ export default class extends Controller {
           break
         case "s":
           this.stashSelected()
+          break
+        case "e":
+          this.editSelected()
           break
       }
     }
@@ -308,6 +330,39 @@ export default class extends Controller {
           "stash_token",
           { map_id: this.mapId, token_id: token.dataset.tokenId }
         )
+      }
+    })
+    if (this.selectedTokens.includes(clickedToken)) {
+      this.selectedTokens = this.selectedTokens.filter(item => {
+        item !== clickedToken
+      })
+    } else {
+      this.selectedTokens = [clickedToken]
+    }
+
+    this.tokenTargets.forEach(target => {
+      target.classList.toggle("selected", this.selectedTokens.includes(target))
+    })
+    if (this.hasActionsTarget) {
+      this.actionsTarget.classList.toggle(
+        "enabled",
+        this.hasTokenSelected()
+      )
+      this.actionTargets.forEach(action => {
+        action.disabled = !this.hasTokenSelected()
+      })
+    }
+  }
+
+  editSelected() {
+    this.tokenTargets.forEach(token => {
+      if (token.dataset.selected) {
+        this.unselectToken(token)
+        Rails.ajax({
+          type: 'GET',
+          url: token.dataset.editUrl,
+          dataType: "script"
+        })
       }
     })
   }

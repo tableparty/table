@@ -1,4 +1,4 @@
-class TokenBroadcastJob < ApplicationJob
+class TokenCreationBroadcastJob < ApplicationJob
   queue_as :default
 
   def perform(token)
