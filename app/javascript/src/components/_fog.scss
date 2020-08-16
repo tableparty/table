@@ -35,6 +35,14 @@ $mask-dm-opacity: 0.5;
   width: 100%;
 }
 
+.map--fog {
+  background-color: $mask-color;
+}
+
+.map--fog--dm {
+  background-color: rgba($mask-color, $mask-dm-opacity);
+}
+
 @keyframes reveal {
   from {
     fill-opacity: 0;

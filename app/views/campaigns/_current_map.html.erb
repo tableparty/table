@@ -1,6 +1,6 @@
 <% if campaign.current_map.present? %>
   <%= content_tag :div,
-    class: "flex-1 flex flex-row h-full",
+    class: "flex-1 flex flex-row h-full #{"map--fog" if campaign.current_map.fog_enabled?} #{"map--fog--dm" if admin && campaign.current_map.fog_enabled?}",
     data: {
       controller: "map map--tokens map--pointers #{"map--fog" if campaign.current_map.fog_enabled?}",
       "map-id": campaign.current_map.id,
