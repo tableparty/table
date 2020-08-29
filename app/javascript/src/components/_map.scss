@@ -5,12 +5,18 @@
   user-select: none;
 
   .controls {
+    transition: opacity 0.2s ease-in-out;
+
     [disabled] {
       @apply cursor-not-allowed;
 
       svg {
         @apply text-gray-400;
       }
+    }
+
+    &.enabled {
+      @apply opacity-100;
     }
   }
 }

@@ -34,6 +34,21 @@ module Maps
       end
     end
 
+    def delete_token(data)
+      map = Map.find(data["map_id"])
+      token = map.tokens.find(data["token_id"])
+      return if !dm?(map.campaign)
+
+      token.destroy
+      broadcast_to(
+        map,
+        {
+          operation: "deleteToken",
+          token_id: token.id
+        }
+      )
+    end
+
     class << self
       def add_token(token)
         broadcast_to(

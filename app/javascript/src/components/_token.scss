@@ -36,6 +36,10 @@
   border-width: calc(var(--base-border) * var(--size-scale) * var(--zoom-amount));
   height: calc((var(--base-size) * var(--size-scale) * var(--zoom-amount)));
   width: calc((var(--base-size) * var(--size-scale) * var(--zoom-amount)));
+
+  .selected & {
+    @apply border-orange-600;
+  }
 }
 
 .token__image-add {
