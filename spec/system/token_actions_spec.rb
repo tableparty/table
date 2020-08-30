@@ -1,6 +1,46 @@
 require "rails_helper"
 
 RSpec.describe "token actions", type: :system do
+  it "can select multiple tokens" do
+    map = create :map, :current
+    token_one = create :token, map: map, stashed: false
+    token_two = create :token, map: map, stashed: false
+
+    visit campaign_path(map.campaign, as: map.campaign.user)
+    wait_for_connection
+
+    shift_click token_element(token_one)
+    shift_click token_element(token_two)
+
+    expect(token_element(token_one)["data-selected"]).to be_present
+    expect(token_element(token_two)["data-selected"]).to be_present
+  end
+
+  it "can use the keyboard to select tokens" do
+    map = create :map, :current
+    token_one = create :token, map: map, stashed: false
+    token_two = create :token, map: map, stashed: false
+
+    visit campaign_path(map.campaign, as: map.campaign.user)
+    wait_for_connection
+
+    page.find("body").send_keys :right
+    expect(token_element(token_one)["data-selected"]).to be_present
+    expect(token_element(token_two)["data-selected"]).not_to be_present
+
+    page.find("body").send_keys :right
+    expect(token_element(token_one)["data-selected"]).not_to be_present
+    expect(token_element(token_two)["data-selected"]).to be_present
+
+    page.find("body").send_keys :right
+    expect(token_element(token_one)["data-selected"]).to be_present
+    expect(token_element(token_two)["data-selected"]).not_to be_present
+
+    page.find("body").send_keys :left
+    expect(token_element(token_one)["data-selected"]).not_to be_present
+    expect(token_element(token_two)["data-selected"]).to be_present
+  end
+
   describe "when a token is selected" do
     it "enables token actions" do
       map = create :map, :current
@@ -32,10 +72,11 @@ RSpec.describe "token actions", type: :system do
       token_element = token_element(token)
       token_element.click
       click_on "Stash"
-
       open_token_drawer
+
       expect(token_drawer).to have_token(token)
       expect(map_element(map)).not_to have_token(token)
+      expect_token_actions_disabled
     end
 
     it "hides the token for other users" do
@@ -73,11 +114,12 @@ RSpec.describe "token actions", type: :system do
       accept_confirm do
         click_on "Delete"
       end
-
       open_token_drawer
+
       expect(token_drawer).not_to have_token(token)
       expect(map_element(map)).not_to have_token(token)
       expect(Token.exists?(token.id)).not_to be true
+      expect_token_actions_disabled
     end
 
     it "deletes the token for other users" do
@@ -106,20 +148,14 @@ RSpec.describe "token actions", type: :system do
   end
 
   def expect_token_actions_enabled
-    expect(page).to have_css(
-      "[data-target='map--tokens.actions'].enabled"
-    )
-    buttons = page.find_all("[data-target='map--tokens.action']")
-    buttons.each do |button|
+    page.find_all("[data-target='map--tokens.action']").each do |button|
       expect(button).not_to be_disabled
     end
   end
 
   def expect_token_actions_disabled
-    expect(page).not_to have_css(
-      "[data-target='map--tokens.actions'].enabled"
+    expect(page.find_all("[data-target='map--tokens.action']")).to all(
+      be_disabled
     )
-    buttons = page.find_all("[data-target='map--tokens.action']")
-    expect(buttons).to all(be_disabled)
   end
 end

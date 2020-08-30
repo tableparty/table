@@ -38,6 +38,17 @@ def shift_click_at(element, x:, y:)
   )
 end
 
+def shift_click(element)
+  dispatch_event(
+    element,
+    "this",
+    mouse_event(
+      "click",
+      shift_key: true
+    )
+  )
+end
+
 def mouse_move_to(x:, y:)
   dispatch_event(
     page,
