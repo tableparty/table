@@ -219,13 +219,15 @@ export default class extends Controller {
   }
 
   handleKeys(event) {
+    console.log(event)
     if (event.code == "ArrowRight" || event.code == "ArrowLeft") {
       this.selectWithKeyboard(event)
     } else if (event.key == "t") {
       this.drawerTarget.dispatchEvent(new CustomEvent("toggle"))
     } else if (this.hasTokenSelected()) {
       switch (event.key) {
-        case "d":
+        case "Backspace":
+        case "Delete":
           this.delete()
           break
         case "s":
