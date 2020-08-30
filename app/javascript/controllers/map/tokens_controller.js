@@ -2,11 +2,10 @@ import { Controller } from "stimulus"
 import consumer from "../../channels/consumer"
 
 export default class extends Controller {
-  static targets = ["container", "drawer", "token", "image", "tokenActions"]
+  static targets = ["container", "drawer", "token", "image", "actions", "action"]
 
   connect() {
     this.mapId = this.element.dataset.mapId
-    this.selectedTokens = []
 
     this.tokenTargets.forEach(target => {
       target.ondragstart = () => null
@@ -202,53 +201,52 @@ export default class extends Controller {
   toggleTokenSelect(event) {
     const clickedToken = event.target
 
-    if (this.selectedTokens.includes(clickedToken)) {
-      this.selectedTokens = this.selectedTokens.filter(item => {
-        item !== clickedToken
-      })
-    } else {
-      this.selectedTokens = [clickedToken]
-    }
-
-    this.tokenTargets.forEach(target => {
-      target.classList.toggle("selected", this.selectedTokens.includes(target))
+    this.tokenTargets.forEach(token => {
+      if (token == clickedToken && !token.dataset.selected) {
+        token.dataset.selected = true
+      } else {
+        delete token.dataset.selected
+      }
     })
-    if (this.hasTokenActionsTarget) {
-      this.tokenActionsTarget.classList.toggle(
+    if (this.hasActionsTarget) {
+      this.actionsTarget.classList.toggle(
         "enabled",
-        this.selectedTokens.length > 0
+        this.hasTokenSelected()
       )
+      this.actionTargets.forEach(action => {
+        action.disabled = !this.hasTokenSelected()
+      })
     }
   }
 
-  delete(event) {
-    if (confirm(`Are you sure you want to delete the selected tokens?`)) {
-      this.selectedTokens.forEach(token => {
-        this.channel.perform(
-          "delete_token",
-          {
-            map_id: this.mapId,
-            token_id: token.dataset.tokenId
-          }
-        )
-      })
+  hasTokenSelected() {
+    return this.tokenTargets.some(token => { return token.dataset.selected })
+  }
 
-      // TODO: unselect tokens
+  delete(event) {
+    if (this.hasTokenSelected() && confirm(`Are you sure you want to delete the selected tokens?`)) {
+      this.tokenTargets.forEach(token => {
+        if (token.dataset.selected) {
+          delete token.dataset.selected
+          this.channel.perform(
+            "delete_token",
+            { map_id: this.mapId, token_id: token.dataset.tokenId }
+          )
+        }
+      })
     }
   }
 
   stash(event) {
-    this.selectedTokens.forEach(token => {
-      this.channel.perform(
-        "stash_token",
-        {
-          map_id: this.mapId,
-          token_id: token.dataset.tokenId
-        }
-      )
+    this.tokenTargets.forEach(token => {
+      if (token.dataset.selected) {
+        delete token.dataset.selected
+        this.channel.perform(
+          "stash_token",
+          { map_id: this.mapId, token_id: token.dataset.tokenId }
+        )
+      }
     })
-
-    // TODO: unselect tokens
   }
 
   stopPropagation(event) {
