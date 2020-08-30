@@ -219,7 +219,6 @@ export default class extends Controller {
   }
 
   handleKeys(event) {
-    console.log(event)
     if (event.code == "ArrowRight" || event.code == "ArrowLeft") {
       this.selectWithKeyboard(event)
     } else if (event.key == "t") {
