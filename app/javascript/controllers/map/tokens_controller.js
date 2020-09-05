@@ -155,7 +155,6 @@ export default class extends Controller {
         token_id: tokenId
       }
     )
-    this.endMoveToken({ target: token })
   }
 
   dragOverMap(event) {
@@ -183,7 +182,6 @@ export default class extends Controller {
         }
       )
     }
-    this.endMoveToken({ target: token })
   }
 
   findToken(tokenId) {
@@ -227,10 +225,10 @@ export default class extends Controller {
       switch (event.key) {
         case "Backspace":
         case "Delete":
-          this.delete()
+          this.deleteSelected()
           break
         case "s":
-          this.stash()
+          this.stashSelected()
           break
       }
     }
@@ -288,7 +286,7 @@ export default class extends Controller {
     }
   }
 
-  delete() {
+  deleteSelected() {
     if (this.hasTokenSelected() && confirm(`Are you sure you want to delete the selected tokens?`)) {
       this.tokenTargets.forEach(token => {
         if (token.dataset.selected) {
@@ -302,7 +300,7 @@ export default class extends Controller {
     }
   }
 
-  stash() {
+  stashSelected() {
     this.tokenTargets.forEach(token => {
       if (token.dataset.selected) {
         this.unselectToken(token)
