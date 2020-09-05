@@ -63,7 +63,7 @@ RSpec.describe "token actions", type: :system do
   end
 
   describe "stash" do
-    it "moves tokens from the map to the drawer" do
+    it "moves tokens from the map to the drawer by clicking the button" do
       map = create :map, :current
       token = create :token, map: map, stashed: false
 
@@ -76,6 +76,41 @@ RSpec.describe "token actions", type: :system do
 
       expect(token_drawer).to have_token(token)
       expect(map_element(map)).not_to have_token(token)
+      expect_token_actions_disabled
+    end
+
+    it "moves tokens from the map to the drawer with the keyboard shortcut" do
+      map = create :map, :current
+      token = create :token, map: map, stashed: false
+
+      visit campaign_path(map.campaign, as: map.campaign.user)
+      wait_for_connection
+      token_element = token_element(token)
+      token_element.click
+      page.find("body").send_keys "s"
+      open_token_drawer
+
+      expect(token_drawer).to have_token(token)
+      expect(map_element(map)).not_to have_token(token)
+      expect_token_actions_disabled
+    end
+
+    it "moves multiple tokens from the map to the drawer" do
+      map = create :map, :current
+      token_one = create :token, map: map, stashed: false
+      token_two = create :token, map: map, stashed: false
+
+      visit campaign_path(map.campaign, as: map.campaign.user)
+      wait_for_connection
+      shift_click token_element(token_one)
+      shift_click token_element(token_two)
+      click_on "Stash"
+      open_token_drawer
+
+      expect(token_drawer).to have_token(token_one)
+      expect(token_drawer).to have_token(token_two)
+      expect(map_element(map)).not_to have_token(token_one)
+      expect(map_element(map)).not_to have_token(token_two)
       expect_token_actions_disabled
     end
 
@@ -103,7 +138,7 @@ RSpec.describe "token actions", type: :system do
   end
 
   describe "delete" do
-    it "deletes the token from the map" do
+    it "deletes the token from the map by clicking the button" do
       map = create :map, :current
       token = create :token, map: map, stashed: false
 
@@ -119,6 +154,48 @@ RSpec.describe "token actions", type: :system do
       expect(token_drawer).not_to have_token(token)
       expect(map_element(map)).not_to have_token(token)
       expect(Token.exists?(token.id)).not_to be true
+      expect_token_actions_disabled
+    end
+
+    it "deletes the token from the map with the keyboard shortcut" do
+      map = create :map, :current
+      token = create :token, map: map, stashed: false
+
+      visit campaign_path(map.campaign, as: map.campaign.user)
+      wait_for_connection
+      token_element = token_element(token)
+      token_element.click
+      accept_confirm do
+        page.find("body").send_keys :delete
+      end
+      open_token_drawer
+
+      expect(token_drawer).not_to have_token(token)
+      expect(map_element(map)).not_to have_token(token)
+      expect(Token.exists?(token.id)).not_to be true
+      expect_token_actions_disabled
+    end
+
+    it "deletes multiple tokens from the map" do
+      map = create :map, :current
+      token_one = create :token, map: map, stashed: false
+      token_two = create :token, map: map, stashed: false
+
+      visit campaign_path(map.campaign, as: map.campaign.user)
+      wait_for_connection
+      shift_click token_element(token_one)
+      shift_click token_element(token_two)
+      accept_confirm do
+        click_on "Delete"
+      end
+      open_token_drawer
+
+      expect(token_drawer).not_to have_token(token_one)
+      expect(token_drawer).not_to have_token(token_two)
+      expect(map_element(map)).not_to have_token(token_one)
+      expect(map_element(map)).not_to have_token(token_two)
+      expect(Token.exists?(token_one.id)).not_to be true
+      expect(Token.exists?(token_two.id)).not_to be true
       expect_token_actions_disabled
     end
 
