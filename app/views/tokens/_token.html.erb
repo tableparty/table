@@ -6,6 +6,7 @@
     target: "map--tokens.token",
     action: "dragenter->map--tokens#dragOverToken dragstart->map--tokens#startMoveToken drag->map--tokens#moveToken dragend->map--tokens#endMoveToken click->map--tokens#toggleTokenSelect mousedown->map--tokens#stopPropagation",
     token_id: token.id,
+    edit_url: edit_campaign_map_token_path(token.map.campaign, token.map, token),
     x: token.x,
     y: token.y,
     "size-scale": token.size_scale,

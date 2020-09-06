@@ -64,6 +64,20 @@ module Maps
         )
       end
 
+      def update_token(token)
+        broadcast_to(
+          token.map,
+          {
+            operation: "updateToken",
+            token_id: token.id,
+            token_html: render_token(token),
+            x: token.x,
+            y: token.y,
+            stashed: token.stashed
+          }
+        )
+      end
+
       private
 
       def render_token(token)

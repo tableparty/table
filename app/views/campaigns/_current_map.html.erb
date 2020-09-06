@@ -70,6 +70,9 @@
           <%= button_tag class: "action flex-initial block rounded-md border mr-1 px-2 text-sm bg-gray-200 hover:bg-gray-400 active:bg-gray-600 relative", data: { target: "map--tokens.action", action: "map--tokens#stashSelected" }, disabled: true, title: "Stash" do %>
             Stash
           <% end %>
+          <%= button_tag class: "action flex-initial block rounded-md border mr-1 px-2 text-sm bg-gray-200 hover:bg-gray-400 active:bg-gray-600 relative", data: { target: "map--tokens.action", action: "map--tokens#editSelected" }, disabled: true, title: "Edit" do %>
+            Edit
+          <% end %>
         </div>
       <% end %>
     <% end %>
