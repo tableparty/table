@@ -274,6 +274,7 @@ RSpec.describe "token actions", type: :system do
 
       within modal do
         fill_in "Name", with: "Wizard"
+        fill_in "Identifier", with: "A"
         click_on "Update Token"
       end
 
