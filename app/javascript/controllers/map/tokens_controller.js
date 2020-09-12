@@ -70,7 +70,7 @@ export default class extends Controller {
     }
   }
 
-  startMoveToken(event) {
+  moveStarted(event) {
     event.stopPropagation()
     if (this.hasDrawerTarget) {
       this.drawerTarget.dispatchEvent(new CustomEvent('open'))
@@ -78,23 +78,34 @@ export default class extends Controller {
 
     const { target, clientX, clientY } = event
     this.recordPointerLocation(event.clientX, event.clientY)
-    const { left, top } = target.getBoundingClientRect()
 
-    const tokenImage = target.getElementsByClassName("token__image")[0]
-    const { width: tokenWidth, height: tokenHeight } = tokenImage.getBoundingClientRect()
-
-    target.dataset.beingDragged = true
-    target.dataset.offsetX = (tokenWidth / 2) - (clientX - left)
-    target.dataset.offsetY = (tokenHeight / 2) - (clientY - top)
+    this.startMoveToken(target, clientX, clientY)
+    this.selectedTokens().forEach(selectedToken => this.startMoveToken(selectedToken, clientX, clientY))
 
     event.dataTransfer.setData("text/plain", target.dataset.tokenId)
   }
 
-  moveToken(event) {
-    event.stopPropagation()
+  startMoveToken(token, clientX, clientY) {
+    const { left, top } = token.getBoundingClientRect()
 
+    const tokenImage = token.getElementsByClassName("token__image")[0]
+    const { width: tokenWidth, height: tokenHeight } = tokenImage.getBoundingClientRect()
+
+    token.dataset.beingDragged = true
+    token.dataset.offsetX = (tokenWidth / 2) - (clientX - left)
+    token.dataset.offsetY = (tokenHeight / 2) - (clientY - top)
+  }
+
+  moved(event) {
+    event.stopPropagation()
     const { target } = event
-    const { x: currentX, y: currentY, offsetX, offsetY } = target.dataset
+
+    this.moveToken(target)
+    this.performOnSelected(this.moveToken.bind(this), false)
+  }
+
+  moveToken(token) {
+    const { x: currentX, y: currentY, offsetX, offsetY } = token.dataset
     const { zoomAmount } = this.imageTarget.dataset
     const { x, y } = this.mapPositionOf(
       new MouseEvent("drag", {
@@ -108,17 +119,22 @@ export default class extends Controller {
 
     if (newX != currentX || newY != currentY) {
       this.setTokenLocation(
-        target,
+        token,
         newX,
         newY
       )
     }
   }
 
-  endMoveToken({ target }) {
-    delete target.dataset.beingDragged
-    delete target.dataset.offsetX
-    delete target.dataset.offsetY
+  moveEnded({ target }) {
+    this.endMoveToken(target)
+    this.performOnSelected(this.endMoveToken.bind(this), false)
+  }
+
+  endMoveToken(token) {
+    delete token.dataset.beingDragged
+    delete token.dataset.offsetX
+    delete token.dataset.offsetY
   }
 
   setTokenLocation(token, x, y) {
@@ -155,19 +171,23 @@ export default class extends Controller {
 
   dropOnDrawer(event) {
     event.preventDefault()
-    const tokenId = event.dataTransfer.getData("text/plain")
+    const token = this.findToken(event.dataTransfer.getData("text/plain"))
 
-    const token = this.findToken(tokenId)
+    this.stashToken(token)
+    this.performOnSelected(this.stashToken.bind(this))
+
+    this.drawerTarget.dispatchEvent(new CustomEvent('close'))
+  }
+
+  stashToken(token) {
     if (token.parentNode != this.drawerTarget) {
       this.drawerTarget.appendChild(token)
     }
-    this.drawerTarget.dispatchEvent(new CustomEvent('close'))
-
     this.channel.perform(
       "stash_token",
       {
         map_id: this.mapId,
-        token_id: tokenId
+        token_id: token.dataset.tokenId
       }
     )
   }
@@ -178,22 +198,25 @@ export default class extends Controller {
 
   dropOnMap(event) {
     event.preventDefault()
-    const tokenId = event.dataTransfer.getData("text/plain")
-
-    const token = this.findToken(tokenId)
     if (this.hasDrawerTarget) {
       this.drawerTarget.dispatchEvent(new CustomEvent('close'))
     }
+    const token = this.findToken(event.dataTransfer.getData("text/plain"))
+
+    this.placeToken(token)
+    this.performOnSelected(this.placeToken.bind(this))
+  }
+
+  placeToken(token) {
     if (token.parentNode != this.containerTarget) {
       if (token.dataset.copyOnPlace != "true") {
         this.containerTarget.appendChild(token)
       }
-
       this.channel.perform(
         "place_token",
         {
           map_id: this.mapId,
-          token_id: tokenId
+          token_id: token.dataset.tokenId
         }
       )
     }
@@ -258,10 +281,8 @@ export default class extends Controller {
 
   selectWithKeyboard(event) {
     var index = 0
-    var selectedTokens = this.tokenTargets.filter(token => {
-      return token.dataset.selected
-    })
-    var availableTokens = this.tokenTargets.filter(token => {
+    const selectedTokens = this.selectedTokens()
+    const availableTokens = this.tokenTargets.filter(token => {
       if (this.hasDrawerTarget && !this.drawerTarget.classList.contains("show") && token.parentNode == this.drawerTarget) {
         return false
       } else {
@@ -300,50 +321,47 @@ export default class extends Controller {
     return this.tokenTargets.some(token => { return token.dataset.selected })
   }
 
+  selectedTokens() {
+    return this.tokenTargets.filter(token => token.dataset.selected)
+  }
+
   toggleTokenActions() {
     if (this.hasActionsTarget) {
-      this.actionTargets.forEach(action => {
-        action.disabled = !this.hasTokenSelected()
-      })
+      this.actionTargets.forEach(action => action.disabled = !this.hasTokenSelected())
     }
   }
 
   deleteSelected() {
     if (this.hasTokenSelected() && confirm(`Are you sure you want to delete the selected tokens?`)) {
-      this.tokenTargets.forEach(token => {
-        if (token.dataset.selected) {
-          this.unselectToken(token)
-          this.channel.perform(
-            "delete_token",
-            { map_id: this.mapId, token_id: token.dataset.tokenId }
-          )
-        }
+      this.performOnSelected(token => {
+        this.channel.perform(
+          "delete_token",
+          { map_id: this.mapId, token_id: token.dataset.tokenId }
+        )
       })
     }
   }
 
-  stashSelected() {
-    this.tokenTargets.forEach(token => {
-      if (token.dataset.selected) {
+  performOnSelected(operation, unselectAfterOperation = true) {
+    this.selectedTokens().forEach(token => {
+      operation(token)
+      if (unselectAfterOperation) {
         this.unselectToken(token)
-        this.channel.perform(
-          "stash_token",
-          { map_id: this.mapId, token_id: token.dataset.tokenId }
-        )
       }
     })
   }
 
+  stashSelected() {
+    this.performOnSelected(this.stashToken.bind(this))
+  }
+
   editSelected() {
-    this.tokenTargets.forEach(token => {
-      if (token.dataset.selected) {
-        this.unselectToken(token)
-        Rails.ajax({
-          type: 'GET',
-          url: token.dataset.editUrl,
-          dataType: "script"
-        })
-      }
+    this.performOnSelected(token => {
+      Rails.ajax({
+        type: 'GET',
+        url: token.dataset.editUrl,
+        dataType: "script"
+      })
     })
   }
 
