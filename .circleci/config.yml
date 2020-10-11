@@ -4,7 +4,7 @@ jobs:
   build:
     working_directory: ~/table
     docker:
-      - image: circleci/ruby:2.6.4-node-browsers
+      - image: circleci/ruby:2.6.6-node-browsers
         environment:
           PGHOST: localhost
           PGUSER: table
@@ -16,6 +16,10 @@ jobs:
           POSTGRES_DB: table_test
           POSTGRES_PASSWORD: test
     steps:
+      - run:
+          name: Install correct bundler version
+          command: gem install bundler -v 2.1.4
+
       - checkout
 
       - run:
