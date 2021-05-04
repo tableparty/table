@@ -9,7 +9,7 @@
     "stimulus": "^1.1.1",
     "tailwindcss": "^1.9.6",
     "turbolinks": "^5.2.0",
-    "uuid": "^8.1.0"
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "lint": "eslint app/javascript"
