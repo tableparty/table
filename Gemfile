@@ -11,7 +11,7 @@ gem "jbuilder", "~> 2.11"
 gem "pg", ">= 0.18", "< 2.0"
 gem "puma", "~> 5.2"
 gem "rails", "6.1.3.1"
-gem "redis", "~> 4.0"
+gem "redis", "~> 4.2"
 gem "sass-rails", ">= 6"
 gem "turbolinks", "~> 5"
 gem "webpacker", "~> 4.0"
@@ -23,11 +23,11 @@ gem "bootsnap", ">= 1.4.2", require: false
 group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
-  gem "rspec-rails", "~> 4.0.0.rc1"
+  gem "rspec-rails", "~> 5.0.1"
 end
 
 group :development do
-  gem "listen", ">= 3.0.5", "< 3.2"
+  gem "listen", ">= 3.0.5", "< 3.6"
   gem "rubocop"
   gem "rubocop-performance"
   gem "rubocop-rails"
