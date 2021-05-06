@@ -23,7 +23,7 @@ gem "bootsnap", ">= 1.4.2", require: false
 group :development, :test do
   gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
-  gem "rspec-rails", "~> 4.0.0.rc1"
+  gem "rspec-rails", "~> 5.0.1"
 end
 
 group :development do
