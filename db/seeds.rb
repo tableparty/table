@@ -21,6 +21,7 @@ map.image.attach(
   filename: "map.jpg"
 )
 map.update(x: 504, y: 528, zoom: 3, grid_size: 65)
+map.reload.image.analyze
 campaign.update(current_map: map)
 
 [
